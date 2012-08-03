@@ -148,15 +148,6 @@ abstract class CMB_Field {
 			$this->value = $value;
 
 			echo '<div class="field-item" style="position: relative">';
-
-			if ( $this->args['repeatable'] ) : ?>
-				<span class="cmb_element">
-					<span class="ui-state-default">
-						<a class="delete-field ui-icon-circle-close ui-icon" style="position: absolute; top: 5px; right: -10px">X</a>
-					</span>
-				</span>
-			<?php endif;
-
 			$this->html();
 			echo '</div>';
 
@@ -167,23 +158,9 @@ abstract class CMB_Field {
 			$this->value = '';
 
 			echo '<div class="field-item hidden" style="position: relative">';
-			
-			if ( $this->args['repeatable'] ) : ?>
-				<span class="cmb_element">
-					<span class="ui-state-default">
-						<a class="delete-field ui-icon-circle-close ui-icon" style="position: absolute; top: 5px; right: -10px">X</a>
-					</span>
-				</span>
-			<?php endif;
-
 			$this->html();
 			echo '</div>';
 
-			?>
-			<p>
-				<a href="#" class="button repeat-field">Add New</a>
-			</p>
-			<?php
 		}
 
 	}
@@ -675,22 +652,15 @@ class CMB_Group_Field extends CMB_Field {
 			$this->html();
 			echo '</div>';
 
-			?>
-
-			<?php
-
 		}
 
 		if ( $this->args['repeatable'] ) {
+			
 			$this->value = '';
 			echo '<div class="field-item hidden">';
 			$this->html();
 			echo '</div>';
-			?>
-			<p>
-				<a href="#" class="button repeat-field">Add New</a>
-			</p>
-			<?php
+
 		}
 
 		if ( ! self::$added_js ) : ?>
@@ -729,10 +699,6 @@ class CMB_Group_Field extends CMB_Field {
 
 			<?php if ( ! empty( $this->args['name'] ) ) : ?>			
 				<h2 class="group-name"><?php echo $this->args['name'] ?></h2>
-			<?php endif; ?>
-
-			<?php if ( $this->args['repeatable'] ) : ?>
-				<a class="delete-field button" style="position: absolute; top: -3px; right: -3px">X</a>
 			<?php endif; ?>
 
 			<?php CMB_Meta_Box::layout_fields( $fields ); ?>

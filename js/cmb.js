@@ -19,6 +19,14 @@ jQuery(document).ready(function ($) {
 	var formfield;
 	var formfieldobj;
 
+
+	jQuery( '.field.repeatable .field-item').each( function() {
+
+		if ( jQuery( this ).find('.delete-field' ).length === 0 )
+			jQuery(this).find( ' > p' ).append( jQuery( '<a class="delete-field ui-icon-circle-close ui-icon">&times;</a>' ) );
+
+	} );
+
 	jQuery( document ).on( 'click', 'a.delete-field', function( e ) {
 
 		e.preventDefault();
@@ -156,6 +164,13 @@ jQuery(document).ready(function ($) {
 		formfield = '';
 	};
 	
+	jQuery( '.field.repeatable').each( function() {
+	
+		if ( jQuery( this ).find('.button.repeat-field' ).length === 0 )
+			jQuery(this).append( jQuery( '<p><a href="#" class="button repeat-field">Add New</a></p>' ) );
+	
+	} );
+
 	jQuery( document ).on( 'click', 'a.repeat-field', function( e ) {
 		
 	    e.preventDefault();

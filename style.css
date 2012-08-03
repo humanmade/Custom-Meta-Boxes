@@ -327,3 +327,6 @@ div.time-picker li.selected { background: #0063CE; color: #fff; }
      width: 200px; /*must have*/
      height: 200px; /*must have*/
  }
+
+
+ .ui-icon.delete-field { display: inline-block; height: 20px; width: 20px; background: red;  }
