@@ -214,8 +214,8 @@ class CMB_File_Field extends CMB_Field {
 		// value can be URL of file or id of image attachment
 		
 		if ( is_numeric( $this->value ) ) {
-			if ( wp_get_attachment_image_src( $this->value, 'width=100&height=100' ) )
-				$meta = reset( wp_get_attachment_image_src( $this->value, 'width=100&height=100' ) );
+			if ( wp_get_attachment_image_src( $this->value, 'width=130&height=100' ) )
+				$meta = reset( wp_get_attachment_image_src( $this->value, 'width=130&height=100' ) );
 			else
 				$meta = '';
 		} else {
@@ -226,17 +226,14 @@ class CMB_File_Field extends CMB_Field {
 		if ( 'url' == $field['allow'] || ( is_array( $field['allow'] ) && in_array( 'url', $field['allow'] ) ) )
 			$input_type_url="text";
 
-		echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', $field['html_id'], '" value="', $meta, '" />';
-		echo '<input class="cmb_upload_button button" type="button" value="Upload File" />';
-		echo '<input class="cmb_upload_file_id" type="hidden" id="', $field['html_id'], '_id" name="', $field['id'], '" value="', $this->value, '" />';
-		echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
+		wp_enqueue_script( 'jquery-ui-sortable' );
+
 		echo '<div id="', $field['html_id'], '_status" class="cmb_upload_status">';
 			if ( $meta != '' ) {
 				$check_image = preg_match( '/(^.*\.jpg|jpeg|png|gif|ico*)/i', $meta );
 				if ( $check_image ) {
 					echo '<div class="img_status">';
 					echo '<img src="', $meta, '" alt="" />';
-					echo '<a href="#" class="cmb_remove_file_button" rel="', $field['html_id'], '">Remove Image</a>';
 					echo '</div>';
 				} else {
 					?>
@@ -248,6 +245,10 @@ class CMB_File_Field extends CMB_Field {
 				}
 			}
 		echo '</div>';
+
+		echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', $field['html_id'], '" value="', $meta, '" />';
+		echo '<input class="cmb_upload_button button" type="button" value="Select File" />';
+		echo '<input class="cmb_upload_file_id" type="hidden" id="', $field['html_id'], '_id" name="', $field['id'], '" value="', $this->value, '" />';
 
 	}
 }

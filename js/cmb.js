@@ -137,7 +137,7 @@ jQuery(document).ready(function ($) {
 			image = /(jpe?g|png|gif|ico)$/gi;
 
 			if (itemurl.match(image)) {
-				uploadStatus = '<div class="img_status"><img src="' + itemurl + '" alt="" /><a href="#" class="cmb_remove_file_button" rel="' + formfield + '">Remove Image</a></div>';
+				uploadStatus = '<div class="img_status"><img src="' + itemurl + '" alt="" /></div>';
 			} else {
 				// No output preview if it's not an image
 				// Standard generic output if it's not an image.
@@ -168,7 +168,7 @@ jQuery(document).ready(function ($) {
 	jQuery( '.field.repeatable').each( function() {
 	
 		if ( jQuery( this ).find('.button.repeat-field' ).length === 0 )
-			jQuery(this).append( jQuery( '<p><a href="#" class="button repeat-field">Add New</a></p>' ) );
+			jQuery(this).append( jQuery( '<p class="button-add-field"><a href="#" class="button repeat-field">Add New</a></p>' ) );
 	
 	} );
 
@@ -202,4 +202,12 @@ jQuery(document).ready(function ($) {
 
 	} );
 
+	jQuery( '.field.file .field-item').each( function() {
+		jQuery(this).prepend( jQuery( '<div class="sortable-handle"></div>' ) );
+	} );
+
+	jQuery( '.field.file' ).sortable({
+		items:  ".field-item:not(.hidden)",
+		handle: ".sortable-handle"
+	});
 });
