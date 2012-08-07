@@ -19,8 +19,7 @@ jQuery(document).ready(function ($) {
 	var formfield;
 	var formfieldobj;
 
-
-	jQuery( '.field.repeatable .field-item').each( function() {
+	jQuery( '.field.repeatable:not(.file) .field-item').each( function() {
 
 		if ( jQuery( this ).find('.delete-field' ).length === 0 )
 
@@ -168,7 +167,7 @@ jQuery(document).ready(function ($) {
 	jQuery( '.field.repeatable').each( function() {
 	
 		if ( jQuery( this ).find('.button.repeat-field' ).length === 0 )
-			jQuery(this).append( jQuery( '<p><a href="#" class="button repeat-field">Add New</a></p>' ) );
+			jQuery(this).append( jQuery( '<p class="button-repeat-field-wrap"><a href="#" class="button repeat-field">Add New</a></p>' ) );
 	
 	} );
 

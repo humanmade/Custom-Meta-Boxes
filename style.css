@@ -8,9 +8,8 @@ table.cmb_metabox th label { margin-top:5px; display:block;}
 .field .field-title { margin-top: 0; }
 .field-item { margin: 4px 0; }
 .field p.cmb_metabox_description { margin: -.6665em 0 .6665em; }
-.field p.cmb_metabox_description { display: none; }
-.field .button-add-field { margin-top: 12px; }
-
+.field p.cmb_metabox_description:empty { display: none; }
+.field .button-repeat-field-wrap { margin-top: 12px; }
 
 table.cmb_metabox input, table.cmb_metabox textarea { font-size:12px; padding: 5px; }
 table.cmb_metabox input[type=text], table.cmb_metabox textarea, table.cmb_metabox select { width: 97%; }
