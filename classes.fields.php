@@ -175,9 +175,7 @@ class CMB_Text_Field extends CMB_Field {
 	public function html() {
 
 		?>
-		<p>
 				<input type="text" name="<?php echo $this->name ?>" value="<?php echo $this->value ?>" />
-		</p>
 		<?php
 	}
 }
@@ -187,9 +185,7 @@ class CMB_Text_Small_Field extends CMB_Field {
 	public function html() {
 
 		?>
-		<p>
 			<input class="cmb_text_small" type="text" name="<?php echo $this->name ?>" value="<?php echo $this->value ?>" /> <span class="cmb_metabox_description"><?php echo $this->description ?></span>
-		</p>
 		<?php
 	}
 }
@@ -260,9 +256,7 @@ class CMB_URL_Field extends CMB_Field {
 	public function html() {
 
 		?>
-		<p>
 			<input class="cmb_text_url" type="text" name="<?php echo $this->name ?>" value="<?php echo esc_url( $this->value ) ?>" /> <span class="cmb_metabox_description"><?php echo $this->description ?></span>
-		</p>
 		<?php
 	}
 }
@@ -276,9 +270,7 @@ class CMB_Date_Field extends CMB_Field {
 	public function html() {
 
 		?>
-		<p>
 			<input class="cmb_text_small cmb_datepicker" type="text" name="<?php echo $this->name ?>" value="<?php echo $this->value ?>" /> <span class="cmb_metabox_description"><?php echo $this->description ?></span>
-		</p>
 		<?php
 	}
 }
@@ -288,9 +280,7 @@ class CMB_Time_Field extends CMB_Field {
 	public function html() {
 	
 		?>
-		<p>
 			<input class="cmb_text_small cmb_timepicker" type="text" name="<?php echo $this->name ?>" value="<?php echo $this->value;?>"/> <span class="cmb_metabox_description"><?php echo $this->description ?></span>
-		</p>
 		<?php
 	}
 
@@ -305,9 +295,7 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
 	public function html() {
 
 		?>
-		<p>
 			<input class="cmb_text_small cmb_datepicker" type="text" name="<?php echo $this->name ?>" value="<?php echo $this->value ? date( 'm\/d\/Y', $this->value ) : '' ?>" /> <span class="cmb_metabox_description"><?php echo $this->description ?></span>
-		</p>
 		<?php
 	}
 	
@@ -326,10 +314,8 @@ class CMB_Datetime_Timestamp_Field extends CMB_Field {
 
 		?>
 
-		<p>
 			<input class="cmb_text_small cmb_datepicker" type="text" name="<?php echo $this->id ?>[date][]" value="<?php echo $this->value ? date( 'm\/d\/Y', $this->value ) : '' ?>" />
 			<input class="cmb_text_small cmb_timepicker" type="text" name="<?php echo $this->id ?>[time][]" value="<?php echo $this->value ? date( 'H:i A', $this->value ) : '' ?>" /> <span class="cmb_metabox_description"><?php echo $this->description ?></span>
-		</p>
 
 		<?php
 	}
@@ -369,7 +355,7 @@ class CMB_Oembed_Field extends CMB_Field {
 		
 		</style>
 
-		<p>
+		<div>
 
 			<?php if ( ! $this->value ) : ?>
 				<?php echo '<input class="cmb_oembed code" type="text" name="', $this->name, '" id="',$this->name, '" value="" /><span class="cmb_metabox_description">', $this->description, '</span>'; ?>
@@ -396,7 +382,7 @@ class CMB_Oembed_Field extends CMB_Field {
 				</div>
 
 			<?php endif; ?>
-		</p>
+		</div>
 	
 	<?php }
 
@@ -438,9 +424,7 @@ class CMB_Textarea_Field extends CMB_Field {
 	public function html() {
 
 		?>
-		<p>
 				<textarea rows="<?php echo !empty( $this->args['rows'] ) ? $this->args['rows'] : 4 ?>" name="<?php echo $this->name ?>"><?php echo $this->value ?></textarea>
-		</p>
 		<?php
 	}
 }
@@ -456,9 +440,7 @@ class CMB_Textarea_Field_Code extends CMB_Field {
 	public function html() {
 
 		?>
-		<p>
 			<textarea class="cmb_textarea_code" rows="<?php echo !empty( $this->args['rows'] ) ? $this->args['rows'] : 4 ?>" name="<?php echo $this->name ?>"><?php echo $this->value ?></textarea>
-		</p>
 		<?php
 	}
 }
@@ -472,9 +454,7 @@ class CMB_Color_Picker extends CMB_Field {
 	public function html() {
 
 		?>
-		<p>
 			<input class="cmb_colorpicker cmb_text_small" type="text" name="<?php echo $this->name; ?>" value="<?php echo $this->get_value() ?>" /><span class="cmb_metabox_description"><?php echo $this->description ?></span>
-		</p>
 		<?php
 	}
 
@@ -506,13 +486,11 @@ class CMB_Select extends CMB_Field {
 
 		$id = 'select-' . rand( 0, 1000 );
 		?>
-		<p>
 			<select id="<?php echo $id ?>" name="<?php echo $this->name ?>"> >
 				<?php foreach ( $this->args['options'] as $value => $name ): ?>
 				   <option <?php selected( $this->value, $value ) ?> value="<?php echo $value; ?>"><?php echo $name; ?></option>
 				<?php endforeach; ?>
 			</select>
-		</p>
 		<script>
 			jQuery( document ).ready( function() {
 				jQuery( '#<?php echo $id ?>' ).select2();
@@ -532,11 +510,9 @@ class CMB_Radio_Field extends CMB_Field {
 
 	public function html() {
 		?>
-		<p>
 			<?php foreach ( $this->values as $key => $value ): ?>
 				<input type="radio" name="<?php echo $this->name ?>" value="<?php echo $value; ?>" <?php checked( $value, $this->get_value() ); ?> />
 			<?php endforeach; ?>
-		</p>
 		<?php
 	}
 }
@@ -556,10 +532,8 @@ class CMB_Checkbox extends CMB_Field {
 
 	public function html() {
 		?>
-		<p>
 			<input type="checkbox" name="checkbox_<?php echo $this->name ?>" value="1" <?php checked( $this->get_value() ); ?> /><span class="cmb_metabox_description"><?php echo $this->description ?></span>
 			<input type="hidden" name="<?php echo $this->name ?>" value="1" />
-		</p>
 		<?php
 	}
 }
@@ -573,10 +547,8 @@ class CMB_Title extends CMB_Field {
 
 	public function html() {
 		?>
-		<p>
 			<h5 class="cmb_metabox_title"><?php echo $this->title; ?></h5>
 			<span class="cmb_metabox_description"><?php echo $this->description ?></span>
-		</p>
 		<?php
 	}
 }
@@ -590,9 +562,9 @@ class CMB_wysiwyg extends CMB_Field {
 	public function html() {
 
 		?>
-		<p>
 			<?php wp_editor( $this->get_value(), $this->name, $this->args['options'] );?><span class="cmb_metabox_description"><?php echo $this->description ?></span>
-		</p>
+		<div>
+		</div>
 		<?php
 	}
 }
