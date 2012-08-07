@@ -23,7 +23,8 @@ jQuery(document).ready(function ($) {
 	jQuery( '.field.repeatable .field-item').each( function() {
 
 		if ( jQuery( this ).find('.delete-field' ).length === 0 )
-			jQuery(this).find( ' > p' ).append( jQuery( '<a class="delete-field ui-icon-circle-close ui-icon">&times;</a>' ) );
+
+			jQuery(this).append( jQuery( '<span class="cmb_element cmb_element_delete"><span class="ui-state-default"><a class="delete-field ui-icon-circle-close ui-icon">&times;</a></span></span>' ) );
 
 	} );
 
