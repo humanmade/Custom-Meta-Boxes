@@ -218,7 +218,7 @@ class CMB_Meta_Box {
 				?>
 
 				<td style="width: <?php echo $field->args['cols'] / 12 * 100 ?>%" colspan="<?php echo $field->args['cols'] ?>">
-					<div class="field <?php echo !empty( $field->args['repeatable'] ) ? 'repeatable' : '' ?>">
+					<div class="field <?php echo strtolower( $field->args['name'] ); ?> <?php echo !empty( $field->args['repeatable'] ) ? 'repeatable' : '' ?>">
 						<?php $field->display(); ?>
 					</div>
 				</td>
