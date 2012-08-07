@@ -176,7 +176,7 @@ jQuery(document).ready(function ($) {
 	    e.preventDefault();
 	    var a = jQuery( this );
 
-	    var newT = a.parent().prev().clone();
+	    var newT = a.closest('.field').find('.field-item.hidden').clone();
 
 	    newT.removeClass('hidden');
 	    newT.find('input[type!="button"]').val('');
