@@ -230,6 +230,7 @@ class CMB_Meta_Box {
 					</tr>
 				<?php endif; ?>
 
+				<input type="hidden" name="_cmb_present_<?php echo $field->id ?>" value="1" />
 			<?php endforeach; ?>
 		</table>
 
@@ -251,7 +252,14 @@ class CMB_Meta_Box {
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 			
-			$value = isset( $_POST[$field['id']] ) ? (array) $_POST[$field['id']] : (array) $_POST[$field['id'].'[]'];
+			// verify this meta box was shown on the page
+			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
+				continue;
+
+			if ( isset( $_POST[$field['id']] ) )
+				$value = (array) $_POST[$field['id']];
+			else
+				$value = array();
 
 			// if it's repeatable take off the last one
 			if ( ! empty( $field['repeatable'] ) && $field['type'] != 'group' ) {
@@ -266,9 +274,6 @@ class CMB_Meta_Box {
 
 			if ( !empty(  $this->_meta_box['repeatable'] ) )
 				$field['repeatable'] = true;
-			
-			if ( ! isset( $_POST[$field['id']] ) && ! isset( $_POST[$field['id']. '[]'] ) ) //TODO: fix this, checkboxes
-				continue;
 			
 			$field_obj = new $class( $field['id'], $field['name'], $value, $field );
 			$field_obj->parse_save_values();
