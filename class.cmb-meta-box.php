@@ -7,6 +7,7 @@ class CMB_Meta_Box {
 
 	protected $_meta_box;
 	private $fields = array();
+	public $type = '';
 
 	function __construct( $meta_box ) {
 
@@ -15,26 +16,7 @@ class CMB_Meta_Box {
 		if ( empty( $this->_meta_box['id'] ) )
 			$this->_meta_box['id'] = $this->_meta_box['title'];
 
-		$upload = false;
-
-		foreach ( $meta_box['fields'] as $field ) {
-			if ( $field['type'] == 'file' || $field['type'] == 'file_list' ) {
-				$upload = true;
-				break;
-			}
-		}
-
-		add_action( 'dbx_post_advanced', array( &$this, 'init_fields_for_post' ) );
-		add_action( 'cmb_init_fields', array( &$this, 'init_fields' ) );
-
-		global $pagenow;
-
-		if ( $upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) )
-			add_action( 'admin_head', array( &$this, 'add_post_enctype' ) );
-
 		add_action( 'admin_menu', array( &$this, 'add' ) );
-		add_action( 'save_post', array( &$this, 'save_for_post' ) );
-		add_action( 'cmb_save_fields', array( &$this, 'save' ) );
 
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_styles' ) );
@@ -44,7 +26,7 @@ class CMB_Meta_Box {
 
 	}
 
-	public function init_fields( $post_id = 0 ) {
+	public function init_fields( $object_id = 0 ) {
 
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
 
@@ -76,33 +58,11 @@ class CMB_Meta_Box {
 
 			// Else if we are on a post edit screen
 			elseif ( $post_id )
-				$values = (array) get_post_meta( $post_id, $field['id'], false );
+				$values = (array) get_metadata( $this->type, $post_id, $field['id'], false );
 
 
 			$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $field );
-
 		}
-
-	}
-
-	public function init_fields_for_post() {
-
-		global $post, $temp_ID;
-
-		// Get the current ID
-		if( isset( $_GET['post'] ) )
-			$post_id = $_GET['post'];
-
-		elseif( isset( $_POST['post_ID'] ) )
-			$post_id = $_POST['post_ID'];
-
-		elseif ( ! empty( $post->ID ) )
-			$post_id = $post->ID;
-
-		if ( is_page() || ! isset( $post_id ) )
-			return false;
-
-		$this->init_fields( (int) $post_id );
 
 	}
 
@@ -117,21 +77,7 @@ class CMB_Meta_Box {
 
 		foreach ( $this->fields as $field )
 			$field->enqueue_styles();
-
 	}
-
-	function add_post_enctype() { ?>
-
-		<script type="text/javascript">
-
-		jQuery(document).ready(function(){
-			jQuery("#post").attr("enctype", "multipart/form-data");
-			jQuery("#post").attr("encoding", "multipart/form-data");
-		} );
-
-		</script>
-
-	<?php }
 
 	// Add metabox
 	function add() {
@@ -266,11 +212,11 @@ class CMB_Meta_Box {
 	<?php }
 
 	// Save data from metabox
-	function save( $post_id = 0 )  {
+	function save( $object_id = 0 )  {
 
 		// verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
-			return $post_id;
+			return $object_id;
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
@@ -298,25 +244,14 @@ class CMB_Meta_Box {
 				$field['repeatable'] = true;
 
 			$field_obj = new $class( $field['id'], $field['name'], $value, $field );
-			$field_obj->save( $post_id, $value );
+			$field_obj->save( $object_id, $value );
 
 		}
 
 		// If we are not on a post, need to refresh the field objects to reflect new values, as we do not get a redirect
-		if ( ! $post_id ) {
+		if ( ! $object_id ) {
 			$this->fields = array();
 			$this->init_fields();
 		}
-	}
-
-	// Save the on save_post hook
-	function save_for_post( $post_id ) {
-
-		// check autosave
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-			return $post_id;
-
-		$this->save( $post_id );
-
 	}
 }

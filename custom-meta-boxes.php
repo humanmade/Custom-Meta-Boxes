@@ -51,13 +51,130 @@ function cmb_init() {
 
 	if ( ! empty( $meta_boxes ) )
 		foreach ( $meta_boxes as $meta_box )
-			new CMB_Meta_Box( $meta_box );
+			cmb_add_post_meta_box( $meta_box );
 
 }
 add_action( 'init', 'cmb_init' );
 
 /**
+ * Add a meta box with given arguments
+ * 
+ * @param $args array (
+ *  	pages 	=> array() // where to show the meta box
+ * 		fields 	=> array() // array of field options
+ * 		title 	=> string  // the name of the meta box (title)
+ * )
+ */
+function cmb_add_post_meta_box( $args ) {
+
+	CMB_Post_Meta_Boxes::get_instance()->add_meta_box( new CMB_Meta_Box( $args ) );
+}
+
+class CMB_Meta_Boxes {
+
+	private $meta_boxes = array();
+
+	/**
+	 * Add a meta box 
+	 * 
+	 * @param @args array
+	 */
+	public function add_meta_box( $meta_box ) {
+
+		$meta_box->type = self::$type;
+
+		$this->meta_boxes[] = $meta_box;
+	}
+
+	/**
+	 * Get an array of all the meta boxes
+	 * 
+	 * @return CMB_Meta_Box[]
+	 */
+	public function get_meta_boxes() {
+
+		return $this->meta_boxes;
+	}
+}
+
+class CMB_Post_Meta_Boxes extends CMB_Meta_Boxes {
+
+	private static $instance;
+	protected $type = 'post';
+
+	/**
+	 * Get the main instance of the meta boxes collection object
+	 * 
+	 * @return CMB_Post_Meta_Boxes
+	 */
+	public static function get_instance() {
+
+		if ( ! empty( self::$instance ) )
+			self::$instance = new CMB_Post_Meta_Boxes();
+
+		return self::$instance;
+	}
+
+	public function __construct() {
+
+		add_action( 'dbx_post_advanced', array( $this, 'init_fields' ) );
+
+		global $pagenow;
+
+		if ( $upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) )
+			add_action( 'admin_head', array( $this, 'add_post_enctype' ) );
+
+		add_action( 'save_post', array( $this, 'save_post' ) );
+	}
+
+	public function init_fields() {
+
+		global $post, $temp_ID;
+
+		// Get the current ID
+		if( isset( $_GET['post'] ) )
+			$post_id = $_GET['post'];
+
+		elseif( isset( $_POST['post_ID'] ) )
+			$post_id = $_POST['post_ID'];
+
+		elseif ( ! empty( $post->ID ) )
+			$post_id = $post->ID;
+
+		if ( ! isset( $post_id ) )
+			return false;
+
+		foreach ( $this->get_meta_boxes() as $meta_box )
+			$meta_box->init_fields( (int) $post_id );
+	}
+
+	public function add_post_enctype() {
+		?>
+
+		<script type="text/javascript">
+
+		jQuery(document).ready(function(){
+			jQuery("#post").attr("enctype", "multipart/form-data");
+			jQuery("#post").attr("encoding", "multipart/form-data");
+		} );
+
+		</script>
+		<?php
+	}
+
+	public function save_post( $post_id ) {
+
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+			return;
+
+		foreach ( $this->get_meta_boxes() as $meta_box )
+			$meta_box->save( (int) $post_id );
+	}
+}
+
+/**
  * Adding scripts and styles
+ * @todo move these into their respective fields
  */
 function cmb_scripts( $hook ) {
 
