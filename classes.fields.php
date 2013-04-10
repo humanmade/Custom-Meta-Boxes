@@ -195,7 +195,7 @@ abstract class CMB_Field {
 	 * @todo this surely only works for posts
 	 * @todo why do values need to be passed in, they can already be passed in on construct
 	 */
-	public function save( $post_id, $values ) {
+	public function save( $object_id, $values ) {
 
 		$this->values = $values;
 		$this->parse_save_values();
@@ -203,17 +203,17 @@ abstract class CMB_Field {
 		// Allow override from args
 		if ( ! empty( $this->args['save_callback'] ) ) {
 
-			call_user_func( $this->args['save_callback'], $this->values, $post_id );
+			call_user_func( $this->args['save_callback'], $this->values, $object_id );
 
 			return;
 
 		}
 
 		// If we are not on a post edit screen
-		if ( ! $post_id )
+		if ( ! $object_id )
 			return;
 
-		delete_post_meta( $post_id, $this->id );
+		delete_post_meta( $object_id, $this->id );
 
 		foreach( $this->values as $v ) {
 
@@ -221,7 +221,7 @@ abstract class CMB_Field {
 			$this->parse_save_value();
 
 			if ( $this->value || $this->value === '0' )
-				add_post_meta( $post_id, $this->id, $this->value );
+				add_post_meta( $object_id, $this->id, $this->value );
 
 		}
 	}
