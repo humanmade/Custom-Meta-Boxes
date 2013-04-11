@@ -904,23 +904,12 @@ class CMB_Radio_Field extends CMB_Field {
  */
 class CMB_Checkbox extends CMB_Field {
 
-	public function parse_save_values() {
-
-		$name = str_replace( '[]', '', $this->name );
-
-		foreach ( $this->values as $key => $value )
-			$this->values[$key] = isset( $_POST['checkbox_' . $name][$key] ) ? $_POST['checkbox_' . $name][$key] : null;
-
-	}
-
 	public function title() {}
 
 	public function html() { ?>
 
-		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="checkbox" name="checkbox_<?php esc_attr_e( $this->name ); ?>" value="1" <?php checked( $this->get_value() ); ?> />
+		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="checkbox" name="<?php esc_attr_e( $this->name ); ?>" value="1" <?php checked( $this->get_value() ); ?> />
 		<label <?php $this->for_attr(); ?>><?php esc_html_e( $this->args['name'] ); ?></label>
-
-			<input type="hidden" name="<?php esc_attr_e( $this->name ); ?>" value="1" />
 
 	<?php }
 
@@ -1162,7 +1151,7 @@ class CMB_Group_Field extends CMB_Field {
 
 		$key = $field->id;
 		$field->original_id = $key;
-		$field->id = $this->id . '[' . $field->id . '][]';
+		$field->id = $this->id . '[' . $field->id . ']';
 		$field->name = $field->id . '[]';
 		$this->fields[$key] = $field;
 
@@ -1216,8 +1205,11 @@ class CMB_Group_Field extends CMB_Field {
 
 			foreach ( $this->fields as $field ) {
 
-				// Create the field object so it can sanitize it's data etc
-				$field->values = (array) $values[$field->original_id][$key];
+				if ( ! isset( $values[$field->original_id][$key] ) )
+					$field->values = array();
+				else
+					$field->values = (array) $values[$field->original_id][$key];
+			
 				$field->parse_save_values();
 
 				// if the field is a repeatable field, store the whole array of them, if it's not repeatble,
