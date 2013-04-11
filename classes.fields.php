@@ -1163,7 +1163,7 @@ class CMB_Group_Field extends CMB_Field {
 
 		$key = $field->id;
 		$field->original_id = $key;
-		$field->id = $this->id . '[' . $field->id . '][]';
+		$field->id = $this->id . '[' . $field->id . ']';
 		$field->name = $field->id . '[]';
 		$this->fields[$key] = $field;
 
