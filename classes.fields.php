@@ -102,6 +102,8 @@ abstract class CMB_Field {
 		if ( $append )
 			$id .= '-' . $append;
 
+		$id = str_replace( array( '[', ']' ), '-', $id );
+
 		?>
 
 		id="<?php esc_attr_e( $id ); ?>"
@@ -116,6 +118,8 @@ abstract class CMB_Field {
 		if ( $append )
 			$for .= '-' . $append;
 
+		$for = str_replace( array( '[', ']' ), '-', $for );
+		
 		?>
 
 		for="<?php esc_attr_e( $for ); ?>"
@@ -794,7 +798,7 @@ class CMB_Select extends CMB_Field {
 
 			<?php else : ?>
 
-			<select <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> style="width: 100%" <?php echo ! empty( $this->args['multiple'] ) ? 'multiple' : '' ?> class="<?php esc_attr_e( $id ); ?>" name="<?php /*nasty hack*/ esc_attr_e( str_replace( '[', '[m', $this->name ) ); ?><?php echo ! empty( $this->args['multiple'] ) ? '[]' : ''; ?>">
+			<select <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> style="width: 100%" <?php echo ! empty( $this->args['multiple'] ) ? 'multiple' : '' ?> class="<?php esc_attr_e( $id ); ?>" name="<?php esc_attr_e( $this->name ); ?><?php echo ! empty( $this->args['multiple'] ) ? '[]' : ''; ?>">
 
 					<?php if ( ! empty( $this->args['allow_none'] ) ) : ?>
 
