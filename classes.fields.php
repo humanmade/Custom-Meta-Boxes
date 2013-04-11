@@ -1217,8 +1217,11 @@ class CMB_Group_Field extends CMB_Field {
 
 			foreach ( $this->fields as $field ) {
 
-				// Create the field object so it can sanitize it's data etc
-				$field->values = (array) $values[$field->original_id][$key];
+				if ( ! isset( $values[$field->original_id][$key] ) )
+					$field->values = array();
+				else
+					$field->values = (array) $values[$field->original_id][$key];
+			
 				$field->parse_save_values();
 
 				// if the field is a repeatable field, store the whole array of them, if it's not repeatble,
