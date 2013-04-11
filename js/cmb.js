@@ -4,11 +4,12 @@
  * @author Andrew Norcross
  * @author Jared Atchison
  * @author Bill Erickson
- * @see    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
+ * @author Jonathan Bardo
+ * @see     https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
+ * @see		https://github.com/jonathanbardo/custom-metaboxes
  */
 
 /*jslint browser: true, devel: true, indent: 4, maxerr: 50, sub: true */
-/*global jQuery, tb_show, tb_remove */
 
 /**
  * Custom jQuery for Custom Metaboxes and Fields
@@ -24,7 +25,15 @@ jQuery(document).ready(function ($) {
 		e.preventDefault();
 		var a = jQuery( this );
 
-		a.closest( '.field-item' ).remove();
+		var confirmation = true;
+		//Confirm group deletion
+		if(a.parents('.cmb_repeat_element').length != 0) 
+			confirmation = confirm("Do you confirm the deletion of this group ?");
+
+		if(confirmation === true)
+			a.closest( '.field-item' ).slideToggle('normal', function(){
+				$(this).remove();
+			});
 
 	} );
 
@@ -55,118 +64,87 @@ jQuery(document).ready(function ($) {
 	/**
 	 * Initialize color picker
 	 */
-    $('input:text.cmb_colorpicker').each(function (i) {
-        $(this).after('<div id="picker-' + i + '" style="z-index: 1000; background: #EEE; border: 1px solid #CCC; position: absolute; display: block;"></div>');
-        $('#picker-' + i).hide().farbtastic($(this));
-    })
-    .focus(function() {
-        $(this).next().show();
-    })
-    .blur(function() {
-        $(this).next().hide();
-    });
+	if (typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function') {
+		$('input:text.cmb_colorpicker').wpColorPicker();
+	} else {
+		$('input:text.cmb_colorpicker').each(function (i) {
+			$(this).after('<div id="picker-' + i + '" style="z-index: 1000; background: #EEE; border: 1px solid #CCC; position: absolute; display: block;"></div>');
+			$('#picker-' + i).hide().farbtastic($(this));
+		})
+		.focus(function () {
+			$(this).next().show();
+		})
+		.blur(function () {
+			$(this).next().hide();
+		});
+	}
 
-	/**
-	 * File and image upload handling
-	 */
-	$('.cmb_upload_file').change(function () {
-		formfield = $(this).attr('id');
+	// Make group sortable
+	var textarea_id;
+	var id = 1;
+	trigger_wysiwygs($('.CMB_wysiwyg:not(:hidden)'));
 
-		formfieldobj = $(this).siblings( '.cmb_upload_file_id' );
+	function trigger_wysiwygs($wysiwygs){
+		var $object;
+		$wysiwygs.each(function(){
+			id++;
+			$object = $(this).find('textarea');
+			$object.attr('id', $object.attr('id') + '-' + id);
+			textarea_id = $object.attr('id');
 
-		$('#' + formfield + '_id').val("");
+			//Add toggle to go back to textarea
+			$(this).find('.field-title').after("<a href='javascript:void(0);' class='button togglewysiwyg ui-state-default' data-id='"+textarea_id+"'' style='margin-bottom:10px;'>⇄ Toggle Editor</a>");
+			
+		});
+	}
 
-	});
-
-	$('.cmb_upload_button').live('click', function () {
-		var buttonLabel;
-		formfield = $(this).prev('input').attr('id');
-		formfieldobj = $(this).siblings( '.cmb_upload_file_id' );
-
-		if ( formfieldobj.siblings( 'label' ).length )
-			buttonLabel = 'Use as ' + formfieldobj.siblings( 'label' ).text();
-
-		else
-			buttonLabel = 'Use as ' + $('label[for=' + formfield + ']').text();
-
-		tb_show('', 'media-upload.php?post_id=' + $('#post_ID').val() + '&type=file&cmb_force_send=true&cmb_send_label=' + buttonLabel + '&TB_iframe=true');
-		return false;
-	});
-
-	$('.cmb_remove_file_button').live('click', function () {
-		formfield = $(this).attr('rel');
-		formfieldobj = $(this).closest('.cmb_upload_status').siblings( '.cmb_upload_file_id' );
-		$('input#' + formfield).val('');
-		$('input#' + formfield + '_id').val('');
-		$(this).parent().remove();
-		return false;
-	});
-
-	window.original_send_to_editor = window.send_to_editor;
-    window.send_to_editor = function (html) {
-		var itemurl, itemclass, itemClassBits, itemid, htmlBits, itemtitle,
-			image, uploadStatus = true;
-
-		if (formfield) {
-
-	        if ($(html).html(html).find('img').length > 0) {
-				itemurl = $(html).html(html).find('img').attr('src'); // Use the URL to the size selected.
-				itemclass = $(html).html(html).find('img').attr('class'); // Extract the ID from the returned class name.
-				itemClassBits = itemclass.split(" ");
-				itemid = itemClassBits[itemClassBits.length - 1];
-				itemid = itemid.replace('wp-image-', '');
-	        } else {
-				// It's not an image. Get the URL to the file instead.
-				htmlBits = html.split("'"); // jQuery seems to strip out XHTML when assigning the string to an object. Use alternate method.
-				itemurl = htmlBits[1]; // Use the URL to the file.
-				itemtitle = htmlBits[2];
-				itemtitle = itemtitle.replace('>', '');
-				itemtitle = itemtitle.replace('</a>', '');
-				itemid = itemurl; // TO DO: Get ID for non-image attachments.
+	function trigger_toggle_wysiwygs(){
+		 $(".togglewysiwyg").toggle(
+			function(event){
+				tinyMCE.execCommand('mceAddControl', false, $(this).data('id'));
+			},
+			function(){
+				tinyMCE.execCommand('mceRemoveControl', false, $(this).data('id'));
 			}
+		);
+		$(".togglewysiwyg").trigger('click');
+	}
 
-			image = /(jpe?g|png|gif|ico)$/gi;
+	trigger_toggle_wysiwygs();
 
-			if (itemurl.match(image)) {
-				uploadStatus = '<div class="img_status"><img src="' + itemurl + '" alt="" /><a href="#" class="cmb_remove_file_button" rel="' + formfield + '">Remove Image</a></div>';
-			} else {
-				// No output preview if it's not an image
-				// Standard generic output if it's not an image.
-				html = '<a href="' + itemurl + '" target="_blank" rel="external">View File</a>';
-				uploadStatus = '<div class="no_image"><span class="file_link">' + html + '</span>&nbsp;&nbsp;&nbsp;<a href="#" class="cmb_remove_file_button" rel="' + formfield + '">Remove</a></div>';
-			}
-
-			if ( formfieldobj ) {
-
-				$(formfieldobj).val(itemid);
-				$(formfieldobj).siblings('.cmb_upload_status').slideDown().html(uploadStatus);
-
-			} else {
-				$('#' + formfield).val(itemurl);
-				$('#' + formfield + '_id').val(itemid);
-				$('#' + formfield).siblings('.cmb_upload_status').slideDown().html(uploadStatus);
-			}
-
-			tb_remove();
-
-		} else {
-			window.original_send_to_editor(html);
+	$('.CMB_Group_Field').sortable({
+		cancel: '.mceStatusbar', 
+		handle: '.move-field',
+		items: "> .field-item",
+		start: function(event, ui) { // turn TinyMCE off while sorting (if not, it won't work when resorted)
+			tinyMCE.execCommand('mceRemoveControl', false, textarea_id);
+		},
+		stop: function(event, ui) { // re-initialize TinyMCE when sort is completed
+			tinyMCE.execCommand('mceAddControl', false, textarea_id);
 		}
+	});
 
-		formfield = '';
-	};
+	jQuery( document ).on( 'click', '.repeat-field', function(event) {
+		event.preventDefault();
 
-	jQuery( document ).on( 'click', '.repeat-field', function( e ) {
-
-	    e.preventDefault();
 	    var el = jQuery( this );
 
 	    var newT = el.prev().clone();
 
+	    //Make a colorpicker field repeatable
+	    newT.find('.wp-color-result').remove();
+		newT.find('input:text.cmb_colorpicker').wpColorPicker();
+		var $wysiwygs = newT.find('.CMB_wysiwyg');
+		trigger_wysiwygs($wysiwygs);
+
 	    newT.removeClass('hidden');
 	    newT.find('input[type!="button"]').val('');
 	    newT.find( '.cmb_upload_status' ).html('');
+	    newT.css('display', 'none');
 	    newT.insertBefore( el.prev() );
+		newT.slideToggle('normal');
+	    //Toggle wysiwyg at the end
+	    trigger_toggle_wysiwygs();
 
 	    // Reinitialize all the datepickers
 		jQuery('.cmb_datepicker' ).each(function () {
@@ -184,6 +162,6 @@ jQuery(document).ready(function ($) {
 			});
 		});
 
-	} );
+	});
 
 });
