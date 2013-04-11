@@ -102,6 +102,8 @@ abstract class CMB_Field {
 		if ( $append )
 			$id .= '-' . $append;
 
+		$id = str_replace( array( '[', ']' ), '-', $id );
+
 		?>
 
 		id="<?php esc_attr_e( $id ); ?>"
@@ -116,6 +118,8 @@ abstract class CMB_Field {
 		if ( $append )
 			$for .= '-' . $append;
 
+		$for = str_replace( array( '[', ']' ), '-', $for );
+		
 		?>
 
 		for="<?php esc_attr_e( $for ); ?>"
