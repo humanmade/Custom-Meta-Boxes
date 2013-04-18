@@ -102,6 +102,8 @@ abstract class CMB_Field {
 		if ( $append )
 			$id .= '-' . $append;
 
+		$id = str_replace( array( '[', ']' ), '-', $id );
+
 		?>
 
 		id="<?php echo esc_attr( $id ); ?>"
@@ -116,6 +118,8 @@ abstract class CMB_Field {
 		if ( $append )
 			$for .= '-' . $append;
 
+		$for = str_replace( array( '[', ']' ), '-', $for );
+		
 		?>
 
 		for="<?php echo esc_attr( $for ); ?>"
@@ -799,7 +803,7 @@ class CMB_Select extends CMB_Field {
 
 			<?php else : ?>
 
-			<select <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> style="width: 100%" <?php echo ! empty( $this->args['multiple'] ) ? 'multiple' : '' ?> class="<?php echo esc_attr( $id ); ?>" name="<?php /*nasty hack*/ echo esc_attr( str_replace( '[', '[m', $this->name ) ); ?><?php echo ! empty( $this->args['multiple'] ) ? '[]' : ''; ?>">
+			<select <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> style="width: 100%" <?php echo ! empty( $this->args['multiple'] ) ? 'multiple' : '' ?> class="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $this->name ); ?><?php echo ! empty( $this->args['multiple'] ) ? '[]' : ''; ?>">
 
 					<?php if ( ! empty( $this->args['allow_none'] ) ) : ?>
 
@@ -823,7 +827,7 @@ class CMB_Select extends CMB_Field {
 				var options = { placeholder: "Type to search" };
 
 				<?php if ( $this->args['ajax_url'] ) : ?>
- 
+
 					var query = JSON.parse( '<?php echo json_encode( $this->args['ajax_args'] ? wp_parse_args( $this->args['ajax_args'] ) : (object) array() ); ?>' );
 					
 					options.data = [];
@@ -905,23 +909,12 @@ class CMB_Radio_Field extends CMB_Field {
  */
 class CMB_Checkbox extends CMB_Field {
 
-	public function parse_save_values() {
-
-		$name = str_replace( '[]', '', $this->name );
-
-		foreach ( $this->values as $key => $value )
-			$this->values[$key] = isset( $_POST['checkbox_' . $name][$key] ) ? $_POST['checkbox_' . $name][$key] : null;
-
-	}
-
 	public function title() {}
 
 	public function html() { ?>
 
-		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="checkbox" name="checkbox_<?php echo esc_attr( $this->name ); ?>" value="1" <?php checked( $this->get_value() ); ?> />
+		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="checkbox" name="<?php echo esc_attr( $this->name ); ?>" value="1" <?php checked( $this->get_value() ); ?> />
 		<label <?php $this->for_attr(); ?>><?php echo esc_html( $this->args['name'] ); ?></label>
-
-			<input type="hidden" name="<?php echo esc_attr( $this->name ); ?>" value="1" />
 
 	<?php }
 
@@ -933,19 +926,6 @@ class CMB_Checkbox extends CMB_Field {
  *
  */
 class CMB_Title extends CMB_Field {
-
-	public function title() {
-		?>
-
-		<div class="field-title">
-			<h2>
-				<?php echo esc_html( $this->title ); ?>
-			</h2>
-		</div>
-
-		<?php
-
-	}
 
 	public function html() {}
 
@@ -1178,7 +1158,7 @@ class CMB_Group_Field extends CMB_Field {
 
 		$key = $field->id;
 		$field->original_id = $key;
-		$field->id = $this->id . '[' . $field->id . '][]';
+		$field->id = $this->id . '[' . $field->id . ']';
 		$field->name = $field->id . '[]';
 		$this->fields[$key] = $field;
 
@@ -1232,8 +1212,11 @@ class CMB_Group_Field extends CMB_Field {
 
 			foreach ( $this->fields as $field ) {
 
-				// Create the field object so it can sanitize it's data etc
+				if ( ! isset( $values[$field->original_id][$key] ) )
+					$field->values = array();
+				else
 				$field->values = (array) $values[$field->original_id][$key];
+			
 				$field->parse_save_values();
 
 				// if the field is a repeatable field, store the whole array of them, if it's not repeatble,
