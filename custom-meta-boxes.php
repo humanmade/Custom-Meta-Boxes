@@ -42,7 +42,11 @@ include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb-meta-box.php' );
 //include_once( CMB_PATH . '/example-functions.php' );
 
-// Get all the meta boxes on init
+/**
+ * Get all the meta boxes on init
+ * 
+ * @return null
+ */
 function cmb_init() {
 
 	if ( ! is_admin() )
@@ -58,11 +62,13 @@ function cmb_init() {
 add_action( 'init', 'cmb_init' );
 
 /**
- * Adding scripts and styles
+ * Enqueue scripts & styles.
+ * 
+ * @param  string $hook current admin screen.
+ * @return null
  */
 function cmb_scripts( $hook ) {
-	global $wp_version;
-	// only enqueue our scripts/styles on the proper pages
+
 	if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' || did_action( 'cmb_init_fields' ) ) {
 		// scripts required for cmb
 		$cmb_script_array = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-sortable', 'media-upload', 'thickbox', 'wp-color-picker' );
@@ -79,27 +85,52 @@ function cmb_scripts( $hook ) {
 }
 add_action( 'admin_enqueue_scripts', 'cmb_scripts', 10 );
 
-function _cmb_field_class_for_type( $type ) {
+/**
+ * Return an array of built in available fields
+ *
+ * Key is field name, Value is class used by field.
+ * Available fields can be modified using the 'cmb_field_types' filter.
+ * 
+ * @return array
+ */
+function _cmb_available_fields() {
 
-	$map = apply_filters( 'cmb_field_types', array(
+	return apply_filters( 'cmb_field_types', array(
 		'text'				=> 'CMB_Text_Field',
+		'text_small' 		=> 'CMB_Text_Small_Field',
+		'text_url'			=> 'CMB_URL_Field',
 		'url'				=> 'CMB_URL_Field',
+		'radio'				=> 'CMB_Radio_Field',
+		'checkbox'			=> 'CMB_Checkbox',
 		'file'				=> 'CMB_File_Field',
-		'group'				=> 'CMB_Group_Field',
+		'image' 			=> 'CMB_Image_Field',
 		'oembed'			=> 'CMB_Oembed_Field',
+		'wysiwyg'			=> 'CMB_wysiwyg',
+		'textarea'			=> 'CMB_Textarea_Field',
+		'textarea_code'		=> 'CMB_Textarea_Field_Code',
+		'select'			=> 'CMB_Select',
+		'taxonomy_select'	=> 'CMB_Taxonomy',
+		'post_select'		=> 'CMB_Post_Select',
 		'date'				=> 'CMB_Date_Field',
 		'date_unix'			=> 'CMB_Date_Timestamp_Field',
 		'datetime_unix'		=> 'CMB_Datetime_Timestamp_Field',
 		'time'				=> 'CMB_Time_Field',
-		'textarea'			=> 'CMB_Textarea_Field',
-		'taxonomy_select'	=> 'CMB_Taxonomy',
-		'select'			=> 'CMB_Select',
-		'wysiwyg'			=> 'CMB_wysiwyg',
-		'checkbox'			=> 'CMB_Checkbox',
-		'post_select'		=> 'CMB_Post_Select',
-		'radio'				=> 'CMB_Radio_Field',
-		'colorpicker'		=> 'CMB_Color_Picker'
+		'title'				=> 'CMB_Title',
+		'colorpicker'		=> 'CMB_Color_Picker',
+		'group'				=> 'CMB_Group_Field',
 	) );
+
+}
+
+/**
+ * Get a field class by type
+ * 
+ * @param  string $type 
+ * @return string $class, or false if not found.
+ */
+function _cmb_field_class_for_type( $type ) {
+
+	$map = _cmb_available_fields();
 
 	if ( isset( $map[$type] ) )
 		return $map[$type];
@@ -108,7 +139,11 @@ function _cmb_field_class_for_type( $type ) {
 
 }
 
-// Draw the meta boxes in places other than the post edit screen
+/**
+ * Draw the meta boxes in places other than the post edit screen
+ * 
+ * @return null
+ */
 function cmb_draw_meta_boxes( $pages, $context = 'normal', $object = null ) {
 
 	cmb_do_meta_boxes( $pages, $context, $object );
