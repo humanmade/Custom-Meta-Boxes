@@ -85,7 +85,7 @@ abstract class CMB_Field {
 	 * @uses wp_enqueue_script()
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'cmb-scripts', CMB_URL . '/js/cmb.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-sortable', 'media-upload', 'thickbox', 'wp-color-picker' ) );
+		wp_enqueue_script( 'cmb-scripts', CMB_URL . '/js/cmb.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'thickbox', 'farbtastic' ) );
 	}
 
 	/**
@@ -295,7 +295,6 @@ abstract class CMB_Field {
 		// if there are no values and it's not repeateble, we want to do one with empty string
 		if ( ! $this->get_values() && ! $this->args['repeatable'] )
 			$values = array( '' );
-
 		else
 			$values = $this->get_values();
 
@@ -309,7 +308,7 @@ abstract class CMB_Field {
 			$this->field_index = $i;
 			$this->value = $value; ?>
 
-			<div class="field-item" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+			<div class="field-item" data-class="<?php echo esc_attr( get_called_class() ) ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
 			<?php if ( $this->args['repeatable'] ) : ?>
 
@@ -337,7 +336,7 @@ abstract class CMB_Field {
 			$this->field_index = 'x'; // x used to distinguish hidden fields.
 			$this->value = ''; ?>
 
-			<div class="field-item hidden" style="position: relative">
+			<div class="field-item hidden" data-class="<?php echo esc_attr( get_called_class() ) ?>" style="position: relative">
 
 			<?php if ( $this->args['repeatable'] ) : ?>
 
@@ -353,7 +352,7 @@ abstract class CMB_Field {
 
 			</div>
 
-			<button href="#" class="button repeat-field">Add New</button>
+			<button class="button repeat-field">Add New</button>
 
 		<?php }
 
@@ -1005,7 +1004,8 @@ class CMB_wysiwyg extends CMB_Field {
 		$this->args['options']['textarea_name'] = $this->get_the_name_attr();
 
 		?>
-			<textarea <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_wysiwyg' ); ?> rows="<?php echo ! empty( $this->args['rows'] ) ? esc_attr( $this->args['rows'] ) : 4; ?>" <?php $this->name_attr(); ?>><?php echo wp_richedit_pre( $this->value ); ?></textarea>
+
+			<?php wp_editor( $this->get_value(), $this->get_the_id_attr(), $this->args['options'] );?>
 
 	<?php }
 }
@@ -1101,27 +1101,26 @@ class CMB_Post_Select extends CMB_Select {
 			$this->value = explode( ',', $this->value );
 
 	}
-
-	public static function cmb_ajax_post_select() {
-
-		$query = new WP_Query( $_GET );
-		$posts = $query->posts;
-
-		$json = array();
-
-		foreach ( $posts as $post )
-			$json[] = array( 'id' => $post->ID, 'text' => get_the_title( $post->ID ) );
-
-		echo json_encode( $json );
-
-		exit;
-
-	}
-
 }
 
-add_action( 'wp_ajax_cmb_post_select', 'CMB_Post_Select::cmb_ajax_post_select' );
+// TODO this should be in inside the class
+function cmb_ajax_post_select() {
 
+	$query = new WP_Query( $_GET );
+	
+	$posts = $query->posts;
+
+	$json = array();
+
+	foreach ( $posts as $post )
+		$json[] = array( 'id' => $post->ID, 'text' => get_the_title( $post->ID ) );
+
+	echo json_encode( $json );
+
+	exit;
+
+}
+add_action( 'wp_ajax_cmb_post_select', 'cmb_ajax_post_select' );
 
 /**
  * Field to group child fieids
@@ -1195,8 +1194,6 @@ class CMB_Group_Field extends CMB_Field {
 
 		<?php endif;
 
-		$this->description();
-
 		$i = 0;
 		foreach ( $meta as $value ) {
 
@@ -1205,7 +1202,7 @@ class CMB_Group_Field extends CMB_Field {
 
 			?>
 
-			<div class="field-item" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+			<div class="field-item" data-class="<?php echo esc_attr( get_called_class() ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
 				<?php $this->html(); ?>
 			</div>
 
@@ -1220,7 +1217,7 @@ class CMB_Group_Field extends CMB_Field {
 			$this->field_index = 'x'; // x used to distinguish hidden fields.
 			$this->value = ''; ?>
 
-				<div class="field-item hidden" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+				<div class="field-item hidden" data-class="<?php echo esc_attr( get_called_class() ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
 
 					<?php $this->html(); ?>
 
@@ -1302,7 +1299,7 @@ class CMB_Group_Field extends CMB_Field {
 				
 				$field->parse_save_values();
 
-				// if the field is a repeatable field, store the whole array of them, if it's not repeatable,
+				// if the field is a repeatable field, store the whole array of them, if it's not repeatble,
 				// just store the first (and only) one directly
 				if ( $field->args['repeatable'] )
 					$meta[$field->original_id] = $field->values;

@@ -1,13 +1,13 @@
 <?php
 /*
 Script Name: 	Custom Metaboxes and Fields
-Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
-				Jared Atchison (@jaredatch / jaredatchison.com)
-				Bill Erickson (@billerickson / billerickson.net)
-				Human Made Limited (@humanmadeltd)
+Contributors: 	Andrew Norcross ( @norcross / andrewnorcross.com )
+				Jared Atchison ( @jaredatch / jaredatchison.com )
+				Bill Erickson ( @billerickson / billerickson.net )
+				Human Made Limited ( @humanmadeltd / hmn.md )
+				Jonathan Bardo ( @jonathanbardo / jonathanbardo.com )
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		1.0 - Beta 1
-Fork and maintained by : Jonathan Bardo
+Version: 	1.0 - Beta 1
 */
 
 /**
@@ -40,7 +40,7 @@ define( 'CMB_URL', str_replace( str_replace( '\\', '/', WP_CONTENT_DIR ), str_re
 
 include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb-meta-box.php' );
-//include_once( CMB_PATH . '/example-functions.php' );
+include_once( CMB_PATH . '/example-functions.php' );
 
 /**
  * Get all the meta boxes on init
@@ -68,19 +68,30 @@ add_action( 'init', 'cmb_init' );
  * @return null
  */
 function cmb_scripts( $hook ) {
-
+		
+	// only enqueue our scripts/styles on the proper pages
 	if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' || did_action( 'cmb_init_fields' ) ) {
-		// scripts required for cmb
-		$cmb_script_array = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-sortable', 'media-upload', 'thickbox', 'wp-color-picker' );
-		// styles required for cmb
-		$cmb_style_array = array( 'thickbox', 'wp-color-picker' );
-
+		
 		wp_register_script( 'cmb-timepicker', CMB_URL . '/js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_URL . '/js/cmb.js', $cmb_script_array );
-		wp_enqueue_script( 'cmb-timepicker' );
-		wp_enqueue_script( 'cmb-scripts' );
-		wp_register_style( 'cmb-styles', CMB_URL . '/style.css', $cmb_style_array );
-		wp_enqueue_style( 'cmb-styles' );
+
+		$cmb_scripts = array( 
+			'jquery', 
+			'jquery-ui-core', 
+			'jquery-ui-datepicker', 
+			'media-upload', 
+			'thickbox', 
+			'wp-color-picker',
+			'cmb-timepicker' 
+		);
+		
+		$cmb_styles = array( 
+			'thickbox', 
+			'wp-color-picker' 
+		);
+
+		wp_enqueue_script( 'cmb-scripts', CMB_URL . '/js/cmb.js', $cmb_scripts );
+		wp_enqueue_style( 'cmb-styles', CMB_URL . '/style.css', $cmb_styles );
+		
 	}
 }
 add_action( 'admin_enqueue_scripts', 'cmb_scripts', 10 );
@@ -115,8 +126,8 @@ function _cmb_available_fields() {
 		'date_unix'			=> 'CMB_Date_Timestamp_Field',
 		'datetime_unix'		=> 'CMB_Datetime_Timestamp_Field',
 		'time'				=> 'CMB_Time_Field',
-		'title'				=> 'CMB_Title',
 		'colorpicker'		=> 'CMB_Color_Picker',
+		'title'				=> 'CMB_Title',
 		'group'				=> 'CMB_Group_Field',
 	) );
 
@@ -135,7 +146,7 @@ function _cmb_field_class_for_type( $type ) {
 	if ( isset( $map[$type] ) )
 		return $map[$type];
 
-	return $type;
+	return false;
 
 }
 

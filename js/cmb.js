@@ -1,109 +1,112 @@
 /**
- * Controls the behaviours of custom metabox fields.
- *
- * @author Andrew Norcross
- * @author Jared Atchison
- * @author Bill Erickson
- * @author Jonathan Bardo
- * @see     https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
- * @see		https://github.com/jonathanbardo/custom-metaboxes
+ * Custom jQuery for Custom Metaboxes and Fields
  */
 
 /*jslint browser: true, devel: true, indent: 4, maxerr: 50, sub: true */
+/*global jQuery, tb_show, tb_remove */
 
-/**
- * Custom jQuery for Custom Metaboxes and Fields
- */
+var CMB = {
+	
+	_callbacks: [],
+	
+	addCallbackForClonedField: function( fieldName, callback ) {
+
+		if ( jQuery.isArray( fieldName ) )
+			for ( var i = 0; i < fieldName.length; i++ )
+				CMB.addCallbackForClonedField( fieldName[i], callback );
+
+		this._callbacks[fieldName] = this._callbacks[fieldName] ? this._callbacks[fieldName] : []
+		this._callbacks[fieldName].push( callback )
+	},
+	
+	clonedField: function( el ) {
+
+		var _this = this
+		
+		// also check child elements
+		el.add( el.find( 'div[data-class]' ) ).each( function(i, el) {
+
+			el = jQuery( el )
+			var callbacks = _this._callbacks[el.attr( 'data-class') ]
+		
+			if ( callbacks ) {
+				for (var a = 0; a < callbacks.length; a++) {
+					callbacks[a]( el )
+				}
+			}
+
+		})
+	},
+
+	_initCallbacks: [],
+
+	addCallbackForInit: function( callback ) {
+
+		this._initCallbacks.push( callback )
+	
+	},
+
+	init: function() {
+
+		var _this = this;
+		
+		// also check child elements
+		
+		var callbacks = _this._initCallbacks;
+		
+		if ( callbacks )
+			for ( var a = 0; a < callbacks.length; a++)
+				callbacks[a]();
+			
+	}
+
+};
+
 jQuery(document).ready(function ($) {
+
 	'use strict';
 
 	var formfield;
 	var formfieldobj;
 
-	jQuery( document ).on( 'click', '.delete-field', function( e ) {
-
-		e.preventDefault();
-		var a = jQuery( this );
-
-		var confirmation = true;
-		//Confirm group deletion
-		if(a.parents('.cmb_repeat_element').length != 0) 
-			confirmation = confirm("Do you confirm the deletion of this group ?");
-
-		if(confirmation === true)
-			a.closest( '.field-item' ).slideToggle('fast', function(){
-				$(this).remove();
-			});
-
-	} );
-
-	/**
-	 * Initialize timepicker (this will be moved inline in a future release)
-	 */
-	$('.cmb_timepicker').each(function () {
-		$( this ).timePicker({
-			startTime: "07:00",
-			endTime: "22:00",
-			show24Hours: false,
-			separator: ':',
-			step: 30
-		});
-	});
-
-	/**
-	 * Initialize jQuery UI datepicker (this will be moved inline in a future release)
-	 */
-	$('.cmb_datepicker').each(function () {
-		$( this ).datepicker();
-		// $('#' + jQuery(this).attr('id')).datepicker({ dateFormat: 'yy-mm-dd' });
-		// For more options see http://jqueryui.com/demos/datepicker/#option-dateFormat
-	});
-	// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
-	$("#ui-datepicker-div").wrap('<div class="cmb_element" />');
-
-	/**
-	 * Initialize color picker
-	 */
-	if (typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function')
-		$('input:text.cmb_colorpicker').wpColorPicker();
-
-
-	//Trigger wysiwygs
-	$('.cmb_wysiwyg:not(:hidden)').each(function(){
-		tinyMCE.execCommand('mceAddControl', false, $(this).attr('id') );
-	})
+	CMB.init();
 
 	$('.CMB_Group_Field').sortable({
 		cancel: '.mceStatusbar', 
 		handle: '.move-field',
 		items: "> .field-item",
 		start: function(event, ui) { // turn TinyMCE off while sorting (if not, it won't work when resorted)
-			$('.cmb_wysiwyg').each(function(){
-				tinyMCE.execCommand('mceRemoveControl', false, $(this).attr('id') );
-			})
+			// $('.cmb_wysiwyg').each(function(){
+			// 	tinyMCE.execCommand('mceRemoveControl', false, $(this).attr('id') );
+			// })
 		},
 		stop: function(event, ui) { // re-initialize TinyMCE when sort is completed
-			$('.cmb_wysiwyg:not(:hidden)').each(function(){
-				tinyMCE.execCommand('mceAddControl', false, $(this).attr('id') );
-			})
+			// $('.cmb_wysiwyg:not(:hidden)').each(function(){
+			// 	tinyMCE.execCommand('mceAddControl', false, $(this).attr('id') );
+			// })
 		}
 	});
 
-	jQuery( document ).on( 'click', '.repeat-field', function(event) {
-		event.preventDefault();
+	jQuery( document ).on( 'click', '.delete-field', function( e ) {
 
+		e.preventDefault();
+		var a = jQuery( this );
+
+		a.closest( '.field-item' ).remove();
+
+	} );
+
+	jQuery( document ).on( 'click', '.repeat-field', function( e ) {
+
+	    e.preventDefault();
 	    var el = jQuery( this );
 
 	    var newT = el.prev().clone();
 
-	    //Make a colorpicker field repeatable
-	    newT.find('.wp-color-result').remove();
-		newT.find('input:text.cmb_colorpicker').wpColorPicker();
-
 	    newT.removeClass('hidden');
-	    newT.find('input[type!="button"]').val('');
+	    
+	    newT.find('input[type!="button"]').not('[readonly]').val('');
 	    newT.find( '.cmb_upload_status' ).html('');
-	    newT.css('display', 'none');
 	    newT.insertBefore( el.prev() );
 
 	    // Recalculate group ids & update the name fields..
@@ -128,26 +131,76 @@ jQuery(document).ready(function ($) {
 
 		} );
 
-		newT.slideToggle('fast', function(){
-			tinyMCE.execCommand('mceAddControl', false, $(this).find('.cmb_wysiwyg').attr('id') );
-		});
+	    CMB.clonedField( newT )
 
-	    // Reinitialize all the datepickers
-		jQuery('.cmb_datepicker' ).each(function () {
-			$(this).attr( 'id', '' ).removeClass( 'hasDatepicker' ).removeData( 'datepicker' ).unbind().datepicker();
-		});
+	} );
 
-		// Reinitialize all the timepickers.
-		jQuery('.cmb_timepicker' ).each(function () {
-			$(this).timePicker({
-				startTime: "07:00",
-				endTime: "22:00",
-				show24Hours: false,
-				separator: ':',
-				step: 30
-			});
-		});
+});
 
+
+/**
+ * ColorPickers
+ */
+
+CMB.addCallbackForInit( function() {
+
+	// Colorpicker
+	jQuery('input:text.cmb_colorpicker').wpColorPicker();
+
+} );
+
+CMB.addCallbackForClonedField( 'CMB_Color_Picker', function( newT ) {
+
+	// Reinitialize colorpickers
+    newT.find('.wp-color-result').remove();
+	newT.find('input:text.cmb_colorpicker').wpColorPicker();
+
+} );
+
+
+/**
+ * Date & Time Fields
+ */
+
+CMB.addCallbackForClonedField( ['CMB_Date_Field', 'CMB_Time_Field', 'CMB_Date_Timestamp_Field', 'CMB_Datetime_Timestamp_Field' ], function( newT ) {
+
+	// Reinitialize all the datepickers
+	newT.find( '.cmb_datepicker' ).each(function () {
+		jQuery(this).attr( 'id', '' ).removeClass( 'hasDatepicker' ).removeData( 'datepicker' ).unbind().datepicker();
 	});
+
+	// Reinitialize all the timepickers.
+	newT.find('.cmb_timepicker' ).each(function () {
+		jQuery(this).timePicker({
+			startTime: "07:00",
+			endTime: "22:00",
+			show24Hours: false,
+			separator: ':',
+			step: 30
+		});
+	});
+
+} );
+
+CMB.addCallbackForInit( function() {
+
+	// Datepicker
+	jQuery('.cmb_datepicker').each(function () {
+		jQuery(this).datepicker();
+	});
+	
+	// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
+	jQuery("#ui-datepicker-div").wrap('<div class="cmb_element" />');
+
+	// Timepicker
+	jQuery('.cmb_timepicker').each(function () {
+		jQuery(this).timePicker({
+			startTime: "07:00",
+			endTime: "22:00",
+			show24Hours: false,
+			separator: ':',
+			step: 30
+		});
+	} );
 
 });
