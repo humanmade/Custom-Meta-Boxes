@@ -22,23 +22,25 @@ var CMB = {
 
 		jQuery(document).ready( function () {
 				
-			jQuery( '.field.repeatable' ).each( function() {
+			jQuery( '.cmb-field.repeatable' ).each( function() {
 				_this.isMaxFields( jQuery(this) );
 			} );
 
 			jQuery( document ).on( 'click', '.cmb-delete-field', function(e) {
 				e.preventDefault();
 				_this.deleteField( jQuery( this ).closest('.field-item' ) );
+				jQuery( this).blur();
 			} );
 			
 			jQuery( document ).on( 'click', '.repeat-field', function(e) {
 				e.preventDefault();
-				_this.repeatField( jQuery( this ).closest('.field' ) );
+				_this.repeatField( jQuery( this ).closest('.cmb-field' ) );
+				jQuery( this).blur();
 			} );
 
 			_this.doneInit();
 			
-			jQuery('.field.cmb-sortable' ).each( function() { 
+			jQuery('.cmb-field.cmb-sortable' ).each( function() { 
 				_this.sortableInit( jQuery(this) );
 			} );
 			
@@ -59,7 +61,7 @@ var CMB = {
 	    
 	    newT = templateField.clone();
 	    newT.removeClass('hidden');
-	    
+	    	
 	    var excludeInputTypes = '[type=submit],[type=button],[type=checkbox],[type=radio],[readonly]';
 	    newT.find( 'input' ).not( excludeInputTypes ).val( '' );
 
@@ -97,7 +99,7 @@ var CMB = {
 
 	deleteField : function( fieldItem  ) {
 		
-		var field = fieldItem.closest( '.field' );
+		var field = fieldItem.closest( '.cmb-field' );
 	
 		this.isMaxFields( field, -1 );
 
@@ -109,9 +111,9 @@ var CMB = {
 	/**
 	 * Prevent having more than the maximum number of repeatable fields.
 	 * When called, if there is the maximum, disable .repeat-field button.
-	 * Note: Information Passed using data-max attribute on the .field element.
+	 * Note: Information Passed using data-max attribute on the .cmb-field element.
 	 *
-	 * @param jQuery .field
+	 * @param jQuery .cmb-field
 	 * @param int modifier - adjust count by this ammount. 1 If adding a field, 0 if checking, -1 if removing a field... etc
 	 * @return null
 	 */
@@ -248,6 +250,13 @@ var CMB = {
 			beforeStop: function( event, ui ) { _this.sortStart( jQuery( ui.item[0] ) ); },
 			deactivate: function( event, ui ) { _this.sortEnd( jQuery( ui.item[0] ) ); },
 		} );
+
+		console.log( field );
+		field.on( "sortstart", function( event, ui ) {
+			ui.placeholder.height( ui.item.height()  );
+			ui.placeholder.width( ui.item.width() );
+		} );
+
 		
 	},
 

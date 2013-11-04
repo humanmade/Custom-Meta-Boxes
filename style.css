@@ -1,41 +1,35 @@
 /**
  * CMB Styling
  */
-.cmb_metabox tr td, table.cmb_metabox tr th { vertical-align: top; padding: 5px; }
-.cmb_metabox th { text-align: right; font-weight:bold;}
-.cmb_metabox th label { margin-top:5px; display:block;}
-div.cmb_metabox_description { color: #AAA; font-style: italic; margin: 2px 0 16px !important;}
-span.cmb_metabox_description { color: #AAA; font-style: italic;}
-.cmb_metabox input, 
-.cmb_metabox textarea { font-size:12px; padding: 5px; margin: 0; }
-.cmb_metabox input[type=text], table.cmb_metabox textarea, table.cmb_metabox select { width: 100%; }
-.cmb_metabox textarea.cmb_textarea_code,
-.cmb_metabox textarea.cmb_textarea { vertical-align: top; margin: 0; }
-.cmb_metabox textarea.cmb_textarea_code { font-family: Consolas,Monaco,monospace; line-height: 16px; }
-.cmb_metabox input.cmb_text_small { width: 100px; }
-.cmb_metabox input.cmb_timepicker { width: 100px; margin-right: 0;}
-.cmb_metabox input.cmb_text_money { width: 90px; margin-right: 15px;}
-.cmb_metabox input.cmb_text_medium { width: 230px; margin-right: 15px;}
-.cmb_metabox input.cmb_upload_file { width: 65%; }
-.cmb_metabox li { font-size:12px; margin: 1px 0 5px 0; line-height: 16px; }
-.cmb_metabox ul { padding-top:5px; margin: 0; }
-.cmb_metabox select { font-size:12px; margin-top: 3px;}
-.cmb_metabox input:focus, table.cmb_metabox textarea:focus { background: #fffff8;}
-.cmb_metabox_title { margin: 0 0 5px 0; padding: 5px 0 0 0; font: italic 24px/35px Georgia,"Times New Roman","Bitstream Charter",Times,serif;}
-.cmb_radio_inline { padding: 4px 0 0 0;}
-.cmb_radio_inline_option {display: inline; padding-right: 18px;}
-.cmb_metabox input[type="radio"] { margin: 0 5px 0 0; padding: 0;}
-.cmb_metabox input[type="checkbox"] { margin: 0 5px 0 0; padding: 0;}
-.cmb_metabox .mceIframeContainer {background:#FFF;}
-.cmb_metabox .meta_mce {width:97%;}
-.cmb_metabox .meta_mce textarea {width:100%;}
-.cmb_metabox .cmb_upload_status {  margin: 10px 0 0 0;}
-.cmb_metabox .cmb_upload_status .img_status {  position: relative; }
-.cmb_metabox .cmb_upload_status .img_status img { border:1px solid #DFDFDF; background: #FAFAFA; max-width:350px; padding: 5px; -moz-border-radius: 2px; border-radius: 2px;}
-.cmb_remove_file_button { text-indent: -9999px; background: url(images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
-/* Sidebar placement adjustments */
-.inner-sidebar table.cmb_metabox input[type=text], table.cmb_metabox textarea { width: 100%; }
-.inner-sidebar table.cmb_metabox .cmb_upload_status .img_status img { width: 90%; }
+
+
+.cmb-fields .cmb-row { display: block; clear:  both; overflow: hidden; margin: 0 -10px; }
+.cmb-fields .cmb-grid { float: left; width: 100%; }
+.cmb-fields .cmb-field { padding: 10px; }
+
+/*.cmb-fields label { margin:0 0 8px; display:block; }*/
+
+.cmb-fields .cmb-field { padding-left: 220px; }
+.cmb-fields .cmb-field-title, 
+.cmb-fields .cmb-field-description { 
+	float: left;
+	margin-left: -210px;
+	width: 200px;
+	margin-top: 4px;
+	clear: left;
+}
+
+.cmb-field-description { color: #AAA; font-style: italic; display: block; margin-bottom: 16px; }
+.cmb-fields input, 
+.cmb-fields textarea { font-size:12px; padding: 5px; margin: 0; }
+.cmb-fields input[type=text],
+.cmb-fields textarea { width: 100%; }
+.cmb-fields input.cmb_text_small { width: 100px; }
+
+.CMB_Radio_Field .field-item label,
+.CMB_Checkbox .field-item label { display: inline-block; margin-top: 5px; }
+.CMB_Radio_Field input[type="radio"],
+.CMB_Checkbox input[type="checkbox"] { margin: 5px 5px 0 0; padding: 0; width: auto; }
 
 /**
  * Timepicker
@@ -329,18 +323,17 @@ div.time-picker li.selected { background: #0063CE; color: #fff; }
      height: 200px; /*must have*/
  }
 
-.field {  margin-bottom: 8px; }
-.field-title { margin-bottom: 8px; margin-top: 0; font-weight: bold; }
-#poststuff .field-title h2 { margin: 0 !important; }
+.cmb-field-title { margin-bottom: 8px; margin-top: 0; font-weight: bold; }
+#poststuff .cmb-field-title h2 { margin: 0 !important; }
 
- .field.repeatable .field-item { 
+ .cmb-field.repeatable .field-item { 
  	padding-right: 25px; 
  	margin-bottom: 8px; 
  }
 
 .cmb-delete-field { 
 	position: absolute;
-	top: 6px;
+	top: 5px;
 	right: 0;
 	width: 16px;
 	height: 16px;
@@ -395,9 +388,9 @@ div.time-picker li.selected { background: #0063CE; color: #fff; }
 		background-size: 8px 8px;
 	}
 
-#poststuff .field-title h2 { margin: 0 !important; }
+#poststuff .cmb-field-title h2 { margin: 0 !important; }
 
- .field.repeatable .field-item { padding-right: 25px; margin-bottom: 8px; }
+ .cmb-field.repeatable .field-item { padding-right: 25px; margin-bottom: 8px; }
 .ui-icon.delete-field { position: absolute; top: 6px; right: 0; cursor: pointer; opacity: 0.75; }
 .ui-icon.delete-field:hover { opacity: 1; }
 button.repeat-field { display: block !important; clear: both; }
@@ -417,7 +410,7 @@ button.repeat-field { display: block !important; clear: both; }
 .CMB_Group_Field .cmb_element { display: block; height: 0;  }
 .CMB_Group_Field .cmb_element .ui-state-default { /*display: none;*/ margin-right: -3px; margin-top: -5px; }
 
-.CMB_Group_Field > .field-title { 
+.CMB_Group_Field > .cmb-field-title { 
 	margin-top: 20px;
 	font-size: 1.5em;
 	margin-top: 10px;
@@ -474,7 +467,6 @@ button.repeat-field { display: block !important; clear: both; }
 .CMB_File_Field.repeatable .cmb-remove-file,
 .CMB_Image_Field.repeatable .cmb-remove-file { display: none !important; }
 
-.CMB_Color_Picker .field-item { float: left; clear: both; }
 .loading::before { content: ' '; display: block; background: url( 'images/wpspin.gif' ) no-repeat; width: 16px; height: 16px; position: absolute; top: 50%; left: 50%; margin-top: -8px; margin-left: -8px; }
 @media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
 	.loading::before { background-image: url( 'images/wpspin-2x.gif'); background-size: 16px 16px; }
@@ -549,3 +541,5 @@ button.repeat-field { display: block !important; clear: both; }
 	height: 11px; 
 	width: auto; 
 }
+/*
+.wp-color-result:after { line-height: 23px; }*/
