@@ -35,17 +35,16 @@ Version: 	1.0 - Beta 1
  * This may need to be filtered for local Window installations.
  * If resources do not load, please check the wiki for details.
  */
-if ( ! defined( 'CMB_PATH') )
-define( 'CMB_PATH', str_replace( '\\', '/', dirname( __FILE__ ) ) );
-if ( ! defined( 'CMB_URL' ) )
-define( 'CMB_URL', str_replace( str_replace( '\\', '/', WP_CONTENT_DIR ), str_replace( '\\', '/', WP_CONTENT_URL ), CMB_PATH ) );
 
+if ( ! defined( 'CMB_PATH') )
+	define( 'CMB_PATH', str_replace( '\\', '/', dirname( __FILE__ ) ) );
+
+if ( ! defined( 'CMB_URL' ) )
+	define( 'CMB_URL', str_replace( str_replace( '\\', '/', WP_CONTENT_DIR ), str_replace( '\\', '/', WP_CONTENT_URL ), CMB_PATH ) );
 
 include_once( CMB_PATH . '/classes.fields.php' );
-include_once( CMB_PATH . '/class.cmb-meta-box.php' );
-
-// Make it possible to add fields in locations other than post edit screen.
-include_once( CMB_PATH . '/fields-anywhere.php' );
+include_once( CMB_PATH . '/class.cmb.php' );
+include_once( CMB_PATH . '/class.cmb-post.php' );
 
 include_once( CMB_PATH . '/example-functions.php' );
 
@@ -71,7 +70,7 @@ function cmb_init() {
 
 	if ( ! empty( $meta_boxes ) )
 		foreach ( $meta_boxes as $meta_box )
-			new CMB_Meta_Box( $meta_box );
+			new CMB_Post( $meta_box );
 
 }
 add_action( 'init', 'cmb_init' );
