@@ -28,7 +28,7 @@ class CMB_Post extends CMB {
 
 		if ( is_page() || ! isset( $object_id ) )
 			return false;
-
+		
 		$this->init( $object_id ); 
 
 	}

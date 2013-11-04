@@ -1159,7 +1159,7 @@ class CMB_Post_Select extends CMB_Select {
 					
 					var ajaxData = {
 						action  : 'cmb_post_select',
-						post_id : '<?php echo intval( get_the_id() ); ?>', // Used for user capabilty check.
+						post_id : '<?php echo intval( 0 ); ?>', // Used for user capabilty check.
 						nonce   : <?php echo json_encode( wp_create_nonce( 'cmb_select_field' ) ); ?>,
 						query   : <?php echo json_encode( $this->args['ajax_args'] ); ?>
 					};
