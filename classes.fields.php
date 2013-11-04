@@ -232,47 +232,16 @@ abstract class CMB_Field {
 
 	}
 
-	public function parse_save_values() {}
-
-	public function parse_save_value() {}
-
-	/**
-	 * @todo this surely only works for posts
-	 * @todo why do values need to be passed in, they can already be passed in on construct
-	 */
-	public function save( $post_id, $values ) {
+	public function parse_save_values() {
 
 		// Don't save readonly values.
 		if ( $this->args['readonly'] )
-			return;
-
-		$this->values = $values;
-		$this->parse_save_values();
+			$this->values = array();
 
 		// Allow override from args
-		if ( ! empty( $this->args['save_callback'] ) ) {
-
+		if ( ! empty( $this->args['save_callback'] ) )
 			call_user_func( $this->args['save_callback'], $this->values, $post_id );
 
-			return;
-
-		}
-
-		// If we are not on a post edit screen
-		if ( ! $post_id )
-			return;
-
-		delete_post_meta( $post_id, $this->id );
-
-		foreach( $this->values as $v ) {
-
-			$this->value = $v;
-			$this->parse_save_value();
-
-			if ( $this->value || $this->value === '0' )
-				add_post_meta( $post_id, $this->id, $this->value );
-
-		}
 	}
 
 	public function title() {
@@ -647,6 +616,8 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
 			$value = strtotime( $value );
 
 		sort( $this->values );
+
+		parent::parse_save_values();
 	
 	}
 
@@ -911,6 +882,8 @@ class CMB_Select extends CMB_Field {
 		if ( isset( $this->group_index ) && isset( $this->args['multiple'] ) && $this->args['multiple'] )
 			$this->values = array( $this->values );
 
+		parent::parse_save_values();
+
 	}
 
 	public function get_options() {
@@ -1095,11 +1068,17 @@ class CMB_Post_Select extends CMB_Select {
 
 	public function parse_save_value() {
 
-		// AJAX multi select2 data is submitted as a string of comma separated post IDs.
-		// If empty, set to false instead of empty array to ensure the meta entry is deleted.
-		if ( $this->args['ajax_url'] && $this->args['multiple'] ) {
-			$this->value = ( ! empty( $this->value ) ) ? explode( ',', $this->value ) : false;
+		foreach ( $this->values as &$value ) {
+		
+			// AJAX multi select2 data is submitted as a string of comma separated post IDs.
+			// If empty, set to false instead of empty array to ensure the meta entry is deleted.
+			if ( $this->args['ajax_url'] && $this->args['multiple'] ) {
+				$value = ( ! empty( $value ) ) ? explode( ',', $value ) : false;
+			}
+
 		}
+
+		parent::parse_save_values();
 
 	}
 
@@ -1424,6 +1403,9 @@ class CMB_Group_Field extends CMB_Field {
 				$this->values[] = $meta;
 
 		}
+
+		parent::parse_save_values();
+
 	}
 
 	private function isNotEmptyArray( $array ) {
