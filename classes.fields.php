@@ -248,7 +248,7 @@ abstract class CMB_Field {
 
 		if ( $this->title ) { ?>
 
-			<div class="field-title">
+			<div class="cmb-field-title">
 				<label <?php $this->for_attr(); ?>>
 					<?php echo esc_html( $this->title ); ?>
 				</label>
@@ -262,7 +262,7 @@ abstract class CMB_Field {
 
 		if ( $this->description ) { ?>
 
-			<div class="cmb_metabox_description"><?php echo wp_kses_post( $this->description ); ?></div>
+			<div class="cmb-field-description"><?php echo wp_kses_post( $this->description ); ?></div>
 
 		<?php }
 
@@ -772,7 +772,7 @@ class CMB_Title extends CMB_Field {
 	public function title() {
 		?>
 
-		<div class="field-title">
+		<div class="cmb-field-title">
 			<h2>
 				<?php echo esc_html( $this->title ); ?>
 			</h2>
