@@ -46,6 +46,7 @@ include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb.php' );
 include_once( CMB_PATH . '/class.cmb-post.php' );
 include_once( CMB_PATH . '/class.cmb-option.php' );
+include_once( CMB_PATH . '/class.cmb-group.php' );
 
 include_once( CMB_PATH . '/example-functions.php' );
 

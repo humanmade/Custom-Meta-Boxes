@@ -2,15 +2,21 @@
 
 abstract class CMB {
 	
-	protected $_meta_box;
-	protected $_object_id;
-	protected $_fields = array();
+	public $_meta_box;
+	public $_object_id;
+	private $_fields = array();
+	
+	protected $meta_box_defaults = array(
+		'id'     => '',
+		'title'  => '',
+		'fields' => array()
+	);
 
 	function __construct( $meta_box ) {
 
 		global $pagenow;
 
-		$this->_meta_box  = $meta_box;
+		$this->_meta_box = wp_parse_args( $meta_box, $this->meta_box_defaults );
 
 		if ( empty( $this->_meta_box['id'] ) )
 			$this->_meta_box['id'] = sanitize_title( $this->_meta_box['title'] );
@@ -25,7 +31,7 @@ abstract class CMB {
 		add_action( 'admin_enqueue_scripts', array( &$this, 'scripts' ) );
 
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
-
+				
 			$values = array();
 
 			$field = wp_parse_args( 
@@ -33,30 +39,57 @@ abstract class CMB {
 				array(
 					'name' => '',
 					'desc' => '',
-					'std'  => '',
+					'type'  => '',
 					'cols' => 12
 				)
 			);
 
 			$class = _cmb_field_class_for_type( $field['type'] );
-
-			$values = (array) $this->get_field_values( $object_id, $field['id'] );
 			
-			$this->_fields[] = new $class( $field['id'], $field['name'], (array) $values, $field );
+			if ( ! $class )
+				continue;
+			
+			$values = (array) $this->get_field_values( $object_id, $field['id'] );
+
+			$this->add_fields( new $class( $field, $values, $this ) );
 
 		}
 
 	}
 
-	public function get_values( $object_id, $field_id ) {}
+	function scripts() {
+
+		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
+
+		foreach ( $this->_fields as $field )
+			$field->enqueue_scripts();
+
+		wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'style.css' );
+
+		foreach ( $this->_fields as $field )
+			$field->enqueue_styles();
+
+	}
+
+	public function add_fields( CMB_Field $field ) {
+		$this->_fields[] = $field;
+	}
+
+	public function &get_fields() {
+		return $this->_fields;
+	}
+
+	public function get_field_values( $object_id, $field_id ) {}
+
+	public function save_field_values( $object_id, $field_id, $values ) {}
 
 	function display() {
 
-		?>
+		?>	
 		
 		<div class="cmb-fields">
 
-			<?php foreach ( $this->_fields as $field ) : ?>
+			<?php foreach ( $this->get_fields() as $field ) : ?>
 		
 				<div class="cmb-row">
 					<?php $this->display_field( $field ); ?>
@@ -111,20 +144,6 @@ abstract class CMB {
 
 	}
 	
-	function scripts() {
-
-		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
-
-		foreach ( $this->_fields as $field )
-			$field->enqueue_scripts();
-
-		wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'style.css' );
-
-		foreach ( $this->_fields as $field )
-			$field->enqueue_styles();
-
-	}
-	
 	function save( $object_id )  {
 
 		// verify nonce
@@ -136,21 +155,18 @@ abstract class CMB {
 			// verify this meta box was shown on the page
 			if ( ! isset( $_POST['_cmb_present_' . $field->id ] ) )
 				continue;
-			
-			$values = ( isset( $_POST[$field->id] ) ) ? (array) $_POST[$field->id] : array();			
+		
+			$values = ( isset( $_POST[ $field->id ] ) ) ? (array) $_POST[ $field->id ] : array();			
 			$values = $this->strip_repeatable( $values );
 			
-			$field->values = $values;
-			
+			$field->set_values( $values );
 			$field->parse_save_values();
-
+			
 			$this->save_field_values( $object_id, $field->id, $field->get_values() );
 
 		}
 
 	}
-
-	public function save_field_values( $object_id, $field_id, $values ) {}
 
 	function strip_repeatable( $values ) {
 

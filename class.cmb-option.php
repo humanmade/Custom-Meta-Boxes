@@ -38,16 +38,20 @@ class CMB_Options extends CMB {
 
 	}
 
-	function display_hook() {
+	function display_hook() { ?>
+		
+		<div class="wrap">
+			
+			<h2><?php echo esc_html( $this->_meta_box['title'] ); ?></h2>
+			<form action="options-general.php?page=<?php echo esc_attr( $this->slug ); ?>" method="POST" style="max-width: 800px;">
+				<?php $this->display();  ?>
+				<input type="submit" class="button-primary" value="Save Settings">
+			</form>
+		
+		</div>
 
-		echo '<div class="wrap">';
-		echo '<h2>' . esc_html( $this->_meta_box['title'] ) . '</h2>';
-		echo '<form action="options-general.php?page=' . esc_attr( $this->slug ) . '" method="POST">';
-		$this->display(); 
-		echo '<input type="submit" class="button-primary" value="Save Settings">';
-		echo '</form>';
-		echo '</div>';
-
+		<?php
+		
 	}
 
 	public function get_field_values( $object_id, $field_id ) {
