@@ -417,6 +417,7 @@ button.repeat-field { display: block !important; }
 	border: 1px solid #DDD; 
 	background: #ECECEC; 
 	border-radius: 3px; 
+	position: relative;
 }
 
 .CMB_Group_Field > .cmb-field-title { 
@@ -446,8 +447,8 @@ button.repeat-field { display: block !important; }
 }
 
 .CMB_Group_Field .group > .cmb-delete-field { 
-	top: -25px;
-	right: -0px;
+	top: 10px;
+	right: 10px;
 	width: auto;
 	height: auto;
 	padding: 2px 5px 2px 20px;

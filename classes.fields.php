@@ -1235,41 +1235,58 @@ add_action( 'wp_ajax_cmb_post_select', 'cmb_ajax_post_select' );
 class CMB_Group_Field extends CMB_Field {
 
 	private $group_fields = array();
+	private $default_args = array(
+		'fields' => array()
+	);
 
 	function __construct() {
 
 		$args = func_get_args(); // you can't just put func_get_args() into a function as a parameter
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
+		$this->args = wp_parse_args( $this->args, $this->default_args );
+
 		$this->init_group_fields();
 
 	}
 
 	public function init_group_fields() {
-		
-		$data = array( 'fields' => array() );
-		$field_values = array();
 
-		if ( ! empty( $this->args['fields'] ) ) {
-			foreach ( $this->args['fields'] as $field ) {
-				
-				$field['original_id'] = $field['id'];
-				$field['id']          = $this->get_the_name_attr() . '[' . $field['id'] . ']';
-				
-				$data['fields'][] = $field;
+		foreach ( $this->get_values() as $value ) {
 
-				$value = $this->get_value();
-				$field_values[ $field['id'] ] = isset( $value[ $field['original_id'] ] ) ? $value[ $field['original_id'] ] : array();
+			$this->init_group_field( $value );
 
-			}
+			$this->field_index++;
 
 		}
-	
-		$this->group_fields = new CMB_Group( $data );
 		
-		$this->group_fields->set_values( $field_values );
-		
-		$this->group_fields->init( 0 );
+		$this->field_index = 'x';		
+		$this->init_group_field( array() );		
+
+		$this->field_index = 0;
+
+	}
+
+	public function init_group_field( $value ) {
+
+		$data = array( 'fields' => array() );
+		$field_values = array();	
+
+		foreach ( $this->args['fields'] as $field ) {
+				
+			// hm( $this->get_the_id_attr() );
+			$field['original_id'] = $field['id'];
+			$field['id']          = $this->args['id'] . '[cmb-group-' . $this->field_index . '][' . $field['id'] . ']';			
+			$data['fields'][] = $field;
+
+			$field_values[ $field['id'] ] = isset( $value[ $field['original_id'] ] ) ? $value[ $field['original_id'] ] : array();
+
+		}
+
+		$this->group_fields[$this->field_index] = new CMB_Group( $data );
+		$this->group_fields[$this->field_index]->set_values( $field_values );
+		$this->group_fields[$this->field_index]->init( 0 );
+		// $this->group_fields[$this->field_index]->group_index = $this->field_index;
 
 	}
 
@@ -1318,18 +1335,20 @@ class CMB_Group_Field extends CMB_Field {
 	}
 	
 	public function html() {
-
+		
 		?>
 
-		<div class="group <?php echo ! empty( $field['repeatable'] ) ? 'cloneable' : '' ?>" style="position: relative">
+		<div class="group">
 
 			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
+				<button class="cmb-delete-field" title="Remove field">
+					<span class="cmb-delete-field-icon">&times;</span> Remove Group
+				</button>
 			<?php endif; ?>
 
 			<?php 
 
-			$this->group_fields->display();
+			$this->group_fields[$this->field_index]->display();
 
 			?>
 
@@ -1339,13 +1358,14 @@ class CMB_Group_Field extends CMB_Field {
 
 	public function parse_save_values() {
 		
-		$values       = &$this->get_values();
-		$group_fields = &$this->group_fields->get_fields();
+		$values      = &$this->get_values();
 
-		hm( $values );
-		die();
-		
-		foreach ( $values as &$value ) {
+		foreach ( $values as $key => &$value ) {
+			
+			$field_index = str_replace( 'cmb-group-', '', $key );
+
+			$group_fields = isset( $this->group_fields[$field_index] ) ? $this->group_fields[$field_index]->get_fields() : array();
+			
 			foreach ( $group_fields as &$group_field ) {
 					
 				$original_id = $group_field->args['original_id'];
@@ -1357,6 +1377,7 @@ class CMB_Group_Field extends CMB_Field {
 				$value[$original_id] = $group_field->get_values();
 				
 			}
+
 		}
 		
 		parent::parse_save_values();

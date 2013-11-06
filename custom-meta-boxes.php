@@ -71,8 +71,10 @@ function cmb_init() {
 	$meta_boxes = apply_filters( 'cmb_meta_boxes', array() );
 
 	if ( ! empty( $meta_boxes ) )
-		foreach ( $meta_boxes as $meta_box )
-			new CMB_Options( $meta_box );
+		foreach ( $meta_boxes as $meta_box ) {
+			new CMB_Post( $meta_box );
+			// new CMB_Options( $meta_box );
+		}
 
 }
 add_action( 'init', 'cmb_init' );
