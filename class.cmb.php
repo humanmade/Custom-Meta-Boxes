@@ -50,7 +50,7 @@ abstract class CMB {
 				continue;
 			
 			$values = (array) $this->get_field_values( $object_id, $field['id'] );
-
+			
 			$this->add_fields( new $class( $field, $values ) );
 
 		}

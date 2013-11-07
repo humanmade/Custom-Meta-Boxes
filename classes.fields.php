@@ -283,11 +283,10 @@ abstract class CMB_Field {
 			$values = $this->get_values();
 
 		$this->title();
-
 		$this->description();
 
 		$i = 0;
-		foreach ( $this->get_values() as $key => $value ) {
+		foreach ( $values as $key => $value ) {
 
 			$this->field_index = $i;
 			$this->value = $value; ?>
