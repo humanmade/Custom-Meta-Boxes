@@ -9,6 +9,7 @@
 abstract class CMB_Field {
 
 	public $value;
+	public $values;
 	public $field_index = 0;
 
 	/**
@@ -28,9 +29,8 @@ abstract class CMB_Field {
 	public $id;
 	public $title;
 
-	public function __construct( Array $field, Array $values = array(), CMB $cmb = null ) {
+	public function __construct( Array $field, Array $values = array() ) {
 
-		$this->cmb   = $cmb;
 		$this->id 	 = $field['id'];
 		$this->title = $field['name'];
 
@@ -287,7 +287,7 @@ abstract class CMB_Field {
 		$this->description();
 
 		$i = 0;
-		foreach ( $values as $key => $value ) {
+		foreach ( $this->get_values() as $key => $value ) {
 
 			$this->field_index = $i;
 			$this->value = $value; ?>
@@ -1250,43 +1250,26 @@ class CMB_Group_Field extends CMB_Field {
 
 	}
 
+	/**
+	 * Initialize all sub-fields of this group.
+	 * 
+	 * @return null
+	 */
 	public function init_group_fields() {
 
-		foreach ( $this->get_values() as $value ) {
-
-			$this->init_group_field( $value );
-
-			$this->field_index++;
-
-		}
-		
-		$this->field_index = 'x';		
-		$this->init_group_field( array() );		
-
-		$this->field_index = 0;
-
-	}
-
-	public function init_group_field( $value ) {
-
 		$data = array( 'fields' => array() );
-		$field_values = array();	
 
 		foreach ( $this->args['fields'] as $field ) {
-				
-			// hm( $this->get_the_id_attr() );
+			
 			$field['original_id'] = $field['id'];
-			$field['id']          = $this->args['id'] . '[cmb-group-' . $this->field_index . '][' . $field['id'] . ']';			
-			$data['fields'][] = $field;
-
-			$field_values[ $field['id'] ] = isset( $value[ $field['original_id'] ] ) ? $value[ $field['original_id'] ] : array();
-
+			$field['id']          = $field['id'];
+			
+			array_push( $data['fields'], $field );
+			
 		}
 
-		$this->group_fields[$this->field_index] = new CMB_Group( $data );
-		$this->group_fields[$this->field_index]->set_values( $field_values );
-		$this->group_fields[$this->field_index]->init( 0 );
-		// $this->group_fields[$this->field_index]->group_index = $this->field_index;
+		$this->group_fields = new CMB_Group( $data );
+		$this->group_fields->init( 0 );
 
 	}
 
@@ -1336,23 +1319,23 @@ class CMB_Group_Field extends CMB_Field {
 	
 	public function html() {
 		
+		if ( $this->args['repeatable'] ) : ?>
+			<button class="cmb-delete-field" title="Remove field">
+				<span class="cmb-delete-field-icon">&times;</span> Remove Group
+			</button>
+		<?php endif; ?>
+
+		<?php 
+		
+		// Update the group fields ID & Values with the data for this instance of the group.
+		foreach ( $this->group_fields->get_fields() as $field ) {
+			$field->id =  $this->args['id'] . '[cmb-group-' . $this->field_index . '][' . $field->args['original_id'] . ']';	
+			$field->values = isset( $this->get_value()[$field->args['original_id']] ) ? $this->get_value()[$field->args['original_id']] : array( 1 => '' );
+		}
+								
+		$this->group_fields->display();
+
 		?>
-
-		<div class="group">
-
-			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="Remove field">
-					<span class="cmb-delete-field-icon">&times;</span> Remove Group
-				</button>
-			<?php endif; ?>
-
-			<?php 
-
-			$this->group_fields[$this->field_index]->display();
-
-			?>
-
-		</div>
 
 	<?php }
 
@@ -1364,9 +1347,9 @@ class CMB_Group_Field extends CMB_Field {
 			
 			$field_index = str_replace( 'cmb-group-', '', $key );
 
-			$group_fields = isset( $this->group_fields[$field_index] ) ? $this->group_fields[$field_index]->get_fields() : array();
+			$group_fields = $this->group_fields->get_fields();
 			
-			foreach ( $group_fields as &$group_field ) {
+			foreach ( $group_fields as $group_field ) {
 					
 				$original_id = $group_field->args['original_id'];
 				$field_values = isset( $value[ $original_id ] ) ? $value[ $original_id ] : array();
@@ -1379,7 +1362,7 @@ class CMB_Group_Field extends CMB_Field {
 			}
 
 		}
-		
+			
 		parent::parse_save_values();
 
 	}

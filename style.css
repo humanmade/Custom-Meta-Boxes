@@ -9,7 +9,7 @@
 
 /*.cmb-fields label { margin:0 0 8px; display:block; }*/
 
-.cmb-fields .cmb-field { padding-left: 220px; }
+/*.cmb-fields .cmb-field { padding-left: 220px; }
 .cmb-fields .cmb-field-title, 
 .cmb-fields .cmb-field-description { 
 	float: left;
@@ -17,7 +17,7 @@
 	width: 200px;
 	margin-top: 4px;
 	clear: left;
-}
+}*/
 
 .cmb-field-description { color: #AAA; font-style: italic; display: block; margin-bottom: 16px; }
 .cmb-fields input, 
@@ -415,7 +415,7 @@ button.repeat-field { display: block !important; }
 	padding: 0 9px; 
 	margin-bottom: 16px; 
 	border: 1px solid #DDD; 
-	background: #ECECEC; 
+	background: #F6F6F6; 
 	border-radius: 3px; 
 	position: relative;
 }
@@ -446,18 +446,37 @@ button.repeat-field { display: block !important; }
 	border-radius: 3px; 
 }
 
-.CMB_Group_Field .group > .cmb-delete-field { 
-	top: 10px;
-	right: 10px;
+.CMB_Group_Field.repeatable > .field-item:before {
+	content: ' ';
+	display: block;
+	height: 30px;
+	top: -1px;
+	left: -1px;
+	right: -1px;
+	position: absolute;
+	background: #f1f1f1;
+	background-image: -webkit-gradient(linear,left bottom,left top,from(#ececec),to(#f9f9f9));
+	background-image: -webkit-linear-gradient(bottom,#ececec,#f9f9f9);
+	background-image: -moz-linear-gradient(bottom,#ececec,#f9f9f9);
+	background-image: -o-linear-gradient(bottom,#ececec,#f9f9f9);
+	background-image: linear-gradient(to top,#ececec,#f9f9f9);
+	border: 1px solid #DFDFDF;
+	border-radius: 3px 3px 0 0;
+}
+
+.CMB_Group_Field > .field-item > .cmb-delete-field { 
+	top: 3px;
+	right: 3px;
 	width: auto;
 	height: auto;
 	padding: 2px 5px 2px 20px;
 	text-indent: 0;
 	font-size: 12px;
 	line-height: 14px;	
+	z-index: 1;
 }
 
-.CMB_Group_Field .group > .cmb-delete-field .cmb-delete-field-icon { 
+.CMB_Group_Field .field-item > .cmb-delete-field .cmb-delete-field-icon { 
 	left: 10px;
 	text-indent: 100%;
 	overflow: hidden;
@@ -502,7 +521,7 @@ button.repeat-field { display: block !important; }
 	cursor: move; 
 }
 
-.cmb-sortable .ui-sortable-helper:before { 
+.cmb-sortable .ui-sortable-helper:after { 
 	content: ' ';
 	position: absolute;
 	width: 100%;
@@ -517,6 +536,7 @@ button.repeat-field { display: block !important; }
 
 .cmb-sortable .ui-sortable-placeholder { 
 	border: 1px dashed #DDD; 
+	background: transparent; 
 	visibility: visible !important; 
 	margin-bottom: 6px !important; 
 	margin-right: 6px !important; 
@@ -545,16 +565,32 @@ button.repeat-field { display: block !important; }
 }
 
 .CMB_Group_Field.cmb-sortable > .field-item { 
-	position: relative; 
-	padding-top: 10px; 
+	/*position: relative; */
+	/*padding-top: 10px; */
 }
 
 .CMB_Group_Field.cmb-sortable > .field-item > .cmb-handle { 
 	top: -1px; 
 	left: -1px; 
 	right: -1px; 
-	height: 11px; 
+	height: 30px; 
 	width: auto; 
+	background: transparent;
 }
+.CMB_Group_Field.cmb-sortable > .field-item.ui-sortable-helper:after {
+	display: none;
+}
+
+.CMB_Group_Field.cmb-sortable > .field-item.ui-sortable-placeholder { 
+	border: 1px dashed #DDD; 
+	background: transparent; 
+	visibility: visible !important; 
+	margin-bottom: 6px !important; 
+	margin-right: 6px !important; 
+}
+.CMB_Group_Field.cmb-sortable > .field-item.ui-sortable-placeholder:before { 
+	display: none;
+}
+
 /*
 .wp-color-result:after { line-height: 23px; }*/

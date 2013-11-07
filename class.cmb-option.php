@@ -44,7 +44,11 @@ class CMB_Options extends CMB {
 			
 			<h2><?php echo esc_html( $this->_meta_box['title'] ); ?></h2>
 			<form action="options-general.php?page=<?php echo esc_attr( $this->slug ); ?>" method="POST" style="max-width: 800px;">
+				
 				<?php $this->display();  ?>
+				
+				<br />
+
 				<input type="submit" class="button-primary" value="Save Settings">
 			</form>
 		
