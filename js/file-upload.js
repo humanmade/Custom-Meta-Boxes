@@ -34,7 +34,7 @@ jQuery( document ).ready( function() {
 			fileHolder.show();
 			fileHolder.siblings( '.cmb-remove-file' ).show();
 
-			var fieldType = container.closest( '.field-item' ).attr( 'data-class' );
+			var fieldType = container.closest( '.cmb-field-item' ).attr( 'data-class' );
 
 			if ( 'CMB_Image_Field' === fieldType ) {
 

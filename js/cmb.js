@@ -28,11 +28,11 @@ var CMB = {
 
 			jQuery( document ).on( 'click', '.cmb-delete-field', function(e) {
 				e.preventDefault();
-				_this.deleteField( jQuery( this ).closest('.field-item' ) );
+				_this.deleteField( jQuery( this ).closest('.cmb-field-item' ) );
 				jQuery( this).blur();
 			} );
 			
-			jQuery( document ).on( 'click', '.repeat-field', function(e) {
+			jQuery( document ).on( 'click', '.cmb-repeat-field', function(e) {
 				e.preventDefault();
 				_this.repeatField( jQuery( this ).closest('.cmb-field' ) );
 				jQuery( this).blur();
@@ -57,7 +57,7 @@ var CMB = {
 		if ( _this.isMaxFields( field, 1 ) )
 			return;
 
-	    templateField = field.find( '> .field-items > .field-item.hidden' );
+	    templateField = field.find( '> .cmb-field-items > .cmb-field-item.hidden' );
 	    
 	    newT = templateField.clone();
 	    newT.removeClass('hidden');
@@ -73,7 +73,7 @@ var CMB = {
 		index = 0;
 		attr  = ['id','name','for','data-id','data-name'];	
 		
-		field.find( '> .field-items > .field-item' ).not( templateField ).each( function() {
+		field.find( '> .cmb-field-items > .cmb-field-item' ).not( templateField ).each( function() {
 
 			var search  = field.hasClass( 'CMB_Group_Field' ) ? /cmb-group-(\d|x)*/g : /cmb-field-(\d|x)*/g;
 			var replace = field.hasClass( 'CMB_Group_Field' ) ? 'cmb-group-' + index : 'cmb-field-' + index;
@@ -110,7 +110,7 @@ var CMB = {
 
 	/**
 	 * Prevent having more than the maximum number of repeatable fields.
-	 * When called, if there is the maximum, disable .repeat-field button.
+	 * When called, if there is the maximum, disable .cmb-repeat-field button.
 	 * Note: Information Passed using data-max attribute on the .cmb-field element.
 	 *
 	 * @param jQuery .cmb-field
@@ -123,12 +123,12 @@ var CMB = {
 
 		modifier = (modifier) ? parseInt( modifier, 10 ) : 0;
 
-		addBtn = field.find( '> .field-items > .repeat-field' );
-		count  = field.find( '> .field-items > .field-item' ).not('.hidden').length + modifier; // Count after anticipated action (modifier)
+		addBtn = field.find( '> .cmb-field-items > .cmb-repeat-field' );
+		count  = field.find( '> .cmb-field-items > .cmb-field-item' ).not('.hidden').length + modifier; // Count after anticipated action (modifier)
 		max    = field.attr( 'data-rep-max' );
 
 		// Show all the remove field buttons.
-		field.find( '> .field-items > .field-item > .cmb-delete-field, > .field-items > .field-item > .group > .cmb-delete-field' ).show();
+		field.find( '> .cmb-field-items > .cmb-field-item > .cmb-delete-field, > .cmb-field-items > .cmb-field-item > .group > .cmb-delete-field' ).show();
 
 		if ( typeof( max ) === 'undefined' )
 			return false;
@@ -235,9 +235,9 @@ var CMB = {
 
 		var _this = this;
 
-		var items = field.find( '> .field-items > .field-item' ).not('.hidden');
+		var items = field.find( '> .cmb-field-items > .cmb-field-item' ).not('.hidden');
 		
-		field.find( '> .field-items > .field-item > .cmb-handle' ).remove();
+		field.find( '> .cmb-field-items > .cmb-field-item > .cmb-handle' ).remove();
 
 		items.each( function() {
 			jQuery(this).append( '<div class="cmb-handle"></div>' );
@@ -246,7 +246,7 @@ var CMB = {
 		field.sortable( { 
 			handle: "> .cmb-handle" ,
 			cursor: "move",
-			items: " > .field-items > .field-item",
+			items: " > .cmb-field-items > .cmb-field-item",
 			beforeStop: function( event, ui ) { _this.sortStart( jQuery( ui.item[0] ) ); },
 			deactivate: function( event, ui ) { _this.sortEnd( jQuery( ui.item[0] ) ); },
 		} );
