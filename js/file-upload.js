@@ -97,7 +97,7 @@ jQuery( document ).ready( function() {
 		jQuery( '.cmb-file-wrap' ).each( function() {
 
 			var el        = jQuery(this),
-				container = el.closest( '.postbox' ),
+				container = el.closest( '.cmb-fields' ),
 				width     = container.width() - 12 - 10 - 10,
 				ratio     =  el.height() / el.width();
 

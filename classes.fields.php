@@ -76,7 +76,6 @@ abstract class CMB_Field {
 		$this->value = reset( $this->values );
 
 		$this->description = ! empty( $this->args['desc'] ) ? $this->args['desc'] : '';
-
 	}
 
 	/**
@@ -282,50 +281,71 @@ abstract class CMB_Field {
 		else
 			$values = $this->get_values();
 
-		$this->title();
-		$this->description();
+		?>
 
-		$i = 0;
-		foreach ( $values as $key => $value ) {
+		<div class="cmb-field-info">
+			
+			<?php
+			$this->title();
+			$this->description();
+			?>
+		
+		</div>
 
-			$this->field_index = $i;
-			$this->value = $value; ?>
+		<div class="field-items">
+		
+			<?php
 
-			<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+			$i = 0;
+			foreach ( $values as $value ) {
+				
+				$this->field_index = $i;
+				$this->value = $value; 
 
-			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
+				?>
+
+				<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+
+					<?php if ( $this->args['repeatable'] ) : ?>
+						<button class="cmb-delete-field" title="Remove field">
+							<span class="cmb-delete-field-icon">&times;</span> 
+							Remove Group
+						</button>
+					<?php endif; ?>
+
+					<?php $this->html(); ?>
+
+				</div>
+
+				<?php 
+
+				$i++;
+
+			}
+
+			// Insert a hidden one if it's repeatable
+			if ( $this->args['repeatable'] ) :
+
+				$this->field_index = 'x'; // x used to distinguish hidden fields.
+				$this->value = ''; ?>
+
+				<div class="field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative">
+
+					<?php if ( $this->args['repeatable'] ) : ?>
+						<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
+					<?php endif; ?>
+
+					<?php $this->html(); ?>
+
+				</div>
+
+				<button class="button repeat-field"><?php esc_html_e( 'Add New', 'cmb' ); ?></button>
+
 			<?php endif; ?>
 
-			<?php $this->html(); ?>
-
-			</div>
+		</div>
 
 		<?php 
-
-			$i++;
-
-		}
-
-		// Insert a hidden one if it's repeatable
-		if ( $this->args['repeatable'] ) {
-
-			$this->field_index = 'x'; // x used to distinguish hidden fields.
-			$this->value = ''; ?>
-
-			<div class="field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative">
-
-			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
-			<?php endif; ?>
-
-			<?php $this->html(); ?>
-
-			</div>
-
-			<button class="button repeat-field"><?php esc_html_e( 'Add New', 'cmb' ); ?></button>
-
-		<?php }
 
 	}
 
@@ -1276,43 +1296,57 @@ class CMB_Group_Field extends CMB_Field {
 
 		global $post;
 
-		$this->title();
-		$this->description();
-
-		$i = 0;
-		foreach ( $this->get_values() as $value ) {
-
-			$this->field_index = $i;
-			$this->value = $value; 	
-
-			?>
-
-			<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-				<?php $this->html(); ?>
-			</div>
-
-			<?php
-
-			$i++;
+		?>
 		
-		}	
-
-		if ( $this->args['repeatable'] ) {
-
-			$this->field_index = 'x'; // x used to distinguish hidden fields.
-			$this->value = ''; 
-
+		<div class="cmb-field-info">
+			<?php
+			$this->title();
+			$this->description();
 			?>
+		</div>
 
-			<div class="field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+		<div class="field-items">
 
-			<?php $this->html(); ?>
+			<?php 
 
-			</div>
+			$i = 0;
+			foreach ( $this->get_values() as $value ) {
 
-			<button class="button repeat-field"><?php esc_html_e( 'Add New', 'cmb' ); ?></button>
+				$this->field_index = $i;
+				$this->value = $value; 	
 
-		<?php }
+				?>
+
+				<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+					<?php $this->html(); ?>
+				</div>
+
+				<?php
+
+				$i++;
+			
+			}	
+
+			if ( $this->args['repeatable'] ) :
+
+				$this->field_index = 'x'; // x used to distinguish hidden fields.
+				$this->value = ''; 
+
+				?>
+
+				<div class="field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+
+				<?php $this->html(); ?>
+
+				</div>
+
+				<button class="button repeat-field"><?php esc_html_e( 'Add New', 'cmb' ); ?></button>
+
+			<?php endif; ?>
+
+		</div>
+
+		<?php
 
 	}
 	
@@ -1329,7 +1363,7 @@ class CMB_Group_Field extends CMB_Field {
 		// Update the group fields ID & Values with the data for this instance of the group.
 		foreach ( $this->group_fields->get_fields() as $field ) {
 			$field->id =  $this->args['id'] . '[cmb-group-' . $this->field_index . '][' . $field->args['original_id'] . ']';	
-			$field->values = isset( $this->get_value()[$field->args['original_id']] ) ? $this->get_value()[$field->args['original_id']] : array( 1 => '' );
+			$field->values = isset( $this->get_value()[$field->args['original_id']] ) ? $this->get_value()[$field->args['original_id']] : array( '' );
 		}
 								
 		$this->group_fields->display();
