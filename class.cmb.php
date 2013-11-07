@@ -85,17 +85,36 @@ abstract class CMB {
 
 	function display() {
 
+		$fields = $this->get_fields();
+		$count  = count( $fields ); 
+		$col    = 0;
+		
 		?>	
 		
 		<div class="cmb-fields">
 
-			<?php foreach ( $this->get_fields() as $field ) : ?>
-		
-				<div class="cmb-row">
-					<?php $this->display_field( $field ); ?>
-				</div>
-		
-			<?php endforeach; ?>
+			<?php 
+
+			foreach ( $fields as $i => $field ) {
+
+				// Start row.
+				if ( $col == 0 )
+					echo '<div class="cmb-row">';
+				
+				$this->display_field( $field );
+				
+				$col += $field->args['cols'];
+
+				// End row. Make sure we close div if this is the last field.
+				if ( $col == 12 || ( $i + 1 ) == $count )
+					echo '</div>';
+				
+				if ( $col >= 12 )
+					$col = 0;
+
+			}
+
+			?>
 		
 		</div>
 

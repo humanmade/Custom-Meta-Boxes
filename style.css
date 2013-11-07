@@ -3,12 +3,30 @@
  */
 
 
-.cmb-fields .cmb-row { display: block; overflow: hidden; margin: 0 -10px; }
-.cmb-fields .cmb-grid { float: left; width: 100%; }
+.cmb-fields .cmb-row { display: block; overflow: hidden; }
+.cmb-fields .cmb-grid { float: left; width: 100%; float: left; }
 .cmb-fields .cmb-field { padding: 10px; }
+
+.cmb-fields .cmb-grid-1 { width: 8.333333333%; }
+.cmb-fields .cmb-grid-2 { width: 16.666666667%; }
+.cmb-fields .cmb-grid-3 { width: 25%; }
+.cmb-fields .cmb-grid-4 { width: 33.333333333%; }
+.cmb-fields .cmb-grid-5 { width: 41.666666667%; }
+.cmb-fields .cmb-grid-6 { width: 50%; }
+.cmb-fields .cmb-grid-7 { width: 58.333333333%; }
+.cmb-fields .cmb-grid-8 { width: 66.666666667%; }
+.cmb-fields .cmb-grid-9 { width: 75%; }
+.cmb-fields .cmb-grid-10 { width: 83.333333333%; }
+.cmb-fields .cmb-grid-11 { width: 91.666666667%; }
+.cmb-fields .cmb-grid-12 { width: 100%; }
+
+@media only screen and (max-width: 750px) {
+	.cmb-fields .cmb-grid { width: 100% !important; }
+}
 
 .cmb-fields label { margin:0 0 8px; display:block; }
 
+/*
 .cmb-fields .cmb-field { 
 	padding-left: 220px; 
 }
@@ -25,7 +43,7 @@
     zoom: 1; /* For IE 6/7 (trigger hasLayout) */
 }
 
-.cmb-fields .cmb-field-info { 
+/*.cmb-fields .cmb-field-info { 
 	float: left;
 	margin-left: -210px;
 	width: 200px;
@@ -34,7 +52,7 @@
 }
 
 .cmb-field-items { float: left; width: 100%; }
-
+*/	
 .cmb-field-description { color: #AAA; font-style: italic; display: block; margin-bottom: 16px; }
 .cmb-fields input, 
 .cmb-fields textarea { font-size:12px; padding: 5px; margin: 0; }

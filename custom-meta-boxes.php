@@ -68,13 +68,11 @@ function cmb_init() {
 	load_textdomain( $textdomain, WP_LANG_DIR . '/custom-meta-boxes/' . $textdomain . '-' . $locale . '.mo' );
 	load_textdomain( $textdomain, CMB_PATH . '/languages/' . $textdomain . '-' . $locale . '.mo' );
 
-	$meta_boxes = apply_filters( 'cmb_meta_boxes', array() );
+	foreach ( apply_filters( 'cmb_meta_boxes', array() ) as $meta_box )
+		new CMB_Post( $meta_box );	
 
-	if ( ! empty( $meta_boxes ) )
-		foreach ( $meta_boxes as $meta_box ) {
-			new CMB_Post( $meta_box );
-			// new CMB_Options( $meta_box );
-		}
+	foreach ( apply_filters( 'cmb_options_pages', array() ) as $meta_box )
+		new CMB_Options( $meta_box );	
 
 }
 add_action( 'init', 'cmb_init' );
