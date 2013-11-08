@@ -864,6 +864,16 @@ class CMB_wysiwyg extends CMB_Field {
 
 	}
 
+	function parse_save_values() {
+
+		$values = &$this->get_values();
+		foreach ( $values as &$value )
+			$value = stripslashes( $value );
+
+		parent::parse_save_values();
+
+	}
+
 	/**
 	 * Check if this is a placeholder field.
 	 * Either the field itself, or because it is part of a repeatable group.
