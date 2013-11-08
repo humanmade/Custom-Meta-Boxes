@@ -40,7 +40,7 @@
     clear: both;
 }
 .cmb-fields .cmb-field {
-    zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+    zoom: 1;
 }
 
 /*.cmb-fields .cmb-field-info { 
@@ -53,6 +53,7 @@
 
 .cmb-field-items { float: left; width: 100%; }
 */	
+
 .cmb-field-description { color: #AAA; font-style: italic; display: block; margin-bottom: 16px; }
 .cmb-fields input, 
 .cmb-fields textarea { font-size:12px; padding: 5px; margin: 0; }
