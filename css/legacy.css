@@ -1,14 +1,14 @@
 /**
  * CMB Styling
  */
-.cmb_metabox tr td, table.cmb_metabox tr th { vertical-align: top; padding: 5px; }
-.cmb_metabox th { text-align: right; font-weight:bold;}
-.cmb_metabox th label { margin-top:5px; display:block;}
+.cmb_metabox [class^=cmb-cell] { vertical-align: top; padding: 5px; }
+/*.cmb_metabox [class^=cmb-cell] { text-align: right; font-weight:bold;}*/
+.cmb_metabox [class^=cmb-cell] label { margin-top:5px; display:inline-block;}
 div.cmb_metabox_description { color: #AAA; font-style: italic; margin: 2px 0 16px !important;}
 span.cmb_metabox_description { color: #AAA; font-style: italic;}
 .cmb_metabox input, 
 .cmb_metabox textarea { font-size:12px; padding: 5px; margin: 0; }
-.cmb_metabox input[type=text], table.cmb_metabox textarea, table.cmb_metabox select { width: 100%; }
+.cmb_metabox input[type=text], .cmb_metabox textarea, .cmb_metabox select { width: 100%; }
 .cmb_metabox textarea.cmb_textarea_code,
 .cmb_metabox textarea.cmb_textarea { vertical-align: top; margin: 0; }
 .cmb_metabox textarea.cmb_textarea_code { font-family: Consolas,Monaco,monospace; line-height: 16px; }
@@ -20,7 +20,7 @@ span.cmb_metabox_description { color: #AAA; font-style: italic;}
 .cmb_metabox li { font-size:12px; margin: 1px 0 5px 0; line-height: 16px; }
 .cmb_metabox ul { padding-top:5px; margin: 0; }
 .cmb_metabox select { font-size:12px; margin-top: 3px;}
-.cmb_metabox input:focus, table.cmb_metabox textarea:focus { background: #fffff8;}
+.cmb_metabox input:focus, .cmb_metabox textarea:focus { background: #fffff8;}
 .cmb_metabox_title { margin: 0 0 5px 0; padding: 5px 0 0 0; font: italic 24px/35px Georgia,"Times New Roman","Bitstream Charter",Times,serif;}
 .cmb_radio_inline { padding: 4px 0 0 0;}
 .cmb_radio_inline_option {display: inline; padding-right: 18px;}
@@ -34,8 +34,8 @@ span.cmb_metabox_description { color: #AAA; font-style: italic;}
 .cmb_metabox .cmb_upload_status .img_status img { border:1px solid #DFDFDF; background: #FAFAFA; max-width:350px; padding: 5px; -moz-border-radius: 2px; border-radius: 2px;}
 .cmb_remove_file_button { text-indent: -9999px; background: url(../images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
 /* Sidebar placement adjustments */
-.inner-sidebar table.cmb_metabox input[type=text], table.cmb_metabox textarea { width: 100%; }
-.inner-sidebar table.cmb_metabox .cmb_upload_status .img_status img { width: 90%; }
+.inner-sidebar .cmb_metabox input[type=text], .cmb_metabox textarea { width: 100%; }
+.inner-sidebar .cmb_metabox .cmb_upload_status .img_status img { width: 90%; }
 
 /**
  * Timepicker
