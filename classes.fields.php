@@ -254,6 +254,8 @@ abstract class CMB_Field {
 		$this->values = $values;
 		$this->parse_save_values();
 
+		$this->ksort_tree( $this->values );
+
 		// Allow override from args
 		if ( ! empty( $this->args['save_callback'] ) ) {
 
@@ -357,6 +359,26 @@ abstract class CMB_Field {
 			<button class="button repeat-field"><?php esc_html_e( 'Add New', 'cmb' ); ?></button>
 
 		<?php }
+
+	}
+
+	/**
+	 * Sort a multidimensional array by array key.
+	 * 
+	 * @param  array $array
+	 * @return null
+	 */
+	function ksort_tree( &$array ) {
+  
+		if ( ! is_array( $array ) )
+			return false;
+
+		ksort($array);
+
+		foreach ( $array as $k => $v )
+			$this->ksort_tree($array[$k] );
+
+		return true;
 
 	}
 
