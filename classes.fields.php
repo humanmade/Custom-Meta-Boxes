@@ -637,6 +637,18 @@ class CMB_Time_Field extends CMB_Field {
  */
 class CMB_Date_Timestamp_Field extends CMB_Field {
 
+	private $timezone;
+
+	public function __construct( $name, $title, array $values, $args = array() )
+	{
+		parent::__construct( $name, $title, $values, $args );
+
+		// Create Timezone Object
+		$timezone_string = get_option( 'timezone_string' );
+		if ( $timezone_string )
+			$this->timezone = new DateTimeZone( $timezone_string );
+	}
+
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -648,16 +660,27 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
 
 	}
 
-	public function html() { ?>
+	public function html() {
 
-		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr(); ?>  value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>" />
+		$datetime = new DateTime();
+		$datetime->setTimezone( $this->timezone );
+		if ( $this->value )
+			$datetime->setTimestamp( $this->value );
+
+		?>	
+		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr(); ?>  value="<?php echo $this->value ? esc_attr( $datetime->format( 'm/d/Y' ) ) : '' ?>" />
 
 	<?php }
 
 	public function parse_save_values() {
 		
-		foreach( $this->values as &$value )
-			$value = strtotime( $value );
+		foreach( $this->values as &$value ) {
+			$datetime = DateTime::createFromFormat( 'm/d/Y', $value, $this->timezone );
+			if ( $datetime ) {
+				$datetime->setTime(0, 0);
+				$value = $datetime->format( 'U' );
+			}
+		}
 
 		sort( $this->values );
 	
