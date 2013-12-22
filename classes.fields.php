@@ -671,6 +671,18 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
  */
 class CMB_Datetime_Timestamp_Field extends CMB_Field {
 	
+	private $timezone;
+
+	public function __construct( $name, $title, array $values, $args = array() )
+	{
+		parent::__construct( $name, $title, $values, $args );
+
+		// Create Timezone Object
+		$timezone_string = get_option( 'timezone_string' );
+		if ( $timezone_string )
+			$this->timezone = new DateTimeZone( $timezone_string );
+	}
+
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -681,22 +693,39 @@ class CMB_Datetime_Timestamp_Field extends CMB_Field {
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
 	}
 
-	public function html() { ?>		
+	public function html() { 
 
-		<input <?php $this->id_attr('date'); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr( '[date]' ); ?>  value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>" />
-		<input <?php $this->id_attr('time'); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_timepicker' ); ?> type="text" <?php $this->name_attr( '[time]' ); ?> value="<?php echo $this->value ? esc_attr( date( 'h:i A', $this->value ) ) : '' ?>" />
+		$datetime = new DateTime();
+		$datetime->setTimezone( $this->timezone );
+		if ( $this->value )
+			$datetime->setTimestamp( $this->value );
 
-	<?php }
+		?>		
+		<input <?php $this->id_attr('date'); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr( '[date]' ); ?>  value="<?php echo $this->value ? esc_attr( $datetime->format( 'm/d/Y' ) ) : '' ?>" />
+		<input <?php $this->id_attr('time'); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_timepicker' ); ?> type="text" <?php $this->name_attr( '[time]' ); ?> value="<?php echo $this->value ? esc_attr( $datetime->format( 'h:i a' ) ) : '' ?>" />
+		<abbr title="Time Zone: <?php echo str_replace('_', ' ', $datetime->format('e')) ?>"><?php echo $datetime->format('T') ?></abbr>
+		<?php 
+	
+	}
 
 	public function parse_save_values() {
 
 		// Convert all [date] and [time] values to a unix timestamp.
-		// If date is empty, assume delete. If time is empty, assume 00:00. 
+		// If date is empty, assume delete. If time is empty, assume midnight. 
 		foreach( $this->values as $key => &$value ) {
-			if ( empty( $value['date'] ) )
+			if ( empty( $value['date'] ) ) {
 				unset( $this->values[$key] );
-			else
-				$value = strtotime( $value['date'] . ' ' . $value['time'] );
+			} else {
+				if ( empty( $value['time'] ) ) {
+					$datetime = DateTime::createFromFormat( 'm/d/Y', $value['date'], $this->timezone );
+					$datetime->setTime(0, 0);
+				} else {
+					$datetime = DateTime::createFromFormat( 'm/d/Y h:i a', $value['date'] . ' ' . $value['time'], $this->timezone );
+				}
+
+				if ( $datetime )
+					$value = $datetime->format( 'U' );
+			}
 		}
 
 		$this->values = array_filter( $this->values );
