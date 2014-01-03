@@ -28,7 +28,7 @@ abstract class CMB {
 	public function init( $object_id ) {
 
 		// Load CMB Scripts.
-		add_action( 'admin_enqueue_scripts', array( &$this, 'scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
 				
@@ -57,15 +57,27 @@ abstract class CMB {
 
 	}
 
-	function scripts() {
+	/**
+	 * Enqueue scripts and styles.
+	 */
+	function enqueue_scripts() {
 
+		$suffix = CMB_DEV ? '' : '.min';
+
+		// Load Main CMB script file
 		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
 
+		// Load individual field scripts.
 		foreach ( $this->_fields as $field )
 			$field->enqueue_scripts();
 
-		wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'style.css' );
+		// Load main CMB Style. (Load legacy pre WordPress 3.8)
+		if ( version_compare( get_bloginfo( 'version' ), '3.8', '>=' ) )
+			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . "css/dist/cmb$suffix.css" );
+		else
+			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'css/legacy.css' );
 
+		// Load individual field styles.
 		foreach ( $this->_fields as $field )
 			$field->enqueue_styles();
 
@@ -126,9 +138,9 @@ abstract class CMB {
 
 	function display_field( $field ) {
 
-		$grid_class = sprintf( 'cmb-grid-%d', absint( $field->args['cols'] ) );
+		$grid_class = sprintf( 'cmb-cell-%d', absint( $field->args['cols'] ) );
 
-		$classes = array('cmb-field');
+		$classes = array( 'field', get_class($field) );
 
 		if ( ! empty( $field->args['repeatable'] ) )
 			$classes[] = 'repeatable';
@@ -136,28 +148,26 @@ abstract class CMB {
 		if ( ! empty( $field->args['sortable'] ) )
 			$classes[] = 'cmb-sortable';
 
-		$classes[] = get_class($field);
+		$attrs = array(
+			sprintf( 'id="%s"', sanitize_html_class( $field->id ) ),
+			sprintf( 'class="%s"', esc_attr( implode(' ', array_map( 'sanitize_html_class', $classes ) ) ) )
+		);
 
-		$classes = 'class="' . esc_attr( implode(' ', array_map( 'sanitize_html_class', $classes ) ) ) . '"';
-
-		$attrs = array();
-
+		// Field Repeatable Max.
 		if ( isset( $field->args['repeatable_max']  ) )
-			$attrs[] = 'data-rep-max="' . intval( $field->args['repeatable_max'] ) . '"';
-
-		$attrs = implode( ' ', $attrs );
+			$attrs[] = sprintf( 'data-rep-max="%s"', intval( $field->args['repeatable_max'] ) );
 
 		?>
 
-		<div class="cmb-grid <?php echo sanitize_html_class( $grid_class ); ?>">
+		<div class="cmb-cell-<?php echo $grid_class; ?>">
 			
-			<div <?php echo $classes; ?> <?php echo $attrs; ?>>
-				<?php $field->display(); ?>
-			</div>
-		
-		</div>
+				<div <?php echo implode( ' ', $attrs ); ?>>
+					<?php $field->display(); ?>
+				</div>
 
-		<input type="hidden" name="_cmb_present_<?php esc_attr_e( $field->id ); ?>" value="1" />
+				<input type="hidden" name="_cmb_present_<?php esc_attr_e( $field->id ); ?>" value="1" />
+
+		</div>
 
 		<?php
 

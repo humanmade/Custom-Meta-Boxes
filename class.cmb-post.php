@@ -17,7 +17,7 @@ class CMB_Post extends CMB {
 		global $post;
 
 		// Get the current ID
-		if( isset( $_GET['post'] ) )
+		if ( isset( $_GET['post'] ) )
 			$object_id = $_GET['post'];
 
 		elseif( isset( $_POST['post_ID'] ) )
