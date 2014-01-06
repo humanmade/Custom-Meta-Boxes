@@ -71,7 +71,7 @@ abstract class CMB {
 		$suffix = CMB_DEV ? '' : '.min';
 
 		// Load Main CMB script file
-		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery', 'jquery-ui', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ) );
+		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
 
 		// Load individual field scripts.
 		foreach ( $this->_fields as $field )

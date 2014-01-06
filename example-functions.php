@@ -1,4 +1,9 @@
 <?php
+
+add_filter( 'cmb_meta_boxes', 'cmb_sample_metaboxes' );
+add_filter( 'cmb_user_meta', 'cmb_sample_metaboxes' );
+add_filter( 'cmb_options_pages', 'cmb_sample_metaboxes' );
+
 /**
  * Define the metabox and field configurations.
  *
@@ -100,5 +105,4 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 	return $meta_boxes;
 
-}
-add_filter( 'cmb_meta_boxes', 'cmb_sample_metaboxes' );
+}]

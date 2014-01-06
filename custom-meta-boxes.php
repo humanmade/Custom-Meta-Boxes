@@ -48,10 +48,11 @@ if ( ! defined( 'CMB_URL' ) )
 include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb.php' );
 include_once( CMB_PATH . '/class.cmb-post.php' );
-// include_once( CMB_PATH . '/class.cmb-option.php' );
 include_once( CMB_PATH . '/class.cmb-group.php' );
+include_once( CMB_PATH . '/class.cmb-option.php' );
+include_once( CMB_PATH . '/class.cmb-user.php' );
 
-include_once( CMB_PATH . '/example-functions.php' );
+// include_once( CMB_PATH . '/example-functions.php' );
 
 /**
  * Get all the meta boxes on init
@@ -74,8 +75,11 @@ function cmb_init() {
 	foreach ( apply_filters( 'cmb_meta_boxes', array() ) as $meta_box )
 		new CMB_Post( $meta_box );	
 
-	// foreach ( apply_filters( 'cmb_options_pages', array() ) as $meta_box )
-		// new CMB_Options( $meta_box );	
+	foreach ( apply_filters( 'cmb_options_pages', array() ) as $meta_box )
+		new CMB_Options( $meta_box );
+
+	foreach ( apply_filters( 'cmb_user_meta', array() ) as $meta_box )
+		new CMB_User( $meta_box );	
 
 }
 add_action( 'init', 'cmb_init' );
