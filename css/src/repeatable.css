@@ -2,12 +2,12 @@
  * Repeatable
  */
 
-.cmb_metabox .field.repeatable > .field-item { 
+.cmb-fields .field.repeatable > .field-item { 
  	padding-right: 30px; 
  	margin-bottom: 10px; 
  }
 
-.cmb_metabox .repeat-field { 
+.cmb-fields .repeat-field { 
 	display: block !important; 
 	clear: both; 
 }

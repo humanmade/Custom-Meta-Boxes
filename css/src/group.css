@@ -1,6 +1,6 @@
 * Group **/
 
-.cmb_metabox .CMB_Group_Field > .field-title { 
+.cmb-fields .CMB_Group_Field > .field-title { 
 	font-size: 1.5em;
 	clear: left;
 	color: #464646;
@@ -8,11 +8,11 @@
 	font-weight: lighter;
 }
 
-.cmb_metabox .CMB_Group_Field > .field-title h2 { 
+.cmb-fields .CMB_Group_Field > .field-title h2 { 
 	margin: 8px 5px !important; 
 }
 
-.cmb_metabox .CMB_Group_Field.repeatable > .field-item { 
+.cmb-fields .CMB_Group_Field.repeatable > .field-item { 
 	padding: 30px 10px 0; 
 	margin-bottom: 16px; 
 	border: 1px solid #DDD; 
@@ -20,7 +20,7 @@
 	position: relative;
 }
 
-.cmb_metabox .CMB_Group_Field.repeatable > .field-item:before {
+.cmb-fields .CMB_Group_Field.repeatable > .field-item:before {
 	content: ' ';
 	display: block;
 	position: absolute;
@@ -31,7 +31,7 @@
 	border-bottom: 1px solid #DDDDDD;	
 }
 
-.cmb_metabox .CMB_Group_Field.repeatable > .field-item > .cmb-delete-field { 
+.cmb-fields .CMB_Group_Field.repeatable > .field-item > .cmb-delete-field { 
 	top: 5px;
 	right: 5px;
 	width: auto;
@@ -44,7 +44,7 @@
 	z-index: 1;
 }
 
-.cmb_metabox .CMB_Group_Field.repeatable > .field-item > .cmb-delete-field .cmb-delete-field-icon { 
+.cmb-fields .CMB_Group_Field.repeatable > .field-item > .cmb-delete-field .cmb-delete-field-icon { 
 	left: 12px;
 }
 
@@ -68,7 +68,7 @@
 	padding: 0 5px;
 }
 
-.cmb_metabox .CMB_Group_Field.repeatable.cmb-sortable > .field-item:before {
+.cmb-fields .CMB_Group_Field.repeatable.cmb-sortable > .field-item:before {
 	display: none !important;
 }
 

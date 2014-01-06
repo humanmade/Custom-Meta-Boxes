@@ -1,41 +1,41 @@
 /**
  * CMB Styling
  */
-.cmb_metabox tr td, table.cmb_metabox tr th { vertical-align: top; padding: 5px; }
-.cmb_metabox th { text-align: right; font-weight:bold;}
-.cmb_metabox th label { margin-top:5px; display:block;}
-div.cmb_metabox_description { color: #AAA; font-style: italic; margin: 2px 0 16px !important;}
-span.cmb_metabox_description { color: #AAA; font-style: italic;}
-.cmb_metabox input, 
-.cmb_metabox textarea { font-size:12px; padding: 5px; margin: 0; }
-.cmb_metabox input[type=text], table.cmb_metabox textarea, table.cmb_metabox select { width: 100%; }
-.cmb_metabox textarea.cmb_textarea_code,
-.cmb_metabox textarea.cmb_textarea { vertical-align: top; margin: 0; }
-.cmb_metabox textarea.cmb_textarea_code { font-family: Consolas,Monaco,monospace; line-height: 16px; }
-.cmb_metabox input.cmb_text_small { width: 100px; }
-.cmb_metabox input.cmb_timepicker { width: 100px; margin-right: 0;}
-.cmb_metabox input.cmb_text_money { width: 90px; margin-right: 15px;}
-.cmb_metabox input.cmb_text_medium { width: 230px; margin-right: 15px;}
-.cmb_metabox input.cmb_upload_file { width: 65%; }
-.cmb_metabox li { font-size:12px; margin: 1px 0 5px 0; line-height: 16px; }
-.cmb_metabox ul { padding-top:5px; margin: 0; }
-.cmb_metabox select { font-size:12px; margin-top: 3px;}
-.cmb_metabox input:focus, table.cmb_metabox textarea:focus { background: #fffff8;}
-.cmb_metabox_title { margin: 0 0 5px 0; padding: 5px 0 0 0; font: italic 24px/35px Georgia,"Times New Roman","Bitstream Charter",Times,serif;}
+.cmb-fields tr td, table.cmb-fields tr th { vertical-align: top; padding: 5px; }
+.cmb-fields th { text-align: right; font-weight:bold;}
+.cmb-fields th label { margin-top:5px; display:block;}
+div.cmb-fields_description { color: #AAA; font-style: italic; margin: 2px 0 16px !important;}
+span.cmb-fields_description { color: #AAA; font-style: italic;}
+.cmb-fields input, 
+.cmb-fields textarea { font-size:12px; padding: 5px; margin: 0; }
+.cmb-fields input[type=text], table.cmb-fields textarea, table.cmb-fields select { width: 100%; }
+.cmb-fields textarea.cmb_textarea_code,
+.cmb-fields textarea.cmb_textarea { vertical-align: top; margin: 0; }
+.cmb-fields textarea.cmb_textarea_code { font-family: Consolas,Monaco,monospace; line-height: 16px; }
+.cmb-fields input.cmb_text_small { width: 100px; }
+.cmb-fields input.cmb_timepicker { width: 100px; margin-right: 0;}
+.cmb-fields input.cmb_text_money { width: 90px; margin-right: 15px;}
+.cmb-fields input.cmb_text_medium { width: 230px; margin-right: 15px;}
+.cmb-fields input.cmb_upload_file { width: 65%; }
+.cmb-fields li { font-size:12px; margin: 1px 0 5px 0; line-height: 16px; }
+.cmb-fields ul { padding-top:5px; margin: 0; }
+.cmb-fields select { font-size:12px; margin-top: 3px;}
+.cmb-fields input:focus, table.cmb-fields textarea:focus { background: #fffff8;}
+.cmb-fields_title { margin: 0 0 5px 0; padding: 5px 0 0 0; font: italic 24px/35px Georgia,"Times New Roman","Bitstream Charter",Times,serif;}
 .cmb_radio_inline { padding: 4px 0 0 0;}
 .cmb_radio_inline_option {display: inline; padding-right: 18px;}
-.cmb_metabox input[type="radio"] { margin: 0 5px 0 0; padding: 0;}
-.cmb_metabox input[type="checkbox"] { margin: 0 5px 0 0; padding: 0;}
-.cmb_metabox .mceIframeContainer {background:#FFF;}
-.cmb_metabox .meta_mce {width:97%;}
-.cmb_metabox .meta_mce textarea {width:100%;}
-.cmb_metabox .cmb_upload_status {  margin: 10px 0 0 0;}
-.cmb_metabox .cmb_upload_status .img_status {  position: relative; }
-.cmb_metabox .cmb_upload_status .img_status img { border:1px solid #DFDFDF; background: #FAFAFA; max-width:350px; padding: 5px; -moz-border-radius: 2px; border-radius: 2px;}
+.cmb-fields input[type="radio"] { margin: 0 5px 0 0; padding: 0;}
+.cmb-fields input[type="checkbox"] { margin: 0 5px 0 0; padding: 0;}
+.cmb-fields .mceIframeContainer {background:#FFF;}
+.cmb-fields .meta_mce {width:97%;}
+.cmb-fields .meta_mce textarea {width:100%;}
+.cmb-fields .cmb_upload_status {  margin: 10px 0 0 0;}
+.cmb-fields .cmb_upload_status .img_status {  position: relative; }
+.cmb-fields .cmb_upload_status .img_status img { border:1px solid #DFDFDF; background: #FAFAFA; max-width:350px; padding: 5px; -moz-border-radius: 2px; border-radius: 2px;}
 .cmb_remove_file_button { text-indent: -9999px; background: url(../images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
 /* Sidebar placement adjustments */
-.inner-sidebar table.cmb_metabox input[type=text], table.cmb_metabox textarea { width: 100%; }
-.inner-sidebar table.cmb_metabox .cmb_upload_status .img_status img { width: 90%; }
+.inner-sidebar table.cmb-fields input[type=text], table.cmb-fields textarea { width: 100%; }
+.inner-sidebar table.cmb-fields .cmb_upload_status .img_status img { width: 90%; }
 
 /**
  * Timepicker

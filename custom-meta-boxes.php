@@ -37,7 +37,7 @@ Version: 	1.0 - Beta 1
  */
 
 if ( ! defined( 'CMB_DEV') )
-	define( 'CMB_DEV', false );
+	define( 'CMB_DEV', true );
 
 if ( ! defined( 'CMB_PATH') )
 	define( 'CMB_PATH', str_replace( '\\', '/', dirname( __FILE__ ) ) );
@@ -46,12 +46,12 @@ if ( ! defined( 'CMB_URL' ) )
 	define( 'CMB_URL', str_replace( str_replace( '\\', '/', WP_CONTENT_DIR ), str_replace( '\\', '/', WP_CONTENT_URL ), CMB_PATH ) );
 
 include_once( CMB_PATH . '/classes.fields.php' );
-include_once( CMB_PATH . '/class.cmb-meta-box.php' );
+include_once( CMB_PATH . '/class.cmb.php' );
+include_once( CMB_PATH . '/class.cmb-post.php' );
+// include_once( CMB_PATH . '/class.cmb-option.php' );
+include_once( CMB_PATH . '/class.cmb-group.php' );
 
-// Make it possible to add fields in locations other than post edit screen.
-include_once( CMB_PATH . '/fields-anywhere.php' );
-
-// include_once( CMB_PATH . '/example-functions.php' );
+include_once( CMB_PATH . '/example-functions.php' );
 
 /**
  * Get all the meta boxes on init
@@ -71,50 +71,14 @@ function cmb_init() {
 	load_textdomain( $textdomain, WP_LANG_DIR . '/custom-meta-boxes/' . $textdomain . '-' . $locale . '.mo' );
 	load_textdomain( $textdomain, CMB_PATH . '/languages/' . $textdomain . '-' . $locale . '.mo' );
 
-	$meta_boxes = apply_filters( 'cmb_meta_boxes', array() );
+	foreach ( apply_filters( 'cmb_meta_boxes', array() ) as $meta_box )
+		new CMB_Post( $meta_box );	
 
-	if ( ! empty( $meta_boxes ) )
-		foreach ( $meta_boxes as $meta_box )
-			new CMB_Meta_Box( $meta_box );
+	// foreach ( apply_filters( 'cmb_options_pages', array() ) as $meta_box )
+		// new CMB_Options( $meta_box );	
 
 }
 add_action( 'init', 'cmb_init' );
-
-/**
- * Return an array of built in available fields
- *
- * Key is field name, Value is class used by field.
- * Available fields can be modified using the 'cmb_field_types' filter.
- * 
- * @return array
- */
-function _cmb_available_fields() {
-
-	return apply_filters( 'cmb_field_types', array(
-		'text'				=> 'CMB_Text_Field',
-		'text_small' 		=> 'CMB_Text_Small_Field',
-		'text_url'			=> 'CMB_URL_Field',
-		'url'				=> 'CMB_URL_Field',
-		'radio'				=> 'CMB_Radio_Field',
-		'checkbox'			=> 'CMB_Checkbox',
-		'file'				=> 'CMB_File_Field',
-		'image' 			=> 'CMB_Image_Field',
-		'wysiwyg'			=> 'CMB_wysiwyg',
-		'textarea'			=> 'CMB_Textarea_Field',
-		'textarea_code'		=> 'CMB_Textarea_Field_Code',
-		'select'			=> 'CMB_Select',
-		'taxonomy_select'	=> 'CMB_Taxonomy',
-		'post_select'		=> 'CMB_Post_Select',
-		'date'				=> 'CMB_Date_Field',
-		'date_unix'			=> 'CMB_Date_Timestamp_Field',
-		'datetime_unix'		=> 'CMB_Datetime_Timestamp_Field',
-		'time'				=> 'CMB_Time_Field',
-		'colorpicker'		=> 'CMB_Color_Picker',
-		'title'				=> 'CMB_Title',
-		'group'				=> 'CMB_Group_Field',
-	) );
-
-}
 
 /**
  * Get a field class by type
@@ -124,7 +88,32 @@ function _cmb_available_fields() {
  */
 function _cmb_field_class_for_type( $type ) {
 
-	$map = _cmb_available_fields();
+	$map = apply_filters( 
+		'cmb_field_types', 
+		array(
+			'text'				=> 'CMB_Text_Field',
+			'text_small' 		=> 'CMB_Text_Small_Field',
+			'text_url'			=> 'CMB_URL_Field',
+			'url'				=> 'CMB_URL_Field',
+			'radio'				=> 'CMB_Radio_Field',
+			'checkbox'			=> 'CMB_Checkbox',
+			'file'				=> 'CMB_File_Field',
+			'image' 			=> 'CMB_Image_Field',
+			'wysiwyg'			=> 'CMB_wysiwyg',
+			'textarea'			=> 'CMB_Textarea_Field',
+			'textarea_code'		=> 'CMB_Textarea_Field_Code',
+			'select'			=> 'CMB_Select',
+			'taxonomy_select'	=> 'CMB_Taxonomy',
+			'post_select'		=> 'CMB_Post_Select',
+			'date'				=> 'CMB_Date_Field',
+			'date_unix'			=> 'CMB_Date_Timestamp_Field',
+			'datetime_unix'		=> 'CMB_Datetime_Timestamp_Field',
+			'time'				=> 'CMB_Time_Field',
+			'colorpicker'		=> 'CMB_Color_Picker',
+			'title'				=> 'CMB_Title',
+			'group'				=> 'CMB_Group_Field'
+		) 
+	);
 
 	if ( isset( $map[$type] ) )
 		return $map[$type];

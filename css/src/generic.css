@@ -1,45 +1,45 @@
-.cmb_metabox .field-item {
+.cmb-fields .field-item {
 	position: relative;
 }
 
-.cmb_metabox_description { 
+.cmb-fields_description { 
 	color: #AAA; 
 	font-style: italic; 
 	margin: 0 0 16px !important;
 }
 
-.cmb_metabox input[type=text], 
-.cmb_metabox textarea, 
-.cmb_metabox select { 
+.cmb-fields input[type=text], 
+.cmb-fields textarea, 
+.cmb-fields select { 
 	width: 100%;
 }
 
-.cmb_metabox input.cmb_text_small { 
+.cmb-fields input.cmb_text_small { 
 	width: 100px; 
 }
 
-.cmb_metabox input.cmb_text_medium {
+.cmb-fields input.cmb_text_medium {
 	width: 230px; 
 	margin-right: 15px;
 }
 
-.cmb_metabox input[type="radio"] { 
+.cmb-fields input[type="radio"] { 
 	margin: 0 5px 0 0; 
 	padding: 0;
 }
 
-.cmb_metabox input[type="checkbox"] { 
+.cmb-fields input[type="checkbox"] { 
 	margin: 0 5px 0 0; 
 	padding: 0;
 }
 
-.cmb_metabox .field-title { 
+.cmb-fields .field-title { 
 	margin-top: -4px; 
 	margin-bottom: 16px; 
 	margin-top: 0; 
 	font-weight: bold; 
 }
 
-.cmb_metabox .field-title label {
+.cmb-fields .field-title label {
 	vertical-align: baseline;
 }
