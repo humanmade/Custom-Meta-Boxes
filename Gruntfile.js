@@ -18,6 +18,7 @@ module.exports = function(grunt) {
         files: {
           'css/dist/cmb.min.css': [ 
             'css/src/layout.css', 
+            'css/src/layout-horizontal.css', 
             'css/src/generic.css', 
             'css/src/repeatable.css', 
             'css/src/sortable.css', 
