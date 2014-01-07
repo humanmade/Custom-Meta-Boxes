@@ -109,7 +109,7 @@ abstract class CMB {
 		
 		?>	
 		
-		<div class="cmb-fields">
+		<div class="cmb-fields cmb-fields-horizontal">
 
 			<?php 
 

@@ -1,0 +1,16 @@
+
+.cmb-fields.cmb-fields-horizontal .field { 
+	padding-left: 210px;
+	border-bottom: none;
+}
+
+.cmb-fields.cmb-fields-horizontal .field-title {
+	width: 190px;
+	float: left;
+	margin-left: -210px;
+	margin-top: 8px;
+}
+
+.cmb-fields.cmb-fields-horizontal .cmb_metabox_description {
+	margin-top: 8px !important;
+}
