@@ -39,6 +39,7 @@ class CMB_User extends CMB {
 	}
 
 	function display_hook( $object ) {
+		printf( '<h3>%s</h3>', esc_html( $this->_meta_box['title'] ) );
 		$this->display( $object->ID ); 
 	}
 
@@ -47,7 +48,7 @@ class CMB_User extends CMB {
 	}
 
 	public function save_field_values( $object_id, $field_id, $values ) {
-
+		
 		delete_user_meta( $object_id, $field_id );
 		
 		if ( empty( $values ) )
