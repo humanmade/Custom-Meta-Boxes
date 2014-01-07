@@ -178,11 +178,11 @@ abstract class CMB {
 	}
 	
 	function save( $object_id )  {
-
+		
 		// verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
 			return $object_id;
-
+		
 		foreach ( $this->_fields as $field ) {
 
 			// verify this meta box was shown on the page

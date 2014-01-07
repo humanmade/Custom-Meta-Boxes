@@ -110,8 +110,6 @@ abstract class CMB_Field {
 	public function get_the_id_attr( $append = null ) {
 
 		$id = $this->id;
-
-		hm_log( isset( $this->parent ) );
 		
 		if ( isset( $this->parent ) ) {
 			$parent_id = preg_replace( '/cmb\-field\-(\d|x)+/', 'cmb-group-$1', $this->parent->get_the_id_attr() );

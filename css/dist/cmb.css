@@ -6,7 +6,7 @@
  */
 
 @import '../src/layout.css';
-@import '../src/horizontal.css';
+@import '../src/layout-horizontal.css';
 @import '../src/generic.css';
 
 /** Features **/
