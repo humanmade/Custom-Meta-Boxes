@@ -42,7 +42,7 @@ class CMB_User extends CMB {
 	}
 
 	function display_hook( $object ) {
-		$this->display( $object->id ); 
+		$this->display( $object->ID ); 
 	}
 
 	public function get_field_values( $object_id, $field_id ) {
