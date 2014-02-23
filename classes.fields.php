@@ -1250,8 +1250,9 @@ function cmb_ajax_post_select() {
 	
 	$json = array( 'total' => $query->found_posts, 'posts' => array() );
 
-	foreach ( $query->posts as $post_id )
-		array_push( $json['posts'], array( 'id' => $post_id, 'text' => get_the_title( $post_id ) ) );
+	foreach ( $query->posts as $post_id ) {
+		array_push( $json['posts'], array( 'id' => $post_id, 'text' => html_entity_decode( get_the_title( $post_id ) ) ) );
+	}
 
 	echo json_encode( $json );
 
