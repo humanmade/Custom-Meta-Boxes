@@ -83,27 +83,27 @@ abstract class CMB_Field {
 
 	/**
 	 * Output the field input ID attribute.
-	 * 
-	 * If multiple inputs are required for a single field, 
+	 *
+	 * If multiple inputs are required for a single field,
 	 * use the append parameter to add unique identifier.
-	 * 
+	 *
 	 * @param  string $append
 	 * @return null
 	 */
 	public function id_attr( $append = null ) {
 
 		printf( 'id="%s"', esc_attr( $this->get_the_id_attr( $append ) ) );
-		
+
 	}
-	
+
 	/**
 	 * Output the for attribute for the field.
 	 *
-	 * 
-	 * 
-	 * If multiple inputs are required for a single field, 
+	 *
+	 *
+	 * If multiple inputs are required for a single field,
 	 * use the append parameter to add unique identifier.
-	 * 
+	 *
 	 * @param  string $append
 	 * @return null
 	 */
@@ -153,7 +153,7 @@ abstract class CMB_Field {
 		$name = str_replace( '[]', '', $this->name );
 
 		if ( isset( $this->parent ) ) {
-			$parent_name = preg_replace( '/cmb\-field\-(\d|x)+/', 'cmb-group-$1', $this->parent->get_the_name_attr() );
+			$parent_name = preg_replace( '/cmb\-field\-(\d+|x)/', 'cmb-group-$1', $this->parent->get_the_name_attr() );
 			$name = $parent_name . '[' . $name . ']';
 		}
 
@@ -679,7 +679,7 @@ class CMB_Datetime_Timestamp_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/jquery-ui.css', '1.10.3' );
+		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
 		
 		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
@@ -1041,6 +1041,10 @@ class CMB_Taxonomy extends CMB_Select {
 	public function get_delegate_data() {
 
 		$terms = $this->get_terms();
+
+		if ( is_wp_error( $terms ) ) { 
+			return array(); 
+		}
 
 		$term_options = array();
 
