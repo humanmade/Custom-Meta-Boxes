@@ -1248,14 +1248,14 @@ function cmb_ajax_post_select() {
 		exit;
 	}
 
-	$args['fields'] = 'ids'; // Only need to retrieve post IDs.
-
 	$query = new WP_Query( $args );
-	
+
 	$json = array( 'total' => $query->found_posts, 'posts' => array() );
 
-	foreach ( $query->posts as $post_id )
-		array_push( $json['posts'], array( 'id' => $post_id, 'text' => get_the_title( $post_id ) ) );
+	while ($query->have_posts()) {
+		$cmb_post = $query->next_post();
+		$json['posts'][] = array( 'id' => $cmb_post->ID, 'text' => $cmb_post->post_title );
+	}
 
 	echo json_encode( $json );
 
