@@ -1,6 +1,6 @@
 
-.CMB_File_Field .field-item,
-.CMB_Image_Field .field-item {
+.CMB_File_Field .cmb-field-item,
+.CMB_Image_Field .cmb-field-item {
 	float: left;
 	margin: 0 16px 16px 0 !important;
 	text-align: center;

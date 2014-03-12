@@ -14,7 +14,7 @@
 /**
  * Color Picker
  */
-.CMB_Color_Picker .field-item {
+.CMB_Color_Picker .cmb-field-item {
 	float: left;
 	clear: both;
 }

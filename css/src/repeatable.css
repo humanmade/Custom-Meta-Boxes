@@ -2,7 +2,7 @@
  * Repeatable
  */
 
-.cmb-fields .field.repeatable > .cmb-field-content > .field-item {
+.cmb-fields .field.repeatable > .cmb-field-content > .cmb-field-item {
  	padding-right: 30px;
  	margin-bottom: 10px;
  }
@@ -12,12 +12,12 @@
 	clear: both;
 }
 
-.CMB_Text_Small_Field.repeatable .field-item,
-.CMB_Date_Field.repeatable .field-item,
-.CMB_Time_Field.repeatable .field-item,
-.CMB_Date_Timestamp_Field.repeatable .field-item,
-.CMB_Date_Timestamp_Field.repeatable .field-item,
-.CMB_Datetime_Timestamp_Field.repeatable .field-item {
+.CMB_Text_Small_Field.repeatable .cmb-field-item,
+.CMB_Date_Field.repeatable .cmb-field-item,
+.CMB_Time_Field.repeatable .cmb-field-item,
+.CMB_Date_Timestamp_Field.repeatable .cmb-field-item,
+.CMB_Date_Timestamp_Field.repeatable .cmb-field-item,
+.CMB_Datetime_Timestamp_Field.repeatable .cmb-field-item {
 	float: left; clear: both;
 }
 
