@@ -6,6 +6,9 @@ class CMB_User extends CMB {
 
 		parent::__construct( $meta_box );
 
+		if ( ! $this->should_show_field() )
+			return;
+
 		add_action( 'admin_init', array( &$this, 'init_hook' ), 100 );
 
 		add_action( 'show_user_profile', array( &$this, 'display_hook' ) );
@@ -54,12 +57,8 @@ class CMB_User extends CMB {
 		if ( empty( $values ) )
 			return;
 
-		foreach ( $values as $value ) {
-
-			if ( $value || $value === '0' )
-				update_user_meta( $object_id, $field_id, $value );
-
-		}
+		// User Meta doesn't seem to handle multiple meta rows per key.
+		update_user_meta( $object_id, $field_id, $values );
 
 	}
 
