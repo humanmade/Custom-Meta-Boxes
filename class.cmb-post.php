@@ -6,6 +6,9 @@ class CMB_Post extends CMB {
 
 		parent::__construct( $meta_box );
 
+		if ( ! $this->should_show_field() )
+			return;
+
 		add_action( 'admin_init', array( &$this, 'init_hook' ) );
 		add_action( 'admin_menu', array( &$this, 'add_post_meta_box' ) );
 		add_action( 'save_post',  array( &$this, 'save_hook' ) );

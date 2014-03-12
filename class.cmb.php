@@ -7,9 +7,11 @@ abstract class CMB {
 	private $_fields = array();
 
 	protected $meta_box_defaults = array(
-		'id'     => '',
-		'title'  => '',
-		'fields' => array()
+		'id'              => '',
+		'title'           => '',
+		'fields'          => array(),
+		'capability'      => null,
+		'capability_args' => null
 	);
 
 	function __construct( $meta_box ) {
@@ -27,11 +29,11 @@ abstract class CMB {
 
 	public function init( $object_id ) {
 
-		// Load CMB Scripts.
-		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
-
 		if ( ! $this->should_show_field() )
 			return;
+
+		// Load CMB Scripts.
+		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
 
@@ -60,6 +62,15 @@ abstract class CMB {
 	}
 
 	protected function should_show_field() {
+
+		if ( $this->_meta_box['capability'] ) {
+			return current_user_can(
+				$this->_meta_box['capability'],
+				$this->_meta_box['capability_args']
+			);
+		}
+
+
 		return true;
 	}
 

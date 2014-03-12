@@ -57,6 +57,8 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		'title' => 'CMB Test - all fields',
 		'pages' => 'post',
 		'fields' => $fields
+		'fields' => $fields,
+		'capability' => 'manage_options'
 	);
 
 	// Examples of Groups and Columns

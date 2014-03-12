@@ -11,6 +11,9 @@ class CMB_Options extends CMB {
 
 		parent::__construct( $meta_box );
 
+		if ( ! $this->should_show_field() )
+			return;
+
 		add_action( 'admin_init', array( &$this, 'init_hook' ) );
 		add_action( 'admin_init',  array( &$this, 'save_hook' ) );
 		add_action( 'admin_menu', array($this, 'admin_menu' ) );
