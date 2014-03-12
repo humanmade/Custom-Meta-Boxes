@@ -7,11 +7,11 @@ class CMB_User extends CMB {
 		parent::__construct( $meta_box );
 
 		add_action( 'admin_init', array( &$this, 'init_hook' ), 100 );
-		
+
 		add_action( 'show_user_profile', array( &$this, 'display_hook' ) );
 		add_action( 'edit_user_profile', array( &$this, 'display_hook' ) );
-		
-		add_action( 'personal_options_update',  array( &$this, 'save_hook' ) );	
+
+		add_action( 'personal_options_update',  array( &$this, 'save_hook' ) );
 		add_action( 'edit_user_profile_update',  array( &$this, 'save_hook' ) );
 
 	}
@@ -30,17 +30,17 @@ class CMB_User extends CMB {
 		if ( empty( $object_id ) )
 			return false;
 
-		$this->init( $object_id ); 
+		$this->init( $object_id );
 
 	}
 
 	public function save_hook( $object_id ) {
-		$this->save( $object_id ); 
+		$this->save( $object_id );
 	}
 
 	function display_hook( $object ) {
 		printf( '<h3>%s</h3>', esc_html( $this->_meta_box['title'] ) );
-		$this->display( $object->ID ); 
+		$this->display( $object->ID );
 	}
 
 	public function get_field_values( $object_id, $field_id ) {
@@ -48,14 +48,14 @@ class CMB_User extends CMB {
 	}
 
 	public function save_field_values( $object_id, $field_id, $values ) {
-		
+
 		delete_user_meta( $object_id, $field_id );
-		
+
 		if ( empty( $values ) )
 			return;
 
 		foreach ( $values as $value ) {
-		
+
 			if ( $value || $value === '0' )
 				update_user_meta( $object_id, $field_id, $value );
 

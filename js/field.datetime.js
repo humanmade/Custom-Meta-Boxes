@@ -29,7 +29,7 @@ CMB.addCallbackForInit( function() {
 	jQuery('.cmb_datepicker').each(function () {
 		jQuery(this).datepicker();
 	});
-	
+
 	// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
 	jQuery("#ui-datepicker-div").wrap('<div class="cmb_element" />');
 

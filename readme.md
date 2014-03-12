@@ -12,8 +12,8 @@ The framework also features a basic layout engine for fields, allowing you to al
 
 ## Usage
 
-* Include the custom-meta-boxes.php framework file. 
-  * In your theme: include the CMB directory to your theme directory, and add `require_once( 'Custom-Meta-Boxes/custom-meta-boxes.php' );` to functions.php  
+* Include the custom-meta-boxes.php framework file.
+  * In your theme: include the CMB directory to your theme directory, and add `require_once( 'Custom-Meta-Boxes/custom-meta-boxes.php' );` to functions.php
   * As an MU Plugin: [Refer to the WordPress Codex here for more information](http://codex.wordpress.org/Must_Use_Plugins)
 * Filter `cmb_meta_boxes` to add your own meta boxes. [The wiki has more details and example code](https://github.com/humanmade/Custom-Meta-Boxes/wiki/Create-a-Meta-Box)
 

@@ -1,11 +1,11 @@
 <?php
 
 abstract class CMB {
-	
+
 	public $_meta_box;
 	public $_object_id;
 	private $_fields = array();
-	
+
 	protected $meta_box_defaults = array(
 		'id'     => '',
 		'title'  => '',
@@ -31,14 +31,14 @@ abstract class CMB {
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 
 		if ( ! $this->should_show_field() )
-			return;			
+			return;
 
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
 
 			$values = array();
 
-			$field = wp_parse_args( 
-				$field, 
+			$field = wp_parse_args(
+				$field,
 				array(
 					'name' => '',
 					'desc' => '',
@@ -48,10 +48,10 @@ abstract class CMB {
 			);
 
 			$class = _cmb_field_class_for_type( $field['type'] );
-			
+
 			if ( ! $class )
 				continue;
-			
+
 			$values = (array) $this->get_field_values( $object_id, $field['id'] );
 			$this->add_field( new $class( $field['id'], $field['name'], $values, $field ) );
 
@@ -104,46 +104,46 @@ abstract class CMB {
 	function display() {
 
 		$fields = $this->get_fields();
-		$count  = count( $fields ); 
+		$count  = count( $fields );
 		$col    = 0;
-		
-		?>	
-		
+
+		?>
+
 		<div class="cmb-fields cmb-fields-horizontal">
 
-			<?php 
+			<?php
 
 			foreach ( $fields as $i => $field ) {
 
 				// Start row.
 				if ( $col == 0 )
 					echo '<div class="cmb-row">';
-				
+
 				$this->display_field( $field );
-				
+
 				$col += $field->args['cols'];
 
 				// End row. Make sure we close div if this is the last field.
 				if ( $col == 12 || ( $i + 1 ) == $count )
 					echo '</div>';
-				
+
 				if ( $col >= 12 )
 					$col = 0;
 
 			}
 
 			?>
-		
+
 		</div>
 
 		<input type="hidden" name="wp_meta_box_nonce" value="<?php esc_attr_e( wp_create_nonce( basename(__FILE__) ) ); ?>" />
-		
+
 		<?php
 
 	}
 
 	function display_field( $field ) {
-		
+
 		$classes = array( 'field', get_class($field) );
 
 		if ( ! empty( $field->args['repeatable'] ) )
@@ -164,7 +164,7 @@ abstract class CMB {
 		?>
 
 		<div class="<?php printf( 'cmb-cell-%d', absint( $field->args['cols'] ) ); ?>">
-			
+
 				<div <?php echo implode( ' ', $attrs ); ?>>
 					<?php $field->display(); ?>
 				</div>
@@ -176,25 +176,25 @@ abstract class CMB {
 		<?php
 
 	}
-	
+
 	function save( $object_id )  {
-		
+
 		// verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
 			return $object_id;
-		
+
 		foreach ( $this->_fields as $field ) {
 
 			// verify this meta box was shown on the page
 			if ( ! isset( $_POST['_cmb_present_' . $field->id ] ) )
 				continue;
 
-			$values = ( isset( $_POST[ $field->id ] ) ) ? (array) $_POST[ $field->id ] : array();			
+			$values = ( isset( $_POST[ $field->id ] ) ) ? (array) $_POST[ $field->id ] : array();
 			$values = $this->strip_repeatable( $values );
 
 			$field->set_values( $values );
 			$field->parse_save_values();
-			
+
 			$this->save_field_values( $object_id, $field->id, $field->get_values() );
 
 		}
@@ -206,7 +206,7 @@ abstract class CMB {
 		foreach ( $values as $key => $value ) {
 
 			if ( false !== strpos( $key, 'cmb-group-x' ) || false !== strpos( $key, 'cmb-field-x' ) )
-				unset( $values[$key] ); 
+				unset( $values[$key] );
 
 			elseif ( is_array( $value ) )
 				$values[$key] = $this->strip_repeatable( $value );

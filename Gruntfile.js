@@ -5,7 +5,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
-    banner: '/**\n' + 
+    banner: '/**\n' +
       ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
       '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
       ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;' + ' License: <%= pkg.license %>\n' +
@@ -16,15 +16,15 @@ module.exports = function(grunt) {
           banner: '<%= banner %>'
         },
         files: {
-          'css/dist/cmb.min.css': [ 
-            'css/src/layout.css', 
-            'css/src/layout-horizontal.css', 
-            'css/src/generic.css', 
-            'css/src/repeatable.css', 
-            'css/src/sortable.css', 
-            'css/src/group.css', 
-            'css/src/file.css', 
-            'css/src/misc-fields.css' 
+          'css/dist/cmb.min.css': [
+            'css/src/layout.css',
+            'css/src/layout-horizontal.css',
+            'css/src/generic.css',
+            'css/src/repeatable.css',
+            'css/src/sortable.css',
+            'css/src/group.css',
+            'css/src/file.css',
+            'css/src/misc-fields.css'
           ]
         }
       }

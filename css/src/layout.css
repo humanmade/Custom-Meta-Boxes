@@ -1,22 +1,22 @@
 /** CMB Layout **/
 
-.cmb-fields .field { 
+.cmb-fields .field {
 	padding: 16px 0;
 	border-bottom: 1px solid #DFDFDF;
 }
 
-.cmb-row:last-child > [class*="cmb-cell-"]  > .field { 
-	border-bottom: 0; 
+.cmb-row:last-child > [class*="cmb-cell-"]  > .field {
+	border-bottom: 0;
 }
 
 /* Neaten up the margins when metaboxes are within the standard postbox. */
 .postbox > .inside > .cmb-fields {
-	margin: -10px 0; 
+	margin: -10px 0;
 }
 
-.cmb-fields .cmb-row { 
-	overflow: hidden; 
-	margin: 0 -5px; 
+.cmb-fields .cmb-row {
+	overflow: hidden;
+	margin: 0 -5px;
 	zoom: 1;
 }
 
@@ -24,13 +24,13 @@
 .cmb-fields .cmb-row:after {
     content: "";
     display: table;
-} 
+}
 .cmb-fields .cmb-row:after {
     clear: both;
 }
 
-.cmb-fields [class*="cmb-cell-"] { 
-	float: left; 
+.cmb-fields [class*="cmb-cell-"] {
+	float: left;
 	padding: 0 5px;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;

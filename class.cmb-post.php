@@ -5,7 +5,7 @@ class CMB_Post extends CMB {
 	public function __construct( $meta_box ) {
 
 		parent::__construct( $meta_box );
-		
+
 		add_action( 'admin_init', array( &$this, 'init_hook' ) );
 		add_action( 'admin_menu', array( &$this, 'add_post_meta_box' ) );
 		add_action( 'save_post',  array( &$this, 'save_hook' ) );
@@ -28,20 +28,20 @@ class CMB_Post extends CMB {
 
 		if ( is_page() || ! isset( $object_id ) )
 			return false;
-		
-		$this->init( $object_id ); 
+
+		$this->init( $object_id );
 
 	}
 
 	public function save_hook( $object_id ) {
 
-		$this->save( $object_id ); 
+		$this->save( $object_id );
 
 	}
 
 	function display_hook( $object ) {
 
-		$this->display( $object->id ); 
+		$this->display( $object->id );
 
 	}
 
@@ -65,9 +65,9 @@ class CMB_Post extends CMB {
 				return false;
 		}
 
-		// Get current template 
+		// Get current template
 		// Note assignment
-		if ( isset( $meta_box['show_on']['page-template'] ) && $current_template = get_post_meta( $post_id, '_wp_page_template', true ) ) { 
+		if ( isset( $meta_box['show_on']['page-template'] ) && $current_template = get_post_meta( $post_id, '_wp_page_template', true ) ) {
 			// If value isn't an array, turn it into one
 			$meta_box['show_on']['page-template'] = ! is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
 			if ( ! in_array( $current_template, $meta_box['show_on']['page-template'] ) )
@@ -83,14 +83,14 @@ class CMB_Post extends CMB {
 
 		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
 		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'low' : $this->_meta_box['priority'];
-		
-		foreach ( (array) $this->_meta_box['pages'] as $page ) 
+
+		foreach ( (array) $this->_meta_box['pages'] as $page )
 			add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'display_hook'), $page, $this->_meta_box['context'], $this->_meta_box['priority'] );
 
 	}
 
 	public function get_field_values( $object_id, $field_id ) {
-		
+
 		return get_post_meta( $object_id, $field_id, false );
 
 	}
@@ -106,14 +106,14 @@ class CMB_Post extends CMB {
 	}
 
 	public function save_field_values( $object_id, $field_id, $values ) {
-		
+
 		delete_post_meta( $object_id, $field_id );
-		
+
 		if ( empty( $values ) )
 			return;
 
 		foreach ( $values as $value ) {
-		
+
 			if ( $value || $value === '0' )
 				add_post_meta( $object_id, $field_id, $value );
 

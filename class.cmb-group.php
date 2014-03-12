@@ -6,13 +6,13 @@ class CMB_Group extends CMB {
 	public $parent;
 
 	public function init( $object_id ) {
-		
+
 		parent::init( $object_id );
 
 		$fields = &$this->get_fields();
-		foreach ( $fields as &$field ) 
+		foreach ( $fields as &$field )
 			$field->parent = $this->parent;
-	
+
 	}
 
 	public function set_parent( $parent ) {
@@ -24,7 +24,7 @@ class CMB_Group extends CMB {
 	}
 
 	public function get_field_values( $object_id, $field_id ) {
-		
+
 		if ( ! isset( $this->values[$this->parent->field_index] ) )
 			return array('');
 
