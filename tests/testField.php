@@ -90,6 +90,12 @@ class FieldTestCase extends WP_UnitTestCase {
 		$id_attr = $field->get_the_id_attr();
 		$this->assertEquals( $id_attr, 'foo-cmb-field-1' );
 
+		// Test more than 10 fields
+		// See https://github.com/humanmade/Custom-Meta-Boxes/pull/164
+		$field->field_index = 12;
+		$id_attr = $field->get_the_id_attr();
+		$this->assertEquals( $id_attr, 'foo-cmb-field-12' );
+
 	}
 
 	function testNameAttrValue() {
@@ -108,6 +114,12 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field->field_index = 1;
 		$id_attr = $field->get_the_name_attr();
 		$this->assertEquals( $id_attr, 'foo[cmb-field-1]' );
+
+		// Test more than 10 fields
+		// See https://github.com/humanmade/Custom-Meta-Boxes/pull/164
+		$field->field_index = 12;
+		$id_attr = $field->get_the_name_attr();
+		$this->assertEquals( $id_attr, 'foo[cmb-field-12]' );
 
 	}
 

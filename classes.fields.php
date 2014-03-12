@@ -11,7 +11,7 @@ abstract class CMB_Field {
 	public $value;
 	public $field_index = 0;
 
-	public function __construct( $name, $title, Array $values, Array $args = array() ) {
+	public function __construct( $name, $title, array $values, $args = array() ) {
 
 		$this->id 		= $name;
 		$this->name		= $name . '[]';
@@ -112,7 +112,7 @@ abstract class CMB_Field {
 		$id = $this->id;
 		
 		if ( isset( $this->parent ) ) {
-			$parent_id = preg_replace( '/cmb\-field\-(\d|x)+/', 'cmb-group-$1', $this->parent->get_the_id_attr() );
+			$parent_id = preg_replace( '/cmb\-field\-(\d+|x)/', 'cmb-group-$1', $this->parent->get_the_id_attr() );
 			$id = $parent_id . '[' . $id . ']';
 		}
 
@@ -153,7 +153,7 @@ abstract class CMB_Field {
 		$name = str_replace( '[]', '', $this->name );
 
 		if ( isset( $this->parent ) ) {
-			$parent_name = preg_replace( '/cmb\-field\-(\d|x)+/', 'cmb-group-$1', $this->parent->get_the_name_attr() );
+			$parent_name = preg_replace( '/cmb\-field\-(\d+|x)/', 'cmb-group-$1', $this->parent->get_the_name_attr() );
 			$name = $parent_name . '[' . $name . ']';
 		}
 
@@ -347,7 +347,6 @@ class CMB_Text_Field extends CMB_Field {
 		<input type="text" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->get_value() ); ?>" />
 
 	<?php }
-
 }
 
 class CMB_Text_Small_Field extends CMB_Text_Field {
@@ -513,7 +512,7 @@ class CMB_Image_Field extends CMB_File_Field {
 
 		// Handle default WP size format. 
 		if ( is_array( $size ) && isset( $size[0] ) && isset( $size[1] ) )
-			$size = array( 'width' => $size[0], 'height' => $size[0] );
+			$size = array( 'width' => $size[0], 'height' => $size[1] );
 
 		return wp_parse_args( $size, array(
 			'width'  => get_option( 'thumbnail_size_w' ),
@@ -615,7 +614,7 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/jquery-ui.css', '1.10.3' );
+		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
 
 		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );		
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
@@ -649,7 +648,7 @@ class CMB_Datetime_Timestamp_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/jquery-ui.css', '1.10.3' );
+		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
 		
 		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
@@ -1012,6 +1011,10 @@ class CMB_Taxonomy extends CMB_Select {
 
 		$terms = $this->get_terms();
 
+		if ( is_wp_error( $terms ) ) { 
+			return array(); 
+		}
+
 		$term_options = array();
 
 		foreach ( $terms as $term )
@@ -1244,18 +1247,24 @@ class CMB_Group_Field extends CMB_Field {
 
 	function __construct() {
 
-		$args = func_get_args();
+		$args = func_get_args(); // you can't just put func_get_args() into a function as a parameter
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
-		$this->init_fields();
+		if ( ! empty( $this->args['fields'] ) ) {
+			foreach ( $this->args['fields'] as $f ) {
+
+				$field_value = isset( $this->value[$f['id']] ) ? $this->value[$f['id']] : '';
+				$f['uid'] = $f['id'];
+
+				$class = _cmb_field_class_for_type( $f['type'] );
+				$f['show_label'] = true;
+
+				// Todo support for repeatable fields in groups
+				$this->add_field( new $class( $f['uid'], $f['name'], (array) $field_value, $f ) );
 
 	}
+		}
 
-	function init_fields() {
-		$this->fields = new CMB_Group( array( 'fields' => $this->args['fields'] ) );
-		$this->fields->set_values( $this->get_values() );
-		$this->fields->set_parent( $this );
-		$this->fields->init(0);
 	}
 
 	public function enqueue_scripts() {
@@ -1263,6 +1272,7 @@ class CMB_Group_Field extends CMB_Field {
 		parent::enqueue_scripts();
 
 		foreach ( $this->args['fields'] as $f ) {
+
 			$class = _cmb_field_class_for_type( $f['type'] );
 			$field = new $class( '', '', array(), $f );
 			$field->enqueue_scripts();
@@ -1333,7 +1343,7 @@ class CMB_Group_Field extends CMB_Field {
 
 	public function html() {
 
-		$fields = &$this->fields->get_fields();
+		$fields = &$this->get_fields();
 		$value = $this->value;
 
 		if ( ! empty( $value ) ) {
@@ -1355,29 +1365,57 @@ class CMB_Group_Field extends CMB_Field {
 			<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
 		<?php endif; ?>
 
-		<?php $this->fields->display(); ?>
+		<?php CMB_Meta_Box::layout_fields( $fields ); ?>
 
 	<?php }
 
 	public function parse_save_values() {
 
-		$fields       = &$this->fields->get_fields();
-		$group_values = &$this->get_values();
+		$fields = &$this->get_fields();
+		$values = &$this->get_values();
 
-		foreach ( $group_values as &$group_value ) {
-			foreach ( $fields as $field ) {
+		foreach ( $values as &$group_value ) {
+			foreach ( $group_value as $field_id => &$field_value ) {
 
-				$field->set_values( $group_value[$field->id] );
+				if ( ! isset( $fields[$field_id] ) ) {
+					$field_value = array();
+					continue;
+				}
+
+				$field = $fields[$field_id];
+				$field->values = $field_value;
 				$field->parse_save_values();
-				$group_value[$field->id] = $field->get_values();
 
+				$field_value = $field->get_values();
+
+				// if the field is a repeatable field, store the whole array of them, if it's not repeatble,
+				// just store the first (and only) one directly
 				if ( ! $field->args['repeatable'] )
-					$group_value[$field->id] = reset( $group_value[$field->id] );
-				
+					$field_value = reset( $field_value );
 			}
 		}
+				
+			}
 
-		parent::parse_save_values();
+	public function add_field( CMB_Field $field ) {
+		$field->parent = $this;
+		$this->fields[$field->id] = $field;
+		}
+
+	public function &get_fields() {
+		return $this->fields;
+	}
+
+	public function set_values( array $values ) {
+		
+		$this->values = $values;
+		$fields = &$this->get_fields();
+
+		foreach ( $values as $value ) {
+			foreach ( $value as $field_id => $field_value ) {
+				$fields[$field_id]->set_values( (array) $field_value );
+			}
+		}
 
 	}
 

@@ -36,8 +36,11 @@ It began as a fork of [Custom Meta Boxes](https://github.com/jaredatch/Custom-Me
 ## To Do
 * Make hooking / registering nicer.
 
-
 ## Contribution Guidelines ##
 
 See [CONTRIBUTING.md](https://github.com/humanmade/Custom-Meta-Boxes/blob/master/CONTRIBUTING.md)
 
+## Changelog ##
+
+**1.0**
+* Initial stable version of the fork.

@@ -52,11 +52,11 @@ include_once( CMB_PATH . '/class.cmb-group.php' );
 include_once( CMB_PATH . '/class.cmb-option.php' );
 include_once( CMB_PATH . '/class.cmb-user.php' );
 
-// include_once( CMB_PATH . '/example-functions.php' );
+include_once( CMB_PATH . '/example-functions.php' );
 
 /**
  * Get all the meta boxes on init
- * 
+ *
  * @return null
  */
 function cmb_init() {
@@ -73,27 +73,29 @@ function cmb_init() {
 	load_textdomain( $textdomain, CMB_PATH . '/languages/' . $textdomain . '-' . $locale . '.mo' );
 
 	foreach ( apply_filters( 'cmb_meta_boxes', array() ) as $meta_box )
-		new CMB_Post( $meta_box );	
+		new CMB_Post( $meta_box );
 
 	foreach ( apply_filters( 'cmb_options_pages', array() ) as $meta_box )
 		new CMB_Options( $meta_box );
 
 	foreach ( apply_filters( 'cmb_user_meta', array() ) as $meta_box )
-		new CMB_User( $meta_box );	
+		new CMB_User( $meta_box );
 
 }
 add_action( 'init', 'cmb_init' );
 
 /**
- * Get a field class by type
- * 
- * @param  string $type 
- * @return string $class, or false if not found.
+ * Return an array of built in available fields
+ *
+ * Key is field name, Value is class used by field.
+ * Available fields can be modified using the 'cmb_field_types' filter.
+ *
+ * @return array
  */
 function _cmb_field_class_for_type( $type ) {
 
-	$map = apply_filters( 
-		'cmb_field_types', 
+	$map = apply_filters(
+		'cmb_field_types',
 		array(
 			'text'				=> 'CMB_Text_Field',
 			'text_small' 		=> 'CMB_Text_Small_Field',
@@ -116,7 +118,7 @@ function _cmb_field_class_for_type( $type ) {
 			'colorpicker'		=> 'CMB_Color_Picker',
 			'title'				=> 'CMB_Title',
 			'group'				=> 'CMB_Group_Field'
-		) 
+		)
 	);
 
 	if ( isset( $map[$type] ) )
@@ -127,24 +129,24 @@ function _cmb_field_class_for_type( $type ) {
 }
 
 /**
- * For the order of repeatable fields to be guaranteed, orderby meta_id needs to be set. 
+ * For the order of repeatable fields to be guaranteed, orderby meta_id needs to be set.
  * Note usermeta has a different meta_id column name.
- * 
+ *
  * Only do this for older versions as meta is now ordered by ID (since 3.8)
  * See http://core.trac.wordpress.org/ticket/25511
- * 
+ *
  * @param  string $query
  * @return string $query
  */
 function cmb_fix_meta_query_order($query) {
 
     $pattern = '/^SELECT (post_id|user_id), meta_key, meta_value FROM \w* WHERE post_id IN \([\d|,]*\)$/';
-    
-    if ( 
-            0 === strpos( $query, "SELECT post_id, meta_key, meta_value" ) &&  
-            preg_match( $pattern, $query, $matches ) 
-    ) {        
-            
+
+    if (
+            0 === strpos( $query, "SELECT post_id, meta_key, meta_value" ) &&
+            preg_match( $pattern, $query, $matches )
+    ) {
+
             if ( isset( $matches[1] ) && 'user_id' == $matches[1] )
                     $meta_id_column = 'umeta_id';
             else
@@ -154,12 +156,12 @@ function cmb_fix_meta_query_order($query) {
 
             if ( false === strpos( $query, $meta_query_orderby ) )
                     $query .= $meta_query_orderby;
-    
+
     }
-    
+
     return $query;
 
 }
 
 if ( version_compare( get_bloginfo( 'version' ), '3.8', '<' ) )
-	add_filter( 'query', 'cmb_fix_meta_query_order', 1 ); 
+	add_filter( 'query', 'cmb_fix_meta_query_order', 1 );

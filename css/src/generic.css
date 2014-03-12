@@ -12,6 +12,7 @@
 .cmb-fields textarea, 
 .cmb-fields select { 
 	width: 100%;
+	margin: 0;
 }
 
 .cmb-fields input.cmb_text_small { 
