@@ -1,5 +1,5 @@
 
-.cmb-sortable > .field-item {
+.cmb-sortable > .cmb-field-content > .field-item {
 	padding-left: 15px;
 }
 
@@ -32,7 +32,7 @@
 	z-index: -1;
 }
 
-.cmb-sortable > .ui-sortable-placeholder {
+.cmb-sortable > .cmb-field-content > .ui-sortable-placeholder {
 	border: 1px dashed #DDD !important;
 	background: transparent !important;
 	visibility: visible !important;

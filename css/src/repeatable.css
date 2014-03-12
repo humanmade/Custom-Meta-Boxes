@@ -2,7 +2,7 @@
  * Repeatable
  */
 
-.cmb-fields .field.repeatable > .field-item {
+.cmb-fields .field.repeatable > .cmb-field-content > .field-item {
  	padding-right: 30px;
  	margin-bottom: 10px;
  }
