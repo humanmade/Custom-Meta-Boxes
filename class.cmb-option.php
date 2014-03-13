@@ -5,11 +5,11 @@ class CMB_Options extends CMB {
 	public $object_id = 0;
 	public $slug;
 
-	protected $options_meta_box_defaults = array(
-		'menu_page_type' => 'submenu_page', // submenu_page or menu_page
+	protected $options_args_defaults = array(
+		'menu_page_type'      => 'submenu_page', // submenu_page or menu_page
 		'submenu_page_parent' => 'options-general.php', // Page parent.  Required if menu_page_type is submenu_page
-		'menu_page_icon_url' => null, // Menu item icon url.  Required if menu_page_type is menu_page
-		'menu_page_position' => null, // Menu item position.  Required if menu_page_type is menu_page
+		'menu_page_icon_url'  => null, // Menu item icon url.  Required if menu_page_type is menu_page
+		'menu_page_position'  => null, // Menu item position.  Required if menu_page_type is menu_page
 	);
 
 	public function __construct( $args ) {
@@ -18,23 +18,23 @@ class CMB_Options extends CMB {
 
 		parent::__construct( $args );
 
-		$this->_meta_box = wp_parse_args( $this->_meta_box, $this->options_meta_box_defaults );
+		$this->args = wp_parse_args( $this->args, $this->options_args_defaults );
 
-		if ( ! $this->should_show_field() )
+		if ( ! $this->is_box_displayed() )
 			return;
 
-		add_action( 'admin_init', array( $this, 'init_hook' ) );
-		add_action( 'admin_init', array( $this, 'save_hook' ) );
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_init', array( &$this, 'init_hook' ) );
+		add_action( 'admin_init', array( &$this, 'save_hook' ) );
+		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
 
 	}
 
 	public function admin_menu() {
 
-		if ( $this->_meta_box['menu_page_type'] === 'submenu_page' ) {
-			add_submenu_page( $this->_meta_box['submenu_page_parent'], $this->_meta_box['title'], $this->_meta_box['title'], $this->_meta_box['capability'], $this->slug, array( $this, 'display_hook' ) );
+		if ( $this->args['menu_page_type'] === 'submenu_page' ) {
+			add_submenu_page( $this->args['submenu_page_parent'], $this->args['title'], $this->args['title'], $this->args['capability'], $this->slug, array( $this, 'display_hook' ) );
 		} else {
-			add_menu_page( $this->_meta_box['title'], $this->_meta_box['title'], $this->_meta_box['capability'], $this->slug, array(), $this->_meta_box['menu_page_icon_url'], $this->_meta_box['menu_page_position'] );
+			add_menu_page( $this->args['title'], $this->args['title'], $this->args['capability'], $this->slug, array(), $this->args['menu_page_icon_url'], $this->args['menu_page_position'] );
 		}
 
 	}

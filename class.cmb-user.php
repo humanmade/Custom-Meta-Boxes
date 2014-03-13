@@ -6,7 +6,7 @@ class CMB_User extends CMB {
 
 		parent::__construct( $args );
 
-		if ( ! $this->should_show_field() )
+		if ( ! $this->is_box_displayed() )
 			return;
 
 		add_action( 'admin_init', array( &$this, 'init_hook' ), 100 );

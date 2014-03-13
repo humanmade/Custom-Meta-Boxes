@@ -10,18 +10,19 @@ abstract class CMB {
 		'id'              => '',
 		'title'           => '',
 		'fields'          => array(),
-		'capability'      => null,
-		'capability_args' => null
+		'show_on'         => array(),
+		'capability'      => null, // Capability requried to show meta box.
+		'capability_args' => null, // Args passed to current user can. If 'current', $this->_object_id is used.
 	);
 
 	function __construct( $meta_box ) {
 
 		global $pagenow;
 
-		$this->_meta_box = wp_parse_args( $meta_box, $this->meta_box_defaults );
+		$this->args = wp_parse_args( $meta_box, $this->meta_box_defaults );
 
-		if ( empty( $this->_meta_box['id'] ) )
-			$this->_meta_box['id'] = sanitize_title( $this->_meta_box['title'] );
+		if ( empty( $this->args['id'] ) )
+			$this->args['id'] = sanitize_title( $this->args['title'] );
 
 	}
 
@@ -29,7 +30,9 @@ abstract class CMB {
 
 	public function init( $object_id ) {
 
-		if ( ! $this->should_show_field() )
+		$this->_object_id = $object_id;
+
+		if ( ! $this->is_box_displayed() )
 			return;
 
 		// Load CMB Scripts.
@@ -61,7 +64,22 @@ abstract class CMB {
 
 	}
 
-	protected function should_show_field() {
+	/**
+	 * Whether the meta box should be shown or not.
+	 *
+	 * If false, the box is not displayed at all.
+	 * Sub-classes of CMB can provide their own conditions
+	 * although they should remember to call the parent method
+	 *
+	 * @return boolean
+	 */
+	protected function is_box_displayed() {
+
+		if ( $this->args['capability'] ) {
+
+			if ( 'current' === $this->args['capability_args'] ) {
+				$this->args['capability_args'] = $this->_object_id;
+			}
 
 			return current_user_can(
 				$this->args['capability'],
@@ -111,6 +129,14 @@ abstract class CMB {
 
 	public function save_field_values( $object_id, $field_id, $values ) {}
 
+	/**
+	 * Meta box output.
+	 *
+	 * Output the CMB structural markup.
+	 * Loops through each field and displays the field.
+	 *
+	 * @return null
+	 */
 	function display() {
 
 		$fields = $this->get_fields();
@@ -152,7 +178,16 @@ abstract class CMB {
 
 	}
 
-	function display_field( $field ) {
+	/**
+	 * Field output.
+	 *
+	 * Outputs CMB field container markup & _cmb_present_$id field.
+	 * Calls the display method on the field object.
+	 *
+	 * @param $field CMB_Field
+	 * @return null
+	 */
+	function display_field( CMB_Field $field ) {
 
 		$classes = array( 'field', get_class($field) );
 
@@ -175,11 +210,11 @@ abstract class CMB {
 
 		<div class="<?php printf( 'cmb-cell-%d', absint( $field->args['cols'] ) ); ?>">
 
-				<div <?php echo implode( ' ', $attrs ); ?>>
-					<?php $field->display(); ?>
-				</div>
+			<div <?php echo implode( ' ', $attrs ); ?>>
+				<?php $field->display(); ?>
+			</div>
 
-				<input type="hidden" name="_cmb_present_<?php esc_attr_e( $field->id ); ?>" value="1" />
+			<input type="hidden" name="_cmb_present_<?php esc_attr_e( $field->id ); ?>" value="1" />
 
 		</div>
 
@@ -187,6 +222,15 @@ abstract class CMB {
 
 	}
 
+	/**
+	 * Save.
+	 * Verify if field should be saved,
+	 * loop through each field and parse save values,
+	 * then call save_field_values(); for each field (this will handle the actual saving of data)
+	 *
+	 * @param numeric $object_id
+	 * @return null
+	 */
 	function save( $object_id )  {
 
 		// verify nonce
