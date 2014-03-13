@@ -56,54 +56,54 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	$meta_boxes[] = array(
 		'title' => 'CMB Test - all fields',
 		'pages' => 'post',
-		'fields' => $fields
 		'fields' => $fields,
-		'capability' => 'manage_options'
+		'capability' => 'edit_user',
+		'capability_args' => 'current'
 	);
 
 	// Examples of Groups and Columns
 
-	// $groups_and_cols = array(
-	// 	array( 'id' => 'gac-1',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
-	// 	array( 'id' => 'gac-2',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
-	// 	array( 'id' => 'gac-3',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
-	// 	array( 'id' => 'gac-4', 'name' => 'Group (4 columns)', 'type' => 'group', 'cols' => 4, 'fields' => array(
-	// 		array( 'id' => 'gac-4-f-1',  'name' => 'Textarea field', 'type' => 'textarea' )
-	// 	) ),
-	// 	array( 'id' => 'gac-5', 'name' => 'Group (8 columns)', 'type' => 'group', 'cols' => 8, 'fields' => array(
-	// 		array( 'id' => 'gac-4-f-1',  'name' => 'Text input field', 'type' => 'text' ),
-	// 		array( 'id' => 'gac-4-f-2',  'name' => 'Text input field', 'type' => 'text' ),
-	// 	) ),
-	// );
+	$groups_and_cols = array(
+		array( 'id' => 'gac-1',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
+		array( 'id' => 'gac-2',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
+		array( 'id' => 'gac-3',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
+		array( 'id' => 'gac-4', 'name' => 'Group (4 columns)', 'type' => 'group', 'cols' => 4, 'fields' => array(
+			array( 'id' => 'gac-4-f-1',  'name' => 'Textarea field', 'type' => 'textarea' )
+		) ),
+		array( 'id' => 'gac-5', 'name' => 'Group (8 columns)', 'type' => 'group', 'cols' => 8, 'fields' => array(
+			array( 'id' => 'gac-4-f-1',  'name' => 'Text input field', 'type' => 'text' ),
+			array( 'id' => 'gac-4-f-2',  'name' => 'Text input field', 'type' => 'text' ),
+		) ),
+	);
 
-	// $meta_boxes[] = array(
-	// 	'title' => 'Groups and Columns',
-	// 	'pages' => 'post',
-	// 	'fields' => $groups_and_cols
-	// );
+	$meta_boxes[] = array(
+		'title' => 'Groups and Columns',
+		'pages' => 'post',
+		'fields' => $groups_and_cols
+	);
 
-	// // Example of repeatable group. Using all fields.
-	// // For this example, copy fields from $fields, update I
-	// $group_fields = $fields;
-	// foreach ( $group_fields as &$field ) {
-	// 	$field['id'] = str_replace( 'field', 'gfield', $field['id'] );
-	// }
+	// Example of repeatable group. Using all fields.
+	// For this example, copy fields from $fields, update I
+	$group_fields = $fields;
+	foreach ( $group_fields as &$field ) {
+		$field['id'] = str_replace( 'field', 'gfield', $field['id'] );
+	}
 
-	// $meta_boxes[] = array(
-	// 	'title' => 'CMB Test - group (all fields)',
-	// 	'pages' => 'post',
-	// 	'fields' => array(
-	// 		array(
-	// 			'id' => 'gp',
-	// 			'name' => 'My Repeatable Group',
-	// 			'type' => 'group',
-	// 			'repeatable' => true,
-	// 			'sortable' => true,
-	// 			'fields' => $group_fields,
-	// 			'desc' => 'This is the group description.'
-	// 		)
-	// 	)
-	// );
+	$meta_boxes[] = array(
+		'title' => 'CMB Test - group (all fields)',
+		'pages' => 'post',
+		'fields' => array(
+			array(
+				'id' => 'gp',
+				'name' => 'My Repeatable Group',
+				'type' => 'group',
+				'repeatable' => true,
+				'sortable' => true,
+				'fields' => $group_fields,
+				'desc' => 'This is the group description.'
+			)
+		)
+	);
 
 	return $meta_boxes;
 
