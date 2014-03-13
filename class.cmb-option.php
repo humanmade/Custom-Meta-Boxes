@@ -2,7 +2,6 @@
 
 class CMB_Options extends CMB {
 
-	public $object_id = 0;
 	public $slug;
 
 	protected $options_args_defaults = array(
@@ -44,7 +43,7 @@ class CMB_Options extends CMB {
 		global $pagenow;
 
 		if ( $pagenow === 'options-general.php' && isset( $_GET['page'] ) ) {
-			$this->init( $this->object_id );
+			$this->init( 0 ); // Note object ID of 0 for options pages.
 		}
 
 	}
