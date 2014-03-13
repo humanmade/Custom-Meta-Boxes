@@ -47,7 +47,7 @@ class CMB_User extends CMB {
 	}
 
 	public function get_field_values( $object_id, $field_id ) {
-		return get_user_meta( $object_id, $field_id, false );
+		return get_user_meta( $object_id, $field_id, true );
 	}
 
 	public function save_field_values( $object_id, $field_id, $values ) {
