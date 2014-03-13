@@ -2,7 +2,7 @@
 
 abstract class CMB {
 
-	public $_meta_box;
+	public $args;
 	public $_object_id;
 	private $_fields = array();
 
@@ -35,7 +35,7 @@ abstract class CMB {
 		// Load CMB Scripts.
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 
-		foreach ( $this->_meta_box['fields'] as $key => $field ) {
+		foreach ( $this->args['fields'] as $key => $field ) {
 
 			$values = array();
 
@@ -63,13 +63,12 @@ abstract class CMB {
 
 	protected function should_show_field() {
 
-		if ( $this->_meta_box['capability'] ) {
 			return current_user_can(
-				$this->_meta_box['capability'],
-				$this->_meta_box['capability_args']
+				$this->args['capability'],
+				$this->args['capability_args']
 			);
-		}
 
+		}
 
 		return true;
 	}

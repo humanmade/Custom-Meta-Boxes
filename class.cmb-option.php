@@ -12,11 +12,11 @@ class CMB_Options extends CMB {
 		'menu_page_position' => null, // Menu item position.  Required if menu_page_type is menu_page
 	);
 
-	public function __construct( $meta_box ) {
+	public function __construct( $args ) {
 
-		$this->slug = sanitize_title( $meta_box['title'] );
+		$this->slug = sanitize_title( $args['title'] );
 
-		parent::__construct( $meta_box );
+		parent::__construct( $args );
 
 		$this->_meta_box = wp_parse_args( $this->_meta_box, $this->options_meta_box_defaults );
 
@@ -59,7 +59,7 @@ class CMB_Options extends CMB {
 
 		<div class="wrap">
 
-			<h2><?php echo esc_html( $this->_meta_box['title'] ); ?></h2>
+			<h2><?php echo esc_html( $this->args['title'] ); ?></h2>
 			<form action="options-general.php?page=<?php echo esc_attr( $this->slug ); ?>" method="POST" style="max-width: 800px;">
 
 				<?php $this->display();  ?>

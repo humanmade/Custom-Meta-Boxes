@@ -2,12 +2,12 @@
 
 class CMB_Post extends CMB {
 
-	public function __construct( $meta_box ) {
+	public function __construct( $args ) {
 
-		parent::__construct( $meta_box );
 
 		if ( ! $this->should_show_field() )
 			return;
+		parent::__construct( $args );
 
 		add_action( 'admin_init', array( &$this, 'init_hook' ) );
 		add_action( 'admin_menu', array( &$this, 'add_post_meta_box' ) );

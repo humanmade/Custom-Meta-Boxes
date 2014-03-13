@@ -2,9 +2,9 @@
 
 class CMB_User extends CMB {
 
-	public function __construct( $meta_box ) {
+	public function __construct( $args ) {
 
-		parent::__construct( $meta_box );
+		parent::__construct( $args );
 
 		if ( ! $this->should_show_field() )
 			return;
@@ -42,7 +42,7 @@ class CMB_User extends CMB {
 	}
 
 	function display_hook( $object ) {
-		printf( '<h3>%s</h3>', esc_html( $this->_meta_box['title'] ) );
+		printf( '<h3>%s</h3>', esc_html( $this->args['title'] ) );
 		$this->display( $object->ID );
 	}
 
