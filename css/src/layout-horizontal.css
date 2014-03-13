@@ -1,7 +1,17 @@
+.cmb-fields.cmb-fields-horizontal .field:before,
+.cmb-fields.cmb-fields-horizontal .field:after {
+    content: "";
+    display: table;
+}
+
+.cmb-fields.cmb-fields-horizontal .field:after {
+    clear: both;
+}
 
 .cmb-fields.cmb-fields-horizontal .field {
 	padding-left: 210px;
 	border-bottom: none;
+    zoom: 1;
 }
 
 .cmb-fields.cmb-fields-horizontal .field-title {
