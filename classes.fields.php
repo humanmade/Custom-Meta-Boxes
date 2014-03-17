@@ -112,7 +112,7 @@ abstract class CMB_Field {
 		$id = $this->id;
 
 		if ( isset( $this->parent ) ) {
-			$parent_id = preg_replace( '/cmb\-field\-(\d|x)+/', 'cmb-group-$1', $this->parent->get_the_id_attr() );
+			$parent_id = preg_replace( '/cmb\-field\-(\d+|x)/', 'cmb-group-$1', $this->parent->get_the_id_attr() );
 			$id = $parent_id . '[' . $id . ']';
 		}
 
@@ -1189,7 +1189,7 @@ class CMB_Post_Select extends CMB_Select {
 							<?php endforeach; ?>
 						
 						<?php else : ?>
-					
+						
 							data = <?php echo json_encode( array( 'id' => $post_id, 'text' => html_entity_decode( get_the_title( $post_id ) ) ) ); ?>;
 						
 						<?php endif; ?>
