@@ -53,8 +53,12 @@ CMB.addCallbackForClonedField( 'CMB_wysiwyg', function( newT ) {
 
 		// If current mode is visual, create the tinyMCE.
 		if ( 'tmce' === mode ) {
+			if ( tinyMCE.majorVersion === '4' ) {
+				var ed = tinymce.init( tinyMCEPreInit.mceInit[id] );
+			} else if ( tinyMCE.majorVersion === '3' ) {
 			var ed = new tinymce.Editor( id, tinyMCEPreInit.mceInit[id] );
 			ed.render();
+		}
 		}
 
 		// Init Quicktags.
@@ -70,7 +74,14 @@ CMB.addCallbackForSortStart( 'CMB_wysiwyg', function( el ) {
 
 	el.find( '.wp-editor-area' ).each(function(){
 		var id = jQuery(this).attr('id');
+
+		if ( tinyMCE.majorVersion === '4' ) {
+			tinyMCE.execCommand('mceRemoveEditor', false, id);
+		} else if ( tinyMCE.majorVersion === '3' ) {
 		tinyMCE.execCommand('mceRemoveControl', false, id);
+		}
+
+
 	});
 
 } );
@@ -82,8 +93,13 @@ CMB.addCallbackForSortEnd( 'CMB_wysiwyg', function( el ) {
 		var id   = jQuery(this).attr('id'),
 		    mode = jQuery(this).closest('.wp-editor-wrap').hasClass('tmce-active') ? 'tmce' : 'html';
 
-		if ( 'tmce' === mode )
+		if ( 'tmce' === mode ) {
+			if ( tinyMCE.majorVersion === '4' ) {
+				tinyMCE.execCommand('mceAddEditor', false, id);
+			} else if ( tinyMCE.majorVersion === '3' ) {
 			tinyMCE.execCommand('mceAddControl', false, id);
+			}
+		}
 
 	});
 
