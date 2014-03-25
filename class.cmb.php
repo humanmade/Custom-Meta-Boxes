@@ -12,7 +12,7 @@ abstract class CMB {
 		'fields'          => array(),
 		'show_on'         => array(),
 		'capability'      => null, // Capability requried to show meta box.
-		'capability_args' => null, // Args passed to current user can. If 'current', $this->_object_id is used.
+		'capability_args' => null, // Args passed to current user can. If null, $this->_object_id is used.
 	);
 
 	function __construct( $meta_box ) {
@@ -38,29 +38,7 @@ abstract class CMB {
 		// Load CMB Scripts.
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 
-		foreach ( $this->args['fields'] as $key => $field ) {
-
-			$values = array();
-
-			$field = wp_parse_args(
-				$field,
-				array(
-					'name' => '',
-					'desc' => '',
-					'type'  => '',
-					'cols' => 12
-				)
-			);
-
-			$class = _cmb_field_class_for_type( $field['type'] );
-
-			if ( ! $class )
-				continue;
-
-			$values = (array) $this->get_field_values( $object_id, $field['id'] );
-			$this->add_field( new $class( $field['id'], $field['name'], $values, $field ) );
-
-		}
+		$this->add_fields( $this->args['fields'] );
 
 	}
 
@@ -73,11 +51,11 @@ abstract class CMB {
 	 *
 	 * @return boolean
 	 */
-	protected function is_box_displayed() {
+	public function is_box_displayed() {
 
 		if ( $this->args['capability'] ) {
 
-			if ( 'current' === $this->args['capability_args'] ) {
+			if ( ! $this->args['capability_args'] ) {
 				$this->args['capability_args'] = $this->_object_id;
 			}
 
@@ -105,15 +83,38 @@ abstract class CMB {
 		foreach ( $this->_fields as $field )
 			$field->enqueue_scripts();
 
-		// Load main CMB Style. (Load legacy pre WordPress 3.8)
-		if ( version_compare( get_bloginfo( 'version' ), '3.8', '>=' ) )
-			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . "css/dist/cmb$suffix.css" );
-		else
-			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'css/legacy.css' );
+		wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . "css/dist/cmb$suffix.css" );
 
 		// Load individual field styles.
 		foreach ( $this->_fields as $field )
 			$field->enqueue_styles();
+
+	}
+
+	public function add_fields( $fields ) {
+
+		foreach ( $fields as $key => $field ) {
+
+			$values = array();
+
+			$field = wp_parse_args(
+				$field,
+				array(
+					'name' => '',
+					'desc' => '',
+					'type'  => '',
+					'cols' => 12
+				)
+			);
+
+			$class = _cmb_field_class_for_type( $field['type'] );
+
+			if ( $class ) {
+				$values = (array) $this->get_field_values( $object_id, $field['id'] );
+				$this->add_field( new $class( $field['id'], $field['name'], $values, $field ) );
+			}
+
+		}
 
 	}
 
@@ -125,8 +126,24 @@ abstract class CMB {
 		return $this->_fields;
 	}
 
+	/**
+	 * Retreive field values from data store
+	 * This does nothing. Subclasses should provide their own methods for handling this.
+	 *
+	 * @param  int $object_id
+	 * @param  string $field_id
+	 * @return array
+	 */
 	public function get_field_values( $object_id, $field_id ) {}
 
+	/**
+	 * Save field values to data store
+	 * This does nothing. Subclasses should provide their own methods for handling this.
+	 *
+	 * @param  int $object_id
+	 * @param  string $field_id
+	 * @return array
+	 */
 	public function save_field_values( $object_id, $field_id, $values ) {}
 
 	/**
