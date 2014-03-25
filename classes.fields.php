@@ -321,15 +321,18 @@ abstract class CMB_Field {
 			if ( $this->args['repeatable'] ) :
 
 			$this->field_index = 'x'; // x used to distinguish hidden fields.
-			$this->value = ''; ?>
+			$this->value = '';
 
-				<div class="cmb-field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
-			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
-			<?php endif; ?>
+			?>
 
-			<?php $this->html(); ?>
+			<div class="cmb-field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+
+				<?php if ( $this->args['repeatable'] ) : ?>
+					<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
+				<?php endif; ?>
+
+				<?php $this->html(); ?>
 
 			</div>
 
