@@ -1190,7 +1190,7 @@ class CMB_Post_Select extends CMB_Select {
 
 						<?php else : ?>
 
-							data = <?php echo json_encode( array( 'id' => $post_id, 'text' => html_entity_decode( get_the_title( $post_id ) ) ) ); ?>;
+							data = <?php echo json_encode( array( 'id' => $post_id, 'text' => html_entity_decode( get_the_title( $this->get_value() ) ) ) ); ?>;
 
 						<?php endif; ?>
 
