@@ -440,6 +440,12 @@ class CMB_File_Field extends CMB_Field {
 
 class CMB_Image_Field extends CMB_File_Field {
 
+	function enqueue_scripts() {
+		parent::enqueue_scripts();
+		wp_enqueue_media();
+		wp_enqueue_script( 'cmb-file-upload', trailingslashit( CMB_URL ) . 'js/file-upload.js', array( 'jquery', 'cmb-scripts' ) );
+	}
+
 	public function html() {
 
 		$args = $this->args = wp_parse_args( $this->args, array(
