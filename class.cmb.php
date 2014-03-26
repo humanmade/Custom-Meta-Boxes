@@ -110,7 +110,7 @@ abstract class CMB {
 			$class = _cmb_field_class_for_type( $field['type'] );
 
 			if ( $class ) {
-				$values = (array) $this->get_field_values( $object_id, $field['id'] );
+				$values = (array) $this->get_field_values( $this->_object_id, $field['id'] );
 				$this->add_field( new $class( $field['id'], $field['name'], $values, $field ) );
 			}
 
@@ -248,19 +248,19 @@ abstract class CMB {
 	 * @param numeric $object_id
 	 * @return null
 	 */
-	function save( $object_id )  {
+	function save( $object_id, $data )  {
 
 		// verify nonce
-		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
+		if ( ! isset( $data['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $data['wp_meta_box_nonce'], basename( __FILE__ ) ) )
 			return $object_id;
 
-		foreach ( $this->_fields as $field ) {
+		foreach ( $this->get_fields() as $field ) {
 
 			// verify this meta box was shown on the page
-			if ( ! isset( $_POST['_cmb_present_' . $field->id ] ) )
+			if ( ! isset( $data['_cmb_present_' . $field->id ] ) )
 				continue;
 
-			$values = ( isset( $_POST[ $field->id ] ) ) ? (array) $_POST[ $field->id ] : array();
+			$values = ( isset( $data[ $field->id ] ) ) ? (array) $data[ $field->id ] : array();
 			$values = $this->strip_repeatable( $values );
 
 			$field->set_values( $values );

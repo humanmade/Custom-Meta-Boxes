@@ -4,10 +4,14 @@ class CMB_Post extends CMB {
 
 	public function __construct( $args ) {
 
+		if ( ! $this->is_box_displayed() ) {
+			return;
+		}
+
 		parent::__construct( $args );
 
 		add_action( 'admin_init', array( &$this, 'init_hook' ) );
-		add_action( 'admin_menu', array( &$this, 'add_post_meta_box' ) );
+		add_action( 'add_meta_boxes', array( &$this, 'add_post_meta_box' ) );
 		add_action( 'save_post',  array( &$this, 'save_hook' ) );
 
 	}
@@ -41,7 +45,7 @@ class CMB_Post extends CMB {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			return;
 
-		$this->save( $object_id );
+		$this->save( $object_id, $_POST );
 
 	}
 
@@ -98,16 +102,6 @@ class CMB_Post extends CMB {
 	public function get_field_values( $object_id, $field_id ) {
 
 		return get_post_meta( $object_id, $field_id, false );
-
-	}
-
-	public function save( $object_id ) {
-
-		// check autosave
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-			return $object_id;
-
-		parent::save( $object_id );
 
 	}
 

@@ -19,13 +19,24 @@ class CMB_Options extends CMB {
 
 		$this->args = wp_parse_args( $this->args, $this->options_args_defaults );
 
-		if ( ! $this->is_box_displayed() )
-			return;
+		if ( $this->is_box_displayed() ) {
+			add_action( 'admin_init', array( &$this, 'init_hook' ) );
+			add_action( 'admin_init', array( &$this, 'save_hook' ) );
+		}
 
-		add_action( 'admin_init', array( &$this, 'init_hook' ) );
-		add_action( 'admin_init', array( &$this, 'save_hook' ) );
 		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
 
+	}
+
+	public function is_box_displayed() {
+
+		global $pagenow;
+
+		if ( $pagenow === 'options-general.php' && isset( $_GET['page'] ) ) {
+			return parent::is_box_displayed();
+		}
+
+		return false;
 	}
 
 	public function admin_menu() {
@@ -50,7 +61,7 @@ class CMB_Options extends CMB {
 
 	public function save_hook() {
 
-		$this->save( $this->object_id );
+		$this->save( $this->object_id, $_POST );
 
 	}
 

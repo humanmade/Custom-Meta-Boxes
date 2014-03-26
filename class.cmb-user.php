@@ -4,10 +4,11 @@ class CMB_User extends CMB {
 
 	public function __construct( $args ) {
 
-		parent::__construct( $args );
-
-		if ( ! $this->is_box_displayed() )
+		if ( ! $this->is_box_displayed() ) {
 			return;
+		}
+
+		parent::__construct( $args );
 
 		add_action( 'admin_init', array( &$this, 'init_hook' ), 100 );
 
@@ -16,6 +17,21 @@ class CMB_User extends CMB {
 
 		add_action( 'personal_options_update',  array( &$this, 'save_hook' ) );
 		add_action( 'edit_user_profile_update',  array( &$this, 'save_hook' ) );
+
+	}
+
+	public function is_box_displayed() {
+
+		global $pagenow;
+
+		if (
+			$pagenow === 'user-edit.php' && isset( $_GET['user_id'] ) ||
+			$pagenow === 'profile.php'
+		) {
+			return parent::is_box_displayed();
+		}
+
+		return false;
 
 	}
 
@@ -38,7 +54,7 @@ class CMB_User extends CMB {
 	}
 
 	public function save_hook( $object_id ) {
-		$this->save( $object_id );
+		$this->save( $object_id, $_POST );
 	}
 
 	function display_hook( $object ) {
