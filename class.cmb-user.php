@@ -30,7 +30,7 @@ class CMB_User extends CMB {
 
 	public function setup_hooks() {
 
-		if ( $this->is_box_displayed() ) {
+		if ( $this->is_displayed() ) {
 
 			add_action( 'show_user_profile', array( &$this, 'display_hook' ) );
 			add_action( 'edit_user_profile', array( &$this, 'display_hook' ) );
@@ -44,7 +44,7 @@ class CMB_User extends CMB {
 
 	}
 
-	public function is_box_displayed() {
+	public function is_displayed() {
 
 		global $pagenow;
 
@@ -52,7 +52,7 @@ class CMB_User extends CMB {
 			$pagenow === 'user-edit.php' && isset( $_GET['user_id'] ) ||
 			$pagenow === 'profile.php'
 		) {
-			return parent::is_box_displayed();
+			return parent::is_displayed();
 		}
 
 		return false;
@@ -68,11 +68,11 @@ class CMB_User extends CMB {
 		$this->display( $object->ID );
 	}
 
-	public function get_field_values( $object_id, $field_id ) {
+	public function get_data( $object_id, $field_id ) {
 		return get_user_meta( $object_id, $field_id, true );
 	}
 
-	public function save_field_values( $object_id, $field_id, $values ) {
+	public function save_data( $object_id, $field_id, $values ) {
 
 		delete_user_meta( $object_id, $field_id );
 

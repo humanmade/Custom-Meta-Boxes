@@ -23,7 +23,7 @@ class CMB_Group extends CMB {
 		$this->values = $values;
 	}
 
-	public function get_field_values( $object_id, $field_id ) {
+	public function get_data( $object_id, $field_id ) {
 
 		if ( ! isset( $this->values[$this->parent->field_index] ) )
 			return array('');
@@ -31,6 +31,6 @@ class CMB_Group extends CMB {
 		return isset( $this->values[$this->parent->field_index][ $field_id ] ) ? $this->values[$this->parent->field_index][ $field_id ] : array('');
 	}
 
-	public function save_field_values( $object_id, $field_id, $values ) {}
+	public function save_data( $object_id, $field_id, $values ) {}
 
 }

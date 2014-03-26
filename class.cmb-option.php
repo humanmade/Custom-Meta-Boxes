@@ -31,7 +31,7 @@ class CMB_Options extends CMB {
 
 		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
 
-		if ( $this->is_box_displayed() ) {
+		if ( $this->is_displayed() ) {
 			add_action( 'admin_init', array( &$this, 'save_hook' ) );
 		}
 
@@ -65,12 +65,12 @@ class CMB_Options extends CMB {
 
 	}
 
-	public function is_box_displayed() {
+	public function is_displayed() {
 
 		global $pagenow;
 
 		if ( $pagenow === 'options-general.php' && isset( $_GET['page'] ) ) {
-			return parent::is_box_displayed();
+			return parent::is_displayed();
 		}
 
 		return false;
@@ -86,13 +86,13 @@ class CMB_Options extends CMB {
 
 	}
 
-	public function get_field_values( $object_id, $field_id ) {
+	public function get_data( $object_id, $field_id ) {
 
 		return get_option( $field_id, array() );
 
 	}
 
-	public function save_field_values( $object_id, $field_id, $values ) {
+	public function save_data( $object_id, $field_id, $values ) {
 
 		if ( empty( $values ) )
 			delete_option( $field_id );

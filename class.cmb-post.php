@@ -36,7 +36,7 @@ class CMB_Post extends CMB {
 
 	public function setup_hooks() {
 
-		if ( $this->is_box_displayed() ) {
+		if ( $this->is_displayed() ) {
 			add_action( 'add_meta_boxes', array( &$this, 'add_post_meta_box' ) );
 			add_action( 'save_post',  array( &$this, 'save_hook' ) );
 		}
@@ -60,7 +60,7 @@ class CMB_Post extends CMB {
 
 	}
 
-	function is_box_displayed() {
+	function is_displayed() {
 
  		// Add for post type.
  		if ( isset( $this->args['pages'] ) ) {
@@ -90,7 +90,7 @@ class CMB_Post extends CMB {
 			}
 		}
 
- 		return parent::is_box_displayed();
+ 		return parent::is_displayed();
 
 	}
 
@@ -105,13 +105,13 @@ class CMB_Post extends CMB {
 
 	}
 
-	public function get_field_values( $object_id, $field_id ) {
+	public function get_data( $object_id, $field_id ) {
 
 		return get_post_meta( $object_id, $field_id, false );
 
 	}
 
-	public function save_field_values( $object_id, $field_id, $values ) {
+	public function save_data( $object_id, $field_id, $values ) {
 
 		delete_post_meta( $object_id, $field_id );
 

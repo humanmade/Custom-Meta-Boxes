@@ -77,35 +77,35 @@ class CMBTests extends WP_UnitTestCase {
 		$cmb->_object_id = $this->post_id;
 
 		wp_set_current_user( $this->users['subscriber'] );
-		$this->assertFalse( $cmb->is_box_displayed(), 'edit_post capability test, box is shown for subscriber.' );
+		$this->assertFalse( $cmb->is_displayed(), 'edit_post capability test, box is shown for subscriber.' );
 
 		wp_set_current_user( $this->users['author_1'] );
-		$this->assertTrue( $cmb->is_box_displayed(), 'edit_post capability test, box is not shown for post author.' );
+		$this->assertTrue( $cmb->is_displayed(), 'edit_post capability test, box is not shown for post author.' );
 
 		wp_set_current_user( $this->users['author_2'] );
-		$this->assertFalse( $cmb->is_box_displayed(), 'edit_post capability test, box is shown for author user who is not the author of the post.' );
+		$this->assertFalse( $cmb->is_displayed(), 'edit_post capability test, box is shown for author user who is not the author of the post.' );
 
 		wp_set_current_user( 1 );
-		$this->assertTrue( $cmb->is_box_displayed(), 'edit_post capability test, box is not shown for post admin user.' );
+		$this->assertTrue( $cmb->is_displayed(), 'edit_post capability test, box is not shown for post admin user.' );
 
 		// Test capability with no 2nd param required
 		$cmb->args['capability'] = 'edit_posts';
 
 		wp_set_current_user( $this->users['subscriber'] );
-		$this->assertFalse( $cmb->is_box_displayed(), 'edit_posts capability test, box is shown for subscriber.' );
+		$this->assertFalse( $cmb->is_displayed(), 'edit_posts capability test, box is shown for subscriber.' );
 
 		wp_set_current_user( 1 );
-		$this->assertTrue( $cmb->is_box_displayed(), 'edit_posts capability test, box is not shown for post admin user.' );
+		$this->assertTrue( $cmb->is_displayed(), 'edit_posts capability test, box is not shown for post admin user.' );
 
 		// Test capability with 2nd param passed manually.
 		$cmb->args['capability'] = 'edit_user';
 		$cmb->args['capability_args'] = $this->users['author_1'];
 
 		wp_set_current_user( $this->users['subscriber'] );
-		$this->assertFalse( $cmb->is_box_displayed(), 'edit_user capability test, box is shown for subscriber.' );
+		$this->assertFalse( $cmb->is_displayed(), 'edit_user capability test, box is shown for subscriber.' );
 
 		wp_set_current_user( 1 );
-		$this->assertTrue( $cmb->is_box_displayed(), 'edit_user capability test, box is not shown for post admin user.' );
+		$this->assertTrue( $cmb->is_displayed(), 'edit_user capability test, box is not shown for post admin user.' );
 
 	}
 

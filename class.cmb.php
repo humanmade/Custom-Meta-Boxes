@@ -44,7 +44,7 @@ abstract class CMB {
 	public function setup_hooks() {
 
 		// Load CMB Scripts.
-		if ( $this->is_box_displayed() ) {
+		if ( $this->is_displayed() ) {
 			add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 		}
 
@@ -59,7 +59,7 @@ abstract class CMB {
 	 *
 	 * @return boolean
 	 */
-	public function is_box_displayed() {
+	public function is_displayed() {
 
 		if ( $this->args['capability'] ) {
 
@@ -118,7 +118,7 @@ abstract class CMB {
 			$class = _cmb_field_class_for_type( $field['type'] );
 
 			if ( $class ) {
-				$values = (array) $this->get_field_values( $this->_object_id, $field['id'] );
+				$values = (array) $this->get_data( $this->_object_id, $field['id'] );
 				$this->add_field( new $class( $field['id'], $field['name'], $values, $field ) );
 			}
 
@@ -142,7 +142,7 @@ abstract class CMB {
 	 * @param  string $field_id
 	 * @return array
 	 */
-	public function get_field_values( $object_id, $field_id ) {}
+	public function get_data( $object_id, $field_id ) {}
 
 	/**
 	 * Save field values to data store
@@ -152,7 +152,7 @@ abstract class CMB {
 	 * @param  string $field_id
 	 * @return array
 	 */
-	public function save_field_values( $object_id, $field_id, $values ) {}
+	public function save_data( $object_id, $field_id, $values ) {}
 
 	/**
 	 * Meta box output.
@@ -251,7 +251,7 @@ abstract class CMB {
 	 * Save.
 	 * Verify if field should be saved,
 	 * loop through each field and parse save values,
-	 * then call save_field_values(); for each field (this will handle the actual saving of data)
+	 * then call save_data(); for each field (this will handle the actual saving of data)
 	 *
 	 * @param numeric $object_id
 	 * @return null
@@ -274,7 +274,7 @@ abstract class CMB {
 			$field->set_values( $values );
 			$field->parse_save_values();
 
-			$this->save_field_values( $object_id, $field->id, $field->get_values() );
+			$this->save_data( $object_id, $field->id, $field->get_values() );
 
 		}
 
