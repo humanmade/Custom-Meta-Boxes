@@ -4,15 +4,9 @@ class CMB_Post extends CMB {
 
 	public function __construct( $args ) {
 
-		if ( ! $this->is_box_displayed() ) {
-			return;
-		}
-
 		parent::__construct( $args );
 
 		add_action( 'admin_init', array( &$this, 'init_hook' ) );
-		add_action( 'add_meta_boxes', array( &$this, 'add_post_meta_box' ) );
-		add_action( 'save_post',  array( &$this, 'save_hook' ) );
 
 	}
 
@@ -40,6 +34,17 @@ class CMB_Post extends CMB {
 
 	}
 
+	public function setup_hooks() {
+
+		if ( $this->is_box_displayed() ) {
+			add_action( 'add_meta_boxes', array( &$this, 'add_post_meta_box' ) );
+			add_action( 'save_post',  array( &$this, 'save_hook' ) );
+		}
+
+		parent::setup_hooks();
+
+	}
+
 	public function save_hook( $object_id ) {
 
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
@@ -59,6 +64,7 @@ class CMB_Post extends CMB {
 
  		// Add for post type.
  		if ( isset( $this->args['pages'] ) ) {
+
 	 		$this->args['pages'] = ! is_array( $this->args['pages'] ) ? array( $this->args['pages'] ) : $this->args['pages'];
 	 		if ( ! in_array( get_post_type( $this->_object_id ), $this->args['pages'] ) ) {
 	 			return false;

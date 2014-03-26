@@ -26,19 +26,27 @@ abstract class CMB {
 
 	}
 
-	// public function hooks() {}
-
+	/**
+	 * Init meta box for object ID.
+	 *
+	 * @param  int $object_id
+	 * @return null
+	 */
 	public function init( $object_id ) {
 
 		$this->_object_id = $object_id;
 
-		if ( ! $this->is_box_displayed() )
-			return;
+		$this->add_fields( $this->args['fields'] );
+		$this->setup_hooks();
+
+	}
+
+	public function setup_hooks() {
 
 		// Load CMB Scripts.
-		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
-
-		$this->add_fields( $this->args['fields'] );
+		if ( $this->is_box_displayed() ) {
+			add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
+		}
 
 	}
 

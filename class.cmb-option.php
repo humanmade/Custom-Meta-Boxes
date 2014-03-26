@@ -13,49 +13,29 @@ class CMB_Options extends CMB {
 
 	public function __construct( $args ) {
 
-		$this->slug = sanitize_title( $args['title'] );
-
 		parent::__construct( $args );
+
+		$this->slug = sanitize_title( $args['title'] );
 
 		$this->args = wp_parse_args( $this->args, $this->options_args_defaults );
 
-		if ( $this->is_box_displayed() ) {
-			add_action( 'admin_init', array( &$this, 'init_hook' ) );
-			add_action( 'admin_init', array( &$this, 'save_hook' ) );
-		}
-
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
-
-	}
-
-	public function is_box_displayed() {
-
-		global $pagenow;
-
-		if ( $pagenow === 'options-general.php' && isset( $_GET['page'] ) ) {
-			return parent::is_box_displayed();
-		}
-
-		return false;
-	}
-
-	public function admin_menu() {
-
-		if ( $this->args['menu_page_type'] === 'submenu_page' ) {
-			add_submenu_page( $this->args['submenu_page_parent'], $this->args['title'], $this->args['title'], $this->args['capability'], $this->slug, array( $this, 'display_hook' ) );
-		} else {
-			add_menu_page( $this->args['title'], $this->args['title'], $this->args['capability'], $this->slug, array(), $this->args['menu_page_icon_url'], $this->args['menu_page_position'] );
-		}
+		add_action( 'admin_init', array( &$this, 'init_hook' ) );
 
 	}
 
 	public function init_hook() {
+		$this->init( get_current_blog_id() );
+	}
 
-		global $pagenow;
+	public function setup_hooks() {
 
-		if ( $pagenow === 'options-general.php' && isset( $_GET['page'] ) ) {
-			$this->init( 0 ); // Note object ID of 0 for options pages.
+		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
+
+		if ( $this->is_box_displayed() ) {
+			add_action( 'admin_init', array( &$this, 'save_hook' ) );
 		}
+
+		parent::setup_hooks();
 
 	}
 
@@ -82,6 +62,27 @@ class CMB_Options extends CMB {
 		</div>
 
 		<?php
+
+	}
+
+	public function is_box_displayed() {
+
+		global $pagenow;
+
+		if ( $pagenow === 'options-general.php' && isset( $_GET['page'] ) ) {
+			return parent::is_box_displayed();
+		}
+
+		return false;
+	}
+
+	public function admin_menu() {
+
+		if ( $this->args['menu_page_type'] === 'submenu_page' ) {
+			add_submenu_page( $this->args['submenu_page_parent'], $this->args['title'], $this->args['title'], $this->args['capability'], $this->slug, array( $this, 'display_hook' ) );
+		} else {
+			add_menu_page( $this->args['title'], $this->args['title'], $this->args['capability'], $this->slug, array(), $this->args['menu_page_icon_url'], $this->args['menu_page_position'] );
+		}
 
 	}
 

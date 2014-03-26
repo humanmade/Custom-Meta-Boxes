@@ -4,34 +4,9 @@ class CMB_User extends CMB {
 
 	public function __construct( $args ) {
 
-		if ( ! $this->is_box_displayed() ) {
-			return;
-		}
-
 		parent::__construct( $args );
 
 		add_action( 'admin_init', array( &$this, 'init_hook' ), 100 );
-
-		add_action( 'show_user_profile', array( &$this, 'display_hook' ) );
-		add_action( 'edit_user_profile', array( &$this, 'display_hook' ) );
-
-		add_action( 'personal_options_update',  array( &$this, 'save_hook' ) );
-		add_action( 'edit_user_profile_update',  array( &$this, 'save_hook' ) );
-
-	}
-
-	public function is_box_displayed() {
-
-		global $pagenow;
-
-		if (
-			$pagenow === 'user-edit.php' && isset( $_GET['user_id'] ) ||
-			$pagenow === 'profile.php'
-		) {
-			return parent::is_box_displayed();
-		}
-
-		return false;
 
 	}
 
@@ -50,6 +25,37 @@ class CMB_User extends CMB {
 			return false;
 
 		$this->init( $object_id );
+
+	}
+
+	public function setup_hooks() {
+
+		if ( $this->is_box_displayed() ) {
+
+			add_action( 'show_user_profile', array( &$this, 'display_hook' ) );
+			add_action( 'edit_user_profile', array( &$this, 'display_hook' ) );
+
+			add_action( 'personal_options_update',  array( &$this, 'save_hook' ) );
+			add_action( 'edit_user_profile_update',  array( &$this, 'save_hook' ) );
+
+		}
+
+		parent::setup_hooks();
+
+	}
+
+	public function is_box_displayed() {
+
+		global $pagenow;
+
+		if (
+			$pagenow === 'user-edit.php' && isset( $_GET['user_id'] ) ||
+			$pagenow === 'profile.php'
+		) {
+			return parent::is_box_displayed();
+		}
+
+		return false;
 
 	}
 
