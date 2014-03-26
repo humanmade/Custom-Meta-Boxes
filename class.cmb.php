@@ -13,6 +13,7 @@ abstract class CMB {
 		'show_on'         => array(),
 		'capability'      => null, // Capability requried to show meta box.
 		'capability_args' => null, // Args passed to current user can. If null, $this->_object_id is used.
+		'layout_style'    => 'horizontal'
 	);
 
 	function __construct( $meta_box ) {
@@ -181,7 +182,7 @@ abstract class CMB {
 
 		?>
 
-		<div class="cmb-fields cmb-fields-horizontal">
+		<div class="cmb-fields <?php echo esc_attr( 'cmb-fields-' . $this->args['layout_style'] ); ?>">
 
 			<?php
 

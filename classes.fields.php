@@ -111,6 +111,7 @@ abstract class CMB_Field {
 
 		$id = $this->id;
 
+		hm_log( $this );
 		if ( isset( $this->parent ) ) {
 			$parent_id = preg_replace( '/cmb\-field\-(\d+|x)/', 'cmb-group-$1', $this->parent->get_the_id_attr() );
 			$id = $parent_id . '[' . $id . ']';
@@ -1253,6 +1254,7 @@ function cmb_ajax_post_select() {
 }
 add_action( 'wp_ajax_cmb_post_select', 'cmb_ajax_post_select' );
 
+
 /**
  * Field to group child fieids
  * pass $args[fields] array for child fields
@@ -1262,180 +1264,95 @@ add_action( 'wp_ajax_cmb_post_select', 'cmb_ajax_post_select' );
  */
 class CMB_Group_Field extends CMB_Field {
 
-	static $added_js;
-	private $fields = array();
+	private $group_fields = array();
+	private $default_args = array(
+		'fields' => array()
+	);
 
 	function __construct() {
 
 		$args = func_get_args(); // you can't just put func_get_args() into a function as a parameter
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
-		if ( ! empty( $this->args['fields'] ) ) {
-			foreach ( $this->args['fields'] as $f ) {
+		$this->args = wp_parse_args( $this->args, $this->default_args );
 
-				$field_value = isset( $this->value[$f['id']] ) ? $this->value[$f['id']] : '';
-				$f['uid'] = $f['id'];
-
-				$class = _cmb_field_class_for_type( $f['type'] );
-				$f['show_label'] = true;
-
-				// Todo support for repeatable fields in groups
-				$this->add_field( new $class( $f['uid'], $f['name'], (array) $field_value, $f ) );
-
-			}
-		}
+		$this->init_group_fields();
 
 	}
 
-	public function enqueue_scripts() {
+	/**
+	 * Initialize all sub-fields of this group.
+	 *
+	 * @return null
+	 */
+	public function init_group_fields() {
 
-		parent::enqueue_scripts();
+		$data = array(
+			'fields' => array(),
+			'layout_style' => 'vertical'
+		);
 
-		foreach ( $this->args['fields'] as $f ) {
+		foreach ( $this->args['fields'] as $field ) {
 
-			$class = _cmb_field_class_for_type( $f['type'] );
-			$field = new $class( '', '', array(), $f );
-			$field->enqueue_scripts();
-		}
-	}
+			$field['original_id'] = $field['id'];
+			$field['id']          = $field['id'];
 
-	public function enqueue_styles() {
-
-		parent::enqueue_styles();
-
-		foreach ( $this->args['fields'] as $f ) {
-			$class = _cmb_field_class_for_type( $f['type'] );
-			$field = new $class( '', '', array(), $f );
-			$field->enqueue_styles();
+			$data['fields'][] = $field;
 		}
 
-	}
-
-	public function display() {
-
-		global $post;
-
-		$field = $this->args;
-
-		$this->title();
-		$this->description();
-
-		// if there are no values and it's not repeateble, we want to do one with empty string
-		if ( ! $this->get_values() && ! $this->args['repeatable'] )
-			$values = array( '' );
-		else
-			$values = $this->get_values();
-
-		$i = 0;
-		foreach ( $values as $value ) {
-
-			$this->field_index = $i;
-			$this->value = $value;
-
-			?>
-
-			<div class="cmb-field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-				<?php $this->html(); ?>
-			</div>
-
-			<?php
-
-			$i++;
-
-		}
-
-		if ( $this->args['repeatable'] ) {
-
-			$this->field_index = 'x'; // x used to distinguish hidden fields.
-			$this->value = ''; ?>
-
-				<div class="cmb-field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-
-					<?php $this->html(); ?>
-
-				</div>
-
-				<button class="button repeat-field"><?php esc_html_e( 'Add New Group', 'cmb' ); ?></button>
-
-		<?php }
+		$this->group_fields = new CMB_Group( $data );
+		$this->group_fields->set_parent( $this );
+		$this->group_fields->init( 0 );
 
 	}
 
 	public function html() {
 
-		$fields = &$this->get_fields();
-		$value = $this->value;
-
-		if ( ! empty( $value ) ) {
-			foreach ( $value as $field_id => $field_value ) {
-				if ( ! empty( $field_value ) && ! empty( $fields[$field_id] ) )
-					$fields[$field_id]->set_values( (array) $field_value );
-				else if ( ! empty( $fields[$field_id] ) )
-					$fields[$field_id]->set_values( array() );
-			}
-		} else {
-			foreach ( $fields as &$field ) {
-				$field->set_values( array() );
-			}
-		}
-
-		?>
-
-		<?php if ( $this->args['repeatable'] ) : ?>
-			<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
+		if ( $this->args['repeatable'] ) : ?>
+			<button class="cmb-delete-field" title="Remove field">
+				<span class="cmb-delete-field-icon">&times;</span> Remove Group
+			</button>
 		<?php endif; ?>
 
-		<?php CMB_Meta_Box::layout_fields( $fields ); ?>
+		<?php
+
+		// Update the group fields ID & Values with the data for this instance of the group.
+		foreach ( $this->group_fields->get_fields() as $field ) {
+			$field->id =  $this->args['id'] . '[cmb-group-' . $this->field_index . '][' . $field->args['original_id'] . ']';
+			$field->values = isset( $this->get_value()[$field->args['original_id']] ) ? $this->get_value()[$field->args['original_id']] : array( '' );
+		}
+
+		$this->group_fields->display();
+
+		?>
 
 	<?php }
 
 	public function parse_save_values() {
 
-		$fields = &$this->get_fields();
 		$values = &$this->get_values();
 
-		foreach ( $values as &$group_value ) {
-			foreach ( $group_value as $field_id => &$field_value ) {
+		foreach ( $values as $key => &$value ) {
 
-				if ( ! isset( $fields[$field_id] ) ) {
-					$field_value = array();
-					continue;
-				}
+			$field_index = str_replace( 'cmb-group-', '', $key );
 
-				$field = $fields[$field_id];
-				$field->values = $field_value;
-				$field->parse_save_values();
+			$group_fields = $this->group_fields->get_fields();
 
-				$field_value = $field->get_values();
+			foreach ( $group_fields as $group_field ) {
 
-				// if the field is a repeatable field, store the whole array of them, if it's not repeatble,
-				// just store the first (and only) one directly
-				if ( ! $field->args['repeatable'] )
-					$field_value = reset( $field_value );
+				$original_id = $group_field->args['original_id'];
+				$field_values = isset( $value[ $original_id ] ) ? $value[ $original_id ] : array();
+
+				$group_field->set_values( $field_values );
+				$group_field->parse_save_values();
+
+				$value[$original_id] = $group_field->get_values();
+
 			}
+
 		}
 
-	}
-
-	public function add_field( CMB_Field $field ) {
-		$field->parent = $this;
-		$this->fields[$field->id] = $field;
-	}
-
-	public function &get_fields() {
-		return $this->fields;
-	}
-
-	public function set_values( array $values ) {
-
-		$this->values = $values;
-		$fields = &$this->get_fields();
-
-		foreach ( $values as $value ) {
-			foreach ( $value as $field_id => $field_value ) {
-				$fields[$field_id]->set_values( (array) $field_value );
-			}
-		}
+		parent::parse_save_values();
 
 	}
 

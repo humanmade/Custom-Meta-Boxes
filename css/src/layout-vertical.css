@@ -1,0 +1,35 @@
+.cmb-fields.cmb-fields-vertical .field:before,
+.cmb-fields.cmb-fields-vertical .field:after {
+    content: "";
+    display: table;
+}
+
+.cmb-fields.cmb-fields-vertical .field:after {
+    clear: both;
+}
+
+.cmb-fields.cmb-fields-vertical .field {
+	padding: 16px 0;
+	border-bottom: 1px solid #DFDFDF;
+    zoom: 1;
+}
+
+.cmb-row:last-child > [class*="cmb-cell-"]  > .field {
+	border-bottom: 0;
+}
+
+.cmb-fields.cmb-fields-vertical .field-title {
+	width: auto;
+	float: none;
+	margin-left: 0;
+	margin-top: 0;
+}
+
+.cmb-fields.cmb-fields-vertical .cmb_metabox_description {
+	margin-top: 0 !important;
+}
+
+.cmb-fields.cmb-fields-vertical .cmb-field-content {
+	float: none;
+	width: auto;
+}

@@ -1,13 +1,13 @@
-* Group **/
+/** Group **/
 
-.cmb-fields .CMB_Group_Field > .field-title {
+/*.cmb-fields .CMB_Group_Field > .field-title {
 	font-size: 1.5em;
 	clear: left;
 	color: #464646;
 	font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",sans-serif;
 	font-weight: lighter;
 }
-
+*/
 .cmb-fields .CMB_Group_Field > .field-title h2 {
 	margin: 8px 5px !important;
 }
