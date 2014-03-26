@@ -36,11 +36,18 @@ abstract class CMB {
 
 		$this->_object_id = $object_id;
 
-		$this->add_fields( $this->args['fields'] );
+		$this->init_fields( $this->args['fields'] );
+
 		$this->setup_hooks();
 
 	}
 
+	/**
+	 * All actions and filters.
+	 * This function is called by the init method.
+	 *
+	 * @return null
+	 */
 	public function setup_hooks() {
 
 		// Load CMB Scripts.
@@ -99,7 +106,11 @@ abstract class CMB {
 
 	}
 
-	public function add_fields( $fields ) {
+	/**
+	 * Initialize Fields
+	 * @param [type] $fields [description]
+	 */
+	public function init_fields( $fields ) {
 
 		foreach ( $fields as $key => $field ) {
 
@@ -136,7 +147,7 @@ abstract class CMB {
 
 	/**
 	 * Retreive field values from data store
-	 * This does nothing. Subclasses should provide their own methods for handling this.
+	 * This does nothing. Subclasses should provide their own methods for saving data.
 	 *
 	 * @param  int $object_id
 	 * @param  string $field_id
@@ -145,8 +156,8 @@ abstract class CMB {
 	public function get_data( $object_id, $field_id ) {}
 
 	/**
-	 * Save field values to data store
-	 * This does nothing. Subclasses should provide their own methods for handling this.
+	 * Save field values
+	 * This does nothing. Subclasses should provide their own methods for saving data.
 	 *
 	 * @param  int $object_id
 	 * @param  string $field_id

@@ -21,6 +21,9 @@ class CMB_Options extends CMB {
 
 		add_action( 'admin_init', array( &$this, 'init_hook' ) );
 
+		// Must not hook in on admin_init - https://codex.wordpress.org/Plugin_API/Action_Reference/admin_menu
+		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
+
 	}
 
 	public function init_hook() {
@@ -28,8 +31,6 @@ class CMB_Options extends CMB {
 	}
 
 	public function setup_hooks() {
-
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
 
 		if ( $this->is_displayed() ) {
 			add_action( 'admin_init', array( &$this, 'save_hook' ) );

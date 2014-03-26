@@ -109,7 +109,7 @@ class CMBTests extends WP_UnitTestCase {
 
 	}
 
-	function testAddFields() {
+	function testInitFields() {
 
 		$cmb = $this->getMockForAbstractClass(
 			'CMB',
@@ -125,7 +125,7 @@ class CMBTests extends WP_UnitTestCase {
 			)
 		);
 
-		$cmb->add_fields( $cmb->args['fields'] );
+		$cmb->init_fields( $cmb->args['fields'] );
 		$fields = $cmb->get_fields();
 
 		$this->assertInstanceOf( 'CMB_Text_Field', $fields[0], 'Fields incorrectly added' );
@@ -148,7 +148,7 @@ class CMBTests extends WP_UnitTestCase {
 			)
 		);
 
-		$cmb->add_fields( $cmb->args['fields'] );
+		$cmb->init_fields( $cmb->args['fields'] );
 		$cmb->enqueue_scripts();
 
 		$this->assertTrue( wp_script_is( 'cmb-scripts', 'queue' ) );
