@@ -23,7 +23,9 @@ class CMB_Group extends CMB {
 
 	public function set_values( $values ) {
 		foreach ( $this->get_fields() as $key => $field ) {
-			$field->values = $values[$field->id];
+			if ( isset( $values[$field->id] ) ) {
+				$field->values = $values[$field->id];
+			}
 		}
 	}
 

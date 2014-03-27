@@ -9,15 +9,20 @@ class CMB_Options extends CMB {
 		'submenu_page_parent' => 'options-general.php', // Page parent.  Required if menu_page_type is submenu_page
 		'menu_page_icon_url'  => null, // Menu item icon url.  Required if menu_page_type is menu_page
 		'menu_page_position'  => null, // Menu item position.  Required if menu_page_type is menu_page
+		'capability'          => 'manage_options', // Menu item position.  Required if menu_page_type is menu_page
 	);
 
 	public function __construct( $args ) {
 
 		parent::__construct( $args );
 
-		$this->slug = sanitize_title( $args['title'] );
-
 		$this->args = wp_parse_args( $this->args, $this->options_args_defaults );
+
+		if ( ! $this->args['capability'] ) {
+			$this->args['capability'] = 'manage_options';
+		}
+
+		$this->slug = sanitize_title( $args['title'] );
 
 		add_action( 'admin_init', array( &$this, 'init_hook' ) );
 
