@@ -37,8 +37,8 @@ class CMB_Options extends CMB {
 
 	public function setup_hooks() {
 
-		if ( $this->is_displayed() ) {
-			add_action( 'admin_init', array( &$this, 'save_hook' ) );
+		if ( isset( $_POST['wp_meta_box_nonce'] ) && $this->is_displayed() ) {
+			$this->save_hook();
 		}
 
 		parent::setup_hooks();
@@ -46,9 +46,7 @@ class CMB_Options extends CMB {
 	}
 
 	public function save_hook() {
-
 		$this->save( $this->object_id, $_POST );
-
 	}
 
 	function display_hook() { ?>
