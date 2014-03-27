@@ -1302,7 +1302,7 @@ class CMB_Group_Field extends CMB_Field {
 
 		$this->group_fields = new CMB_Group( $data );
 		$this->group_fields->set_parent( $this );
-		$this->group_fields->init( 0 );
+		$this->group_fields->init(0);
 
 	}
 
@@ -1315,15 +1315,8 @@ class CMB_Group_Field extends CMB_Field {
 		<?php endif; ?>
 
 		<?php
-
-		// Update the group fields ID & Values with the data for this instance of the group.
-		foreach ( $this->group_fields->get_fields() as $field ) {
-			$field->id =  $this->args['id'] . '[cmb-group-' . $this->field_index . '][' . $field->args['original_id'] . ']';
-			$field->values = isset( $this->get_value()[$field->args['original_id']] ) ? $this->get_value()[$field->args['original_id']] : array( '' );
-		}
-
+		$this->group_fields->set_values( $this->get_value() );
 		$this->group_fields->display();
-
 		?>
 
 	<?php }

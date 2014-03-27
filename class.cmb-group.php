@@ -22,17 +22,9 @@ class CMB_Group extends CMB {
 	}
 
 	public function set_values( $values ) {
-		$this->values = $values;
+		foreach ( $this->get_fields() as $key => $field ) {
+			$field->values = $values[$field->id];
+		}
 	}
-
-	public function get_data( $object_id, $field_id ) {
-
-		if ( ! isset( $this->values[$this->parent->field_index] ) )
-			return array('');
-
-		return isset( $this->values[$this->parent->field_index][ $field_id ] ) ? $this->values[$this->parent->field_index][ $field_id ] : array('');
-	}
-
-	public function save_data( $object_id, $field_id, $values ) {}
 
 }
