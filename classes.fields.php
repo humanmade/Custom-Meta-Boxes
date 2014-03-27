@@ -111,7 +111,6 @@ abstract class CMB_Field {
 
 		$id = $this->id;
 
-		hm_log( $this );
 		if ( isset( $this->parent ) ) {
 			$parent_id = preg_replace( '/cmb\-field\-(\d+|x)/', 'cmb-group-$1', $this->parent->get_the_id_attr() );
 			$id = $parent_id . '[' . $id . ']';
@@ -1264,7 +1263,7 @@ add_action( 'wp_ajax_cmb_post_select', 'cmb_ajax_post_select' );
  */
 class CMB_Group_Field extends CMB_Field {
 
-	private $group_fields = array();
+	public $group_fields = array();
 	private $default_args = array(
 		'fields' => array()
 	);
