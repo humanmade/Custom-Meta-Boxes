@@ -25,83 +25,26 @@ class GroupFieldTestCase extends WP_UnitTestCase {
 
 		$group = new CMB_Group_Field( 'test-group', 'Test Group', $values, $this->args );
 
-		$this->assertInstanceOf( 'CMB_Group', $group->get_group_fields() );
+		$this->assertInstanceOf( 'CMB_Group', $group->group_fields );
 
-		$fields = $group->get_group_fields()->get_fields();
+		$fields = $group->group_fields->get_fields();
 		$this->assertInstanceOf( 'CMB_Text_Field', reset( $fields ) );
 
-
-
-		// die( print_r( $fields[0]->get_values(), true ) );
-		// die( print_r( $group->get_values(), true ) );
-		// $group  = new CMB_Group_Field( 'group', 'Group Title', array() );
-		// // $field1 = new CMB_Text_Field( 'field-1', 'Title', array( 1 ) );
-		// // $field2 = new CMB_Text_Field( 'bar', 'Title', array( 2, 3 ), array( 'repeatable' => true ) );
-
-		// $group->add_field( $field1 );
-		// $group->add_field( $field2 );
-
-		// $this->assertArrayHasKey( 'field-1', $group->get_fields() );
-		// $this->assertArrayHasKey( 'bar', $group->get_fields() );
-
 	}
-
-	// function testGetValues() {
-
-	// 	$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
-	// 	$field1 = new CMB_Text_Field( 'field-1', 'Title', array() );
-	// 	$field2 = new CMB_Text_Field( 'bar', 'Title', array() );
-
-	// 	$group->add_field( $field1 );
-	// 	$group->add_field( $field2 );
-
-	// 	$group->values = $values = array(
-	// 		'group' => array(
-	// 			'field-1' => array( 1, 2 ),
-	// 			'bar' => array( 3, 4 )
-	// 		)
-	// 	);
-
-	// 	$this->assertEquals( $group->get_values(), $values );
-
-	// }
 
 	function testParseSaveValues() {
 
 		$group = new CMB_Group_Field( 'group', 'Test Group', array( '1', '2' ), $this->args );
-		$fields = $group->get_group_fields()->get_fields();
+		$fields = $group->group_fields->get_fields();
 		$field1 = $fields[0];
 		$field2 = $fields[1];
-
-		// die( print_r( $field1, true ) );
-		// $group  = new CMB_Group_Field( 'group', 'Group Title', array() );
-		// $field1 = new CMB_Text_Field( 'field-1', 'Title', array( 1 ) );
-		// $field2 = new CMB_Text_Field( 'bar', 'Title', , array( 'repeatable' => true ) );
-
-		// $group->get_group_fields()->set_values( array(
-		// 	'group' => array(
-		// 		'field-1' => array( 1 ),
-		// 		'bar' => array( 2, 3 )
-		// 	),
-		// ) );
-
-		// $expected = array(
-		// 	'group' => array(
-		// 		'field-1' => 1,
-		// 		'bar' => array( 2, 3 )
-		// 	)
-		// );
-
-		// $group->parse_save_values();
-
-		// $this->assertEquals( $group->get_values(), $expected );
 
 	}
 
 	function testFieldNameAttrValue() {
 
 		$group = new CMB_Group_Field( 'group', 'Test Group', array(), $this->args );
-		$fields = $group->get_group_fields()->get_fields();
+		$fields = $group->group_fields->get_fields();
 		$field1 = reset( $fields );
 
 		// Standard use of ID attribute
@@ -131,14 +74,12 @@ class GroupFieldTestCase extends WP_UnitTestCase {
 		$this->assertEquals( $id_attr, 'group[cmb-group-12][field-1][cmb-field-0]' );
 		$group->field_index = 0; // Unset
 
-
-
 	}
 
 	function testFieldIdAttrValue() {
 
 		$group = new CMB_Group_Field( 'group', 'Test Group', array(), $this->args );
-		$fields = $group->get_group_fields()->get_fields();
+		$fields = $group->group_fields->get_fields();
 		$field1 = reset( $fields );
 
 		// Standard use of ID attribute
