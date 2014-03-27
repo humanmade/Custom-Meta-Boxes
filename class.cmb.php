@@ -251,7 +251,7 @@ abstract class CMB {
 				<?php $field->display(); ?>
 			</div>
 
-			<input type="hidden" name="_cmb_present_<?php esc_attr_e( $field->id ); ?>" value="1" />
+			<input type="hidden" name="_cmb_present_<?php echo esc_attr( $field->id ); ?>" value="1" />
 
 		</div>
 
