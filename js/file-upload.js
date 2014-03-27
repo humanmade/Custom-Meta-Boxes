@@ -101,6 +101,10 @@ jQuery( document ).ready( function() {
 				width     = container.width() - 12 - 10 - 10,
 				ratio     =  el.height() / el.width();
 
+			if ( width <= 0 ) {
+				return;
+			}
+
 			if ( el.attr( 'data-original-width' ) )
 				el.width( el.attr( 'data-original-width' ) );
 			else
