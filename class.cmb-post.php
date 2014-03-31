@@ -1,8 +1,17 @@
 <?php
 
+/**
+ * Custom Meta Boxes for Posts and Pages.
+ */
 class CMB_Post extends CMB {
 
+	private $cmb_post_defaults = array(
+		'layout_style' => 'vertical'
+	);
+
 	public function __construct( $args ) {
+
+		$args = wp_parse_args( $args, $this->cmb_post_defaults );
 
 		parent::__construct( $args );
 

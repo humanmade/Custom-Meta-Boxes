@@ -1,10 +1,13 @@
 <?php
 
+/**
+ * Custom Meta Boxes for option pages
+ */
 class CMB_Options extends CMB {
 
 	public $slug;
 
-	protected $options_args_defaults = array(
+	protected $cmb_options_defaults = array(
 		'menu_page_type'      => 'submenu_page', // submenu_page or menu_page
 		'submenu_page_parent' => 'options-general.php', // Page parent.  Required if menu_page_type is submenu_page
 		'menu_page_icon_url'  => null, // Menu item icon url.  Required if menu_page_type is menu_page
@@ -14,9 +17,9 @@ class CMB_Options extends CMB {
 
 	public function __construct( $args ) {
 
-		parent::__construct( $args );
+		$args = wp_parse_args( $args, $this->cmb_options_defaults );
 
-		$this->args = wp_parse_args( $this->args, $this->options_args_defaults );
+		parent::__construct( $args );
 
 		if ( ! $this->args['capability'] ) {
 			$this->args['capability'] = 'manage_options';

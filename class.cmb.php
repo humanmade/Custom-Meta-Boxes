@@ -1,12 +1,15 @@
 <?php
 
+/**
+ * Custom Meta Boxes Core
+ */
 abstract class CMB {
 
 	public $args;
 	public $_object_id;
 	private $_fields = array();
 
-	protected $meta_box_defaults = array(
+	protected $cmb_defaults = array(
 		'id'              => '',
 		'title'           => '',
 		'fields'          => array(),
@@ -20,7 +23,7 @@ abstract class CMB {
 
 		global $pagenow;
 
-		$this->args = wp_parse_args( $meta_box, $this->meta_box_defaults );
+		$this->args = wp_parse_args( $meta_box, $this->cmb_defaults );
 
 		if ( empty( $this->args['id'] ) )
 			$this->args['id'] = sanitize_title( $this->args['title'] );
