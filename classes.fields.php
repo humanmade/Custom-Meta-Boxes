@@ -758,9 +758,6 @@ class CMB_Color_Picker extends CMB_Field {
 
 /**
  * Standard radio field.
- *
- * Args:
- *  - bool "inline" - display the radio buttons inline
  */
 class CMB_Radio_Field extends CMB_Field {
 
