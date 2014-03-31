@@ -812,6 +812,39 @@ class CMB_Checkbox extends CMB_Field {
 }
 
 
+class Checkbox_Multi extends CMB_Field {
+
+	public function html() {
+
+		if ( $this->has_data_delegate() ) {
+			$this->args['options'] = $this->get_delegate_data();
+		}
+
+		foreach ( $this->args['options'] as $key => $value ) : ?>
+
+			<div class="cmb-checkbox-wrap">
+
+				<input
+					type="checkbox"
+					<?php $this->id_attr( 'item-' . $key ); ?>
+					<?php $this->boolean_attr(); ?>
+					<?php $this->class_attr(); ?>
+					<?php $this->name_attr( '[item-' . $key . ']' ); ?>
+					<?php checked( isset( $this->get_value()[ 'item-' . $key ] )); ?>
+				/>
+
+				<label <?php $this->for_attr( 'item-' . $key ); ?>>
+					<?php echo esc_html( $value ); ?>
+				</label>
+
+			</div>
+
+		<?php endforeach;
+
+	}
+
+}
+
 /**
  * Standard title used as a splitter.
  *
