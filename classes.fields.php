@@ -820,7 +820,11 @@ class CMB_Checkbox_Multi extends CMB_Field {
 			$this->args['options'] = $this->get_delegate_data();
 		}
 
-		foreach ( $this->args['options'] as $i => $label ) : ?>
+		foreach ( $this->args['options'] as $i => $label ) :
+
+			$value = $this->get_value();
+
+			?>
 
 			<div class="cmb-checkbox-wrap">
 
@@ -830,7 +834,7 @@ class CMB_Checkbox_Multi extends CMB_Field {
 					<?php $this->boolean_attr(); ?>
 					<?php $this->class_attr(); ?>
 					<?php $this->name_attr( '[item-' . $i . ']' ); ?>
-					<?php checked( isset( $this->get_value()[ 'item-' . $i ] )); ?>
+					<?php checked( isset( $value[ 'item-' . $i ] ) ); ?>
 				/>
 
 				<label <?php $this->for_attr( 'item-' . $i ); ?>>
