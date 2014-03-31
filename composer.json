@@ -10,6 +10,7 @@
 		}
 	],
 	"require"   : {
+		"composer/installers": "~1.*",
 		"php": ">=5.3"
 	}
 }
