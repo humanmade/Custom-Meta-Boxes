@@ -29,3 +29,12 @@
 	float: left;
 	width: 100%;
 }
+
+.cmb-fields.cmb-fields-horizontal  .cmb-radio-wrap {
+	margin: 0 20px 8px 0;
+}
+
+.cmb-fields.cmb-fields-horizontal  .cmb-checkbox-wrap {
+	margin: 4px 0;
+}
+

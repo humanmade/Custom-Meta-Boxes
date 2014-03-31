@@ -763,17 +763,31 @@ class CMB_Radio_Field extends CMB_Field {
 
 	public function html() {
 
-		if ( $this->has_data_delegate() )
-			$this->args['options'] = $this->get_delegate_data(); ?>
+		if ( $this->has_data_delegate() ) {
+			$this->args['options'] = $this->get_delegate_data();
+		}
 
-			<?php foreach ( $this->args['options'] as $key => $value ): ?>
+		foreach ( $this->args['options'] as $key => $value ): ?>
 
-			<input <?php $this->id_attr( 'item-' . $key ); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="radio" <?php $this->name_attr(); ?>  value="<?php echo esc_attr( $key ); ?>" <?php checked( $key, $this->get_value() ); ?> />
-			<label <?php $this->for_attr( 'item-' . $key ); ?> style="margin-right: 20px;">
-				<?php echo esc_html( $value ); ?>
-			</label>
+			<div class="cmb-radio-wrap">
 
-			<?php endforeach; ?>
+				<input
+					<?php $this->id_attr( 'item-' . $key ); ?>
+					<?php $this->boolean_attr(); ?>
+					<?php $this->class_attr(); ?>
+					type="radio"
+					<?php $this->name_attr(); ?>
+					value="<?php echo esc_attr( $key ); ?>"
+					<?php checked( $key, $this->get_value() ); ?>
+				/>
+
+				<label <?php $this->for_attr( 'item-' . $key ); ?>>
+					<?php echo esc_html( $value ); ?>
+				</label>
+
+			</div>
+
+		<?php endforeach; ?>
 
 	<?php }
 

@@ -44,3 +44,18 @@
 .cmb-fields .field-title label {
 	vertical-align: baseline;
 }
+
+.cmb-radio-wrap {
+	float: left;
+	margin: 0 20px 8px 0;
+	display: block;
+}
+
+.cmb-checkbox-wrap {
+	margin: 0 0 8px;
+	display: block;
+}
+
+.cmb-fields .field-title label {
+	vertical-align: baseline;
+}
