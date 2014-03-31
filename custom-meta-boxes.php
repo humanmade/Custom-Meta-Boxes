@@ -51,7 +51,7 @@ include_once( CMB_PATH . '/class.cmb-meta-box.php' );
 // Make it possible to add fields in locations other than post edit screen.
 include_once( CMB_PATH . '/fields-anywhere.php' );
 
-// include_once( CMB_PATH . '/example-functions.php' );
+include_once( CMB_PATH . '/example-functions.php' );
 
 /**
  * Get all the meta boxes on init
@@ -97,6 +97,7 @@ function _cmb_available_fields() {
 		'url'				=> 'CMB_URL_Field',
 		'radio'				=> 'CMB_Radio_Field',
 		'checkbox'			=> 'CMB_Checkbox',
+		'checkbox_multi'    => 'CMB_Checkbox_Multi',
 		'file'				=> 'CMB_File_Field',
 		'image' 			=> 'CMB_Image_Field',
 		'wysiwyg'			=> 'CMB_wysiwyg',
