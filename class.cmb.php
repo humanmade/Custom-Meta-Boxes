@@ -113,6 +113,10 @@ abstract class CMB {
 	 */
 	public function init_fields( $fields ) {
 
+		if ( ! $this->is_displayed() ) {
+			return;
+		}
+
 		foreach ( $fields as $key => $field ) {
 
 			$values = array();
