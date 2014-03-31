@@ -1,40 +1,31 @@
 <?php
+
 /*
-Script Name: 	Custom Metaboxes and Fields
-Contributors: 	Andrew Norcross ( @norcross / andrewnorcross.com )
-				Jared Atchison ( @jaredatch / jaredatchison.com )
-				Bill Erickson ( @billerickson / billerickson.net )
-				Human Made Limited ( @humanmadeltd / hmn.md )
-				Jonathan Bardo ( @jonathanbardo / jonathanbardo.com )
-Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 	1.0.1
+Plugin Name: Custom Meta Boxes
+Plugin URI: https://github.com/humanmade/Custom-Meta-Boxes
+Description: Lets you easily create metaboxes with custom fields that will blow your mind.
+Version: 1.0.1
+License: GPL-2.0+
+Author: Human Made Limited
+Author URI: http://hmn.md
 */
 
-/**
- * Released under the GPL license
- * http://www.opensource.org/licenses/gpl-license.php
- *
- * This is an add-on for WordPress
- * http://wordpress.org/
- *
- * **********************************************************************
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * **********************************************************************
- */
+/*
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
-/**
- * Defines the url to which is used to load local resources.
- * This may need to be filtered for local Window installations.
- * If resources do not load, please check the wiki for details.
- */
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+Online: http://www.gnu.org/licenses/gpl.txt
+*/
 
 if ( ! defined( 'CMB_DEV') )
 	define( 'CMB_DEV', false );
@@ -51,7 +42,7 @@ include_once( CMB_PATH . '/class.cmb-meta-box.php' );
 // Make it possible to add fields in locations other than post edit screen.
 include_once( CMB_PATH . '/fields-anywhere.php' );
 
-// include_once( CMB_PATH . '/example-functions.php' );
+include_once( CMB_PATH . '/example-functions.php' );
 
 /**
  * Get all the meta boxes on init
