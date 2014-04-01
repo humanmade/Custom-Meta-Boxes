@@ -1,7 +1,7 @@
 {
 	"name": "humanmade/custom-meta-boxes",
 	"description": "Lets you easily create metaboxes with custom fields that will blow your mind.",
-	"type": "wordpress-plugin",
+	"type": "wordpress-muplugin",
 	"license": "GPL-2.0+",
 	"authors": [
 		{
@@ -10,7 +10,10 @@
 		}
 	],
 	"require"   : {
-		"composer/installers": "~1.*",
+		"composer/installers": "1.*",
 		"php": ">=5.3"
-	}
+	},
+	"autoload": {
+    "files": ["custom-meta-boxes.php"]
+  }
 }
