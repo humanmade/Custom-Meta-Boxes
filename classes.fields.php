@@ -1106,14 +1106,27 @@ class CMB_Post_Select extends CMB_Select {
 
 	}
 
-	public function parse_save_value() {
+	public function parse_save_values() {
+		$values = &$this->get_values();
+		foreach ( $values as &$value ) {
 
-		// AJAX multi select2 data is submitted as a string of comma separated post IDs.
-		// If empty, set to false instead of empty array to ensure the meta entry is deleted.
-		if ( $this->args['ajax_url'] && $this->args['multiple'] ) {
-			$this->value = ( ! empty( $this->value ) ) ? explode( ',', $this->value ) : false;
+			// AJAX multi select2 data is submitted as a string of comma separated post IDs.
+			// If empty, set to false instead of empty array to ensure the meta entry is deleted.
+			if ( $this->args['ajax_url'] && $this->args['multiple'] ) {
+				$value = ( ! empty( $value ) ) ? explode( ',', $value ) : false;
+			}
 		}
+	}
 
+	public function sanitize_values() {
+		$values = &$this->get_values();
+		foreach ( $values as &$value ) {
+
+			$value = absint( $value );
+			$value = ( $value > 0 ) ? $value : null;
+
+		}
+		$values = array_filter( $values );
 	}
 
 	public function output_field() {
