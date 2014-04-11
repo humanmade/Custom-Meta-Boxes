@@ -11,13 +11,15 @@ abstract class CMB_Field {
 	public $value;
 	public $field_index = 0;
 
-	public function __construct( $name, $title, array $values, $args = array() ) {
+	public function __construct( $name, $title, array $values, array $args = array() ) {
 
 		$this->id 		= $name;
 		$this->name		= $name . '[]';
 		$this->title 	= $title;
 
-		$this->args		= wp_parse_args( $args, array(
+		$this->args		= wp_parse_args(
+			$args,
+			array(
 				'repeatable' 			=> false,
 				'std'        			=> '',
 				'default'    			=> '',
@@ -34,28 +36,8 @@ abstract class CMB_Field {
 			)
 		);
 
-		if ( ! empty( $this->args['std'] ) && empty( $this->args['default'] ) ) {
-			$this->args['default'] = $this->args['std'];
-			_deprecated_argument( 'CMB_Field', "'std' is deprecated, use 'default instead'", '0.9' );
-		}
-
-		if ( ! empty( $this->args['options'] ) && is_array( reset( $this->args['options'] ) ) ) {
-
-			$re_format = array();
-
-			foreach ( $this->args['options'] as $option )
-				$re_format[$option['value']] = $option['name'];
-
-			$this->args['options'] = $re_format;
-		}
-
-		// If the field has a custom value populator callback
-		if ( ! empty( $args['values_callback'] ) )
-			$this->values = call_user_func( $args['values_callback'], get_the_id() );
-		else
-			$this->values = $values;
-
-		$this->value = reset( $this->values );
+		$this->values = $values;
+		$this->value  = reset( $this->values );
 
 		$this->description = ! empty( $this->args['desc'] ) ? $this->args['desc'] : '';
 
