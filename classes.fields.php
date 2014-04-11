@@ -150,11 +150,13 @@ abstract class CMB_Field {
 
 	public function class_attr( $classes = '' ) {
 
-		if ( $classes = implode( ' ', array_map( 'sanitize_html_class', array_filter( array_unique( explode( ' ', $classes . ' ' . $this->args['class'] ) ) ) ) ) ) { ?>
+		$classes = explode( ' ', $classes . ' ' . $this->args['class'] );
+		$classes = array_map( 'sanitize_html_class', array_filter( array_unique( $classes ) ) );
+		$classes = implode( ' ', $classes );
 
-			class="<?php echo esc_attr( $classes ); ?>"
-
-		<?php }
+		if ( ! empty( $classes ) ) {
+			printf( 'class="%s"', esc_attr( $classes ) );
+		}
 
 	}
 
