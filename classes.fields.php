@@ -231,11 +231,11 @@ abstract class CMB_Field {
 		if ( $this->args['readonly'] )
 			$this->values = array();
 
-		// Allow override from args
-		if ( ! empty( $this->args['save_callback'] ) )
-			call_user_func( $this->args['save_callback'], $this->values, $post_id );
+		$this->sanitize_values();
 
 	}
+
+	public function sanitize_values() {}
 
 	public function title() {
 
@@ -344,6 +344,12 @@ class CMB_Text_Field extends CMB_Field {
 		<input type="text" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->get_value() ); ?>" />
 
 	<?php }
+
+	public function sanitize() {
+		$values = &$this->get_values();
+		$values = array_map( 'sanitize_text_field', $values );
+	}
+
 }
 
 class CMB_Text_Small_Field extends CMB_Text_Field {
