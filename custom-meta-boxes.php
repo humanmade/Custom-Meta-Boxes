@@ -1,40 +1,26 @@
 <?php
 /*
-Script Name: 	Custom Metaboxes and Fields
-Contributors: 	Andrew Norcross ( @norcross / andrewnorcross.com )
-				Jared Atchison ( @jaredatch / jaredatchison.com )
-				Bill Erickson ( @billerickson / billerickson.net )
-				Human Made Limited ( @humanmadeltd / hmn.md )
-				Jonathan Bardo ( @jonathanbardo / jonathanbardo.com )
-Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 	1.0.1
+Plugin Name: Custom Meta Boxes
+Plugin URI: https://github.com/humanmade/Custom-Meta-Boxes
+Description: Lets you easily create metaboxes with custom fields that will blow your mind. Originally a fork of https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress.
+Version: 1.0.1
+License: GPL-2.0+
+Author: Human Made Limited
+Author URI: http://hmn.md
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License, version 2, as
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-/**
- * Released under the GPL license
- * http://www.opensource.org/licenses/gpl-license.php
- *
- * This is an add-on for WordPress
- * http://wordpress.org/
- *
- * **********************************************************************
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * **********************************************************************
- */
-
-/**
- * Defines the url to which is used to load local resources.
- * This may need to be filtered for local Window installations.
- * If resources do not load, please check the wiki for details.
- */
 
 if ( ! defined( 'CMB_DEV') )
 	define( 'CMB_DEV', false );
