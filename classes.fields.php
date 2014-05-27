@@ -1117,19 +1117,13 @@ class CMB_Post_Select extends CMB_Select {
 		// If AJAX, must use input type not standard select.
 		if ( $this->args['ajax_url'] ) :
 
-			?>
-
-			<input
-				<?php $this->id_attr(); ?>
-				<?php printf( 'value="%s" ', esc_attr( implode( ',' , (array) $this->get_values() ) ) ); ?>
-				<?php printf( 'name="%s"', esc_attr( $this->get_the_name_attr() ) ); ?>
-				<?php printf( 'data-field-id="%s" ', esc_attr( $this->get_js_id() ) ); ?>
-				<?php $this->boolean_attr(); ?>
-				class="cmb_select"
-				style="width: 100%"
-			/>
-
-			<?php
+			printf(
+				'<input id="%s" value="%s" name="%s" data-field-id="%s class="cmb_select" style="width: 100%" />',
+				esc_attr( $this->get_the_id_attr() ),
+				esc_attr( implode( ',' , (array) $this->get_values() ) ),
+				esc_attr( $this->get_the_name_attr() ),
+				esc_attr( $this->get_js_id() )
+			);
 
 		else :
 
