@@ -226,10 +226,16 @@ abstract class CMB_Field {
 	}
 
 	public function parse_save_values() {
+
 		// Don't save readonly values.
 		if ( $this->args['readonly'] )
 			$this->values = array();
+
+		$this->sanitize_values();
+
 	}
+
+	public function sanitize_values() {}
 
 	public function title() {
 
@@ -339,7 +345,7 @@ class CMB_Text_Field extends CMB_Field {
 
 	<?php }
 
-	public function sanitize_values() {
+	public function sanitize() {
 		$values = &$this->get_values();
 		$values = array_map( 'sanitize_text_field', $values );
 	}

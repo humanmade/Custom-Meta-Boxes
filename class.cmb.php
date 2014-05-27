@@ -292,7 +292,6 @@ abstract class CMB {
 
 			$field->set_values( $values );
 			$field->parse_save_values();
-			$field->sanitize_values();
 
 			$this->save_data( $object_id, $field->id, $field->get_values() );
 
