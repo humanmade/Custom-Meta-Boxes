@@ -52,7 +52,7 @@ include_once( CMB_PATH . '/class.cmb-group.php' );
 include_once( CMB_PATH . '/class.cmb-option.php' );
 include_once( CMB_PATH . '/class.cmb-user.php' );
 
-include_once( CMB_PATH . '/example-functions.php' );
+// include_once( CMB_PATH . '/example-functions.php' );
 
 /**
  * Get all the meta boxes on init
