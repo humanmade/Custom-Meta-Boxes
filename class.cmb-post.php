@@ -24,17 +24,13 @@ class CMB_Post extends CMB {
 		global $post;
 
 		// Get the current ID
-		if ( isset( $_GET['post'] ) )
+		if ( isset( $_GET['post'] ) ) {
 			$object_id = $_GET['post'];
-
-		elseif( isset( $_POST['post_ID'] ) )
+		} elseif ( isset( $_POST['post_ID'] ) ) {
 			$object_id = $_POST['post_ID'];
-
-		elseif ( ! empty( $post->ID ) )
+		} elseif ( ! empty( $post->ID ) ) {
 			$object_id = $post->ID;
-
-		elseif ( isset( $_GET['post'] ) )
-			$object_id  = $_GET['post'];
+		}
 
 		if ( is_page() || ! isset( $object_id ) )
 			return false;
