@@ -20,7 +20,6 @@ class CMB_Taxonomies extends CMB {
         parent::__construct( $args );
 
         add_action( 'admin_init', array( &$this, 'init_hook' ) );
-
     }
 
     public function init_hook() {
@@ -35,7 +34,6 @@ class CMB_Taxonomies extends CMB {
         $this->init( $object_id );
     }
 
-
     public function setup_hooks() {
 
         if(empty($this->args['taxonomy']))
@@ -45,12 +43,14 @@ class CMB_Taxonomies extends CMB {
 
         foreach($taxonomies as $taxonomy) {
 
-            if( in_array('create', $this->args['show_on']) && $this->is_displayed() ) {
-                add_action( "{$taxonomy}_add_form_fields", array( &$this, 'display_hook' ), $this->args['priority'] );
-            }
+            if($this->is_displayed()) {
+                if( in_array('create', $this->args['show_on'])) {
+                    add_action( "{$taxonomy}_add_form_fields", array( &$this, 'display_hook' ), $this->args['priority'] );
+                }
 
-            if( in_array('edit', $this->args['show_on']) && $this->is_displayed() ) {
-                add_action( "{$taxonomy}_edit_form_fields", array( &$this, 'display_hook' ), $this->args['priority'] );
+                if( in_array('edit', $this->args['show_on'])) {
+                    add_action( "{$taxonomy}_edit_form_fields", array( &$this, 'display_hook' ), 15 );
+                }
             }
 
             add_action( "created_{$taxonomy}", array( &$this, 'save_hook' ), $this->args['priority'] );
@@ -88,6 +88,10 @@ class CMB_Taxonomies extends CMB {
     }
 
     public function get_data( $term_id, $field_id ) {
+
+        if(empty($term_id)){
+            return;
+        }
 
         $term_meta = get_option( "taxonomy_$term_id" );
 
