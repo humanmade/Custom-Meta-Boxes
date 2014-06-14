@@ -1,0 +1,6 @@
+{
+	"directory": "js",
+	"scripts": {
+        "postinstall": "rm -rf js/jquery"
+    }
+}
