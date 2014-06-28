@@ -8,26 +8,23 @@ class FieldTestCase extends WP_UnitTestCase {
 
 		parent::setUp();
 
-		// insert a post
-		$id = wp_insert_post(
-			array(
-				'post_author' => $this->author_id,
-				'post_status' => 'publish',
-				'post_content' => rand_str(),
-				'post_title' => rand_str(),
-				'tax_input' => array( 'post_tag' => 'tag1,tag2', 'ctax' => 'cterm1,cterm2' ),
-				'post_type' => $post_type
-			)
+		$args = array(
+			'post_author' => 1,
+			'post_status' => 'publish',
+			'post_content' => rand_str(),
+			'post_title' => rand_str(),
+			'post_type' => 'post'
 		);
 
-		// fetch the post
+		$id = wp_insert_post( $args );
+
 		$this->post = get_post( $id );
 
 	}
 
 	function tearDown() {
+		wp_delete_post( $this->post->ID, true );
 		unset( $this->post );
-		wp_delete_post( $this->post_id, true );
 		parent::tearDown();
 	}
 
@@ -37,7 +34,7 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
 		$this->assertEquals( $field->get_values(), array( 1 ) );
 
-		// Multiple Values - eg repeatable.
+		// // Multiple Values - eg repeatable.
 		$field = new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ), array( 'repeatable' => true ) );
 		$this->assertEquals( $field->get_values(), array( 1, 2 ) );
 
