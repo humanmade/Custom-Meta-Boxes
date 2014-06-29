@@ -1,0 +1,20 @@
+{
+	"name"       : "humanmade/custom-meta-boxes",
+	"description": "Lets you easily create metaboxes with custom fields that will blow your mind.",
+	"keywords"   : ["wordpress"],
+	"homepage"   : "https://github.com/humanmade/Custom-Meta-Boxes",
+	"license"    : "GPL-2.0+",
+	"authors"    : [
+		{
+			"name"    : "Human Made Limited",
+			"email"   : "hello@humanmade.co.uk",
+			"homepage": "http://hmn.md/tools/"
+		}
+	],
+	"support"    : {
+		"issues": "https://github.com/humanmade/Custom-Meta-Boxes/issues"
+	},
+	"autoload"   : {
+		"classmap": ["custom-meta-boxes.php"]
+	}
+}
