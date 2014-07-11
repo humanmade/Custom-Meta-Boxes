@@ -448,7 +448,11 @@ class CMB_File_Field extends CMB_Field {
 				<?php esc_html_e( 'Remove', 'cmb' ); ?>
 			</button>
 
-			<input type="hidden" class="cmb-file-upload-input" <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
+			<input type="hidden"
+				<?php $this->class_attr( 'cmb-file-upload-input' ); ?>
+				<?php $this->name_attr(); ?>
+				value="<?php echo esc_attr( $this->value ); ?>"
+			/>
 
 		</div>
 
@@ -508,7 +512,11 @@ class CMB_Image_Field extends CMB_File_Field {
 				<?php esc_html_e( 'Remove', 'cmb' ); ?>
 			</button>
 
-			<input type="hidden" class="cmb-file-upload-input" <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
+			<input type="hidden"
+				<?php $this->class_attr( 'cmb-file-upload-input' ); ?>
+				<?php $this->name_attr(); ?>
+				value="<?php echo esc_attr( $this->value ); ?>"
+			/>
 
 		</div>
 
@@ -822,7 +830,7 @@ class CMB_Title extends CMB_Field {
 		?>
 
 		<div class="field-title">
-			<h2>
+			<h2 <?php $this->class_attr(); ?>>
 				<?php echo esc_html( $this->title ); ?>
 			</h2>
 		</div>
@@ -982,7 +990,7 @@ class CMB_Select extends CMB_Field {
 			<?php printf( 'name="%s"', esc_attr( $name ) ); ?>
 			<?php printf( 'data-field-id="%s" ', esc_attr( $this->get_js_id() ) ); ?>
 			<?php echo ! empty( $this->args['multiple'] ) ? 'multiple' : '' ?>
-			class="cmb_select"
+			<?php $this->class_attr( 'cmb_select' ); ?>
 			style="width: 100%"
 		>
 
