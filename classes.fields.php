@@ -810,11 +810,50 @@ class CMB_Checkbox extends CMB_Field {
 
 	public function title() {}
 
-	public function html() { ?>
+	/**
+	 * For checkbox field - ensure never more than 1 field.
+	 *
+	 * @return null
+	 */
+	public function &get_values() {
+		$_values = array_slice( $this->values, 0, 1 );
+		return $_values;
+	}
 
+	public function get_value() {
+		if ( isset( $this->args['inverse'] ) && $this->args['inverse'] ) {
+			return ! parent::get_value();
+		}
+		return parent::get_value();
+	}
+
+	/**
+	 * For checkbox field - ensure never more than 1 field.
+	 * Handle inverse logic.
+	 *
+	 * @return null
+	 */
+	public function parse_save_values() {
+
+		/**
+		 * Inverted Checkbox logic.
+		 */
+		if ( isset( $this->args['inverse'] ) && $this->args['inverse'] ) {
+
+			if ( empty( $this->values ) ) {
+				$this->values = array( true );
+			} else {
+				$this->values = array( false );
+			}
+		}
+
+		$this->values = array_slice( $this->values, 0, 1 );
+
+	}
+
+	public function html() { ?>
 		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="checkbox" <?php $this->name_attr(); ?>  value="1" <?php checked( $this->get_value() ); ?> />
 		<label <?php $this->for_attr(); ?>><?php echo esc_html( $this->args['name'] ); ?></label>
-
 	<?php }
 
 }
