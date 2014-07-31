@@ -102,10 +102,12 @@ var CMB = {
 		fieldItem = jQuery( this ).closest('.field-item' );
 		field     = fieldItem.closest( '.field' );
 
-		CMB.isMaxFields( field, -1 );
-		CMB.deletedField( fieldItem );
+		if ( confirm( 'Delete field?' ) ) {
+			CMB.isMaxFields( field, -1 );
+			CMB.deletedField( fieldItem );
+			fieldItem.remove();
+		}
 
-		fieldItem.remove();
 
 	},
 
