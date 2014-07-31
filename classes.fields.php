@@ -808,6 +808,17 @@ class CMB_Radio_Field extends CMB_Field {
  */
 class CMB_Checkbox extends CMB_Field {
 
+	public function __construct( $name, $title, array $values, $args = array() ) {
+
+		if ( isset( $args['default'] ) ) {
+			unset( $args['default'] );
+			_deprecated_argument( 'CMB_Checkbox', "The checkbox field does not support the default arg. Maybe consider the 'inverse' arg instead.", '1.1' );
+		}
+
+		parent::__construct( $name, $title, $values, $args );
+
+
+	}
 	public function title() {}
 
 	/**
@@ -821,6 +832,7 @@ class CMB_Checkbox extends CMB_Field {
 	}
 
 	public function get_value() {
+		// If inverse, do inverse logic.
 		if ( isset( $this->args['inverse'] ) && $this->args['inverse'] ) {
 			return ! parent::get_value();
 		}
@@ -835,16 +847,11 @@ class CMB_Checkbox extends CMB_Field {
 	 */
 	public function parse_save_values() {
 
-		/**
-		 * Inverted Checkbox logic.
-		 */
+		// If inverse, do inverse logic.
 		if ( isset( $this->args['inverse'] ) && $this->args['inverse'] ) {
 
-			if ( empty( $this->values ) ) {
-				$this->values = array( true );
-			} else {
-				$this->values = array( false );
-			}
+			$this->values = ( empty( $this->values ) ) ? array( true ) : array();
+
 		}
 
 		$this->values = array_slice( $this->values, 0, 1 );
