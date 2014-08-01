@@ -10,7 +10,7 @@
 }
 
 .cmb_metabox .CMB_Group_Field.repeatable > .field-item {
-	padding: 30px 10px 0;
+	padding: 33px 10px 0;
 	margin-bottom: 16px;
 	border: 1px solid #DDD;
 	background: #FAFAFA;
@@ -39,6 +39,48 @@
 	line-height: 20px;
 	font-size: 11px;
 	z-index: 1;
+}
+
+.cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-field {
+	display: inline-block;
+	text-decoration: none;
+	font-size: 11px;
+	line-height: 20px;
+	height: 22px;
+	width: 22px;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+	border-width: 1px;
+	border-style: solid;
+	border-color: transparent;
+	-webkit-appearance: none;
+	border-radius: 3px;
+	white-space: nowrap;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	color: #555;
+	background: transparent;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	vertical-align: top;
+	position: absolute;
+	top: 3px;
+	right: 0;
+	text-indent: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	top: 5px;
+	left: 5px;
+	z-index: 1;
+	width: auto;
+	text-indent: 0;
+	padding-left: 5px;
+}
+
+.cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-field:focus {
+	outline: none;
 }
 
 .cmb_metabox .CMB_Group_Field.repeatable > .field-item > .cmb-delete-field .cmb-delete-field-icon {

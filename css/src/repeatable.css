@@ -1,15 +1,15 @@
-/** 
+/**
  * Repeatable
  */
 
-.cmb_metabox .field.repeatable > .field-item { 
- 	padding-right: 30px; 
- 	margin-bottom: 10px; 
+.cmb_metabox .field.repeatable > .field-item {
+ 	padding-right: 30px;
+ 	margin-bottom: 10px;
  }
 
-.cmb_metabox .repeat-field { 
-	display: block !important; 
-	clear: both; 
+.cmb_metabox .repeat-field {
+	display: block !important;
+	clear: both;
 }
 
 .CMB_Text_Small_Field.repeatable .field-item,
@@ -21,7 +21,7 @@
 	float: left; clear: both;
 }
 
-.cmb-delete-field { 
+.cmb-delete-field {
 	display: inline-block;
 	text-decoration: none;
 	font-size: 11px;

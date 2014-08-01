@@ -71,6 +71,10 @@ abstract class CMB_Field {
 		if ( isset( $this->args['sortable'] ) && $this->args['sortable'] )
 			wp_enqueue_script( 'jquery-ui-sortable' );
 
+		if ( isset( $this->args['collapsable'] ) && $this->args['collapsable'] )
+			wp_enqueue_script( 'cmb-collapsable', trailingslashit( CMB_URL ) . 'js/collapsable.js', array( 'jquery' ) );
+
+
 	}
 
 	/**

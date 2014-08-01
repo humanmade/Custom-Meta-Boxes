@@ -176,7 +176,7 @@ class CMB_Meta_Box {
 
 		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
 
-		if ( ! $post_id ) 
+		if ( ! $post_id )
 			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
 
 		if ( ! $post_id || ! isset( $meta_box['show_on']['id'] ) )
@@ -251,6 +251,9 @@ class CMB_Meta_Box {
 
 				if ( ! empty( $field->args['sortable'] ) )
 					$classes[] = 'cmb-sortable';
+
+				if ( ! empty( $field->args['collapsable'] ) )
+					$classes[] = 'cmb-collapsable';
 
 				$attrs = array(
 					sprintf( 'id="%s"', sanitize_html_class( $field->id ) ),
