@@ -930,7 +930,13 @@ class CMB_Select extends CMB_Field {
 
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
-		$this->args = wp_parse_args( $this->args, array( 'multiple' => false ) );
+		$this->args = wp_parse_args(
+			$this->args,
+			array(
+				'multiple'        => false,
+				'select2_options' => array(),
+			)
+		);
 
 	}
 
@@ -995,7 +1001,7 @@ class CMB_Select extends CMB_Field {
 		>
 
 			<?php if ( ! empty( $this->args['allow_none'] ) ) : ?>
-				<option value=""><?php echo esc_html_x( 'None', 'select field', 'cmb' ) ?></option>
+				<option value=""></option>
 			<?php endif; ?>
 
 			<?php foreach ( $this->args['options'] as $value => $name ): ?>
@@ -1008,16 +1014,19 @@ class CMB_Select extends CMB_Field {
 	}
 
 	public function output_script() {
+
+		$options = wp_parse_args( $this->args['select2_options'], array(
+			'placeholder' => __( 'Type to search', 'cmb' ),
+			'allowClear'  => true,
+		) );
+
 		?>
 
 		<script type="text/javascript">
 
 			(function($) {
 
-				var options = {};
-
-				options.placeholder = <?php echo json_encode( __( 'Type to search', 'cmb' ) ) ?>;
-				options.allowClear  = true;
+				var options = <?php echo  json_encode( $options ); ?>
 
 				if ( 'undefined' === typeof( window.cmb_select_fields ) )
 					window.cmb_select_fields = {};
