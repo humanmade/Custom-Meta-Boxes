@@ -9,6 +9,10 @@
 	margin: 8px 0;
 }
 
+.cmb_metabox .CMB_Group_Field.repeatable > .field-title {
+	margin-bottom: 16px;
+}
+
 .cmb_metabox .CMB_Group_Field.repeatable > .field-item {
 	padding: 30px 10px 0;
 	margin-bottom: 16px;
