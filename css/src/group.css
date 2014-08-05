@@ -1,12 +1,12 @@
 /** Group **/
 
 .cmb_metabox .CMB_Group_Field > .field-title {
-	font-size: 16px;
+	font-size: 20px;
 	clear: left;
 	color: #222;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: normal;
-	margin: 8px 0 16px;
+	margin: 8px 0;
 }
 
 .cmb_metabox .CMB_Group_Field.repeatable > .field-item {
