@@ -176,7 +176,7 @@ class CMB_Meta_Box {
 
 		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
 
-		if ( ! $post_id ) 
+		if ( ! $post_id )
 			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
 
 		if ( ! $post_id || ! isset( $meta_box['show_on']['id'] ) )
@@ -194,13 +194,17 @@ class CMB_Meta_Box {
 	// Add for Page Template
 	function add_for_page_template( $display, $meta_box ) {
 
+		if ( ! isset( $meta_box['show_on']['page-template'] ) )
+			return $display;
+
 		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
 
 		if ( ! $post_id )
 			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
 
-		if ( ! isset( $meta_box['show_on']['page-template'] ) )
-			return $display;
+		if ( ! $post_id ) {
+			return false;
+		}
 
 		// Get current template
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
