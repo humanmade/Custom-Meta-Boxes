@@ -111,6 +111,13 @@ class CMB_Meta_Box {
 
 		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
 
+		wp_localize_script( 'cmb-scripts', 'CMBData', array(
+			'strings' => array(
+				'confirmDeleteField' => __( 'Are you sure you want to delete this field?', 'cmb' )
+				)
+			)
+		);
+
 		foreach ( $this->fields as $field )
 			$field->enqueue_scripts();
 
