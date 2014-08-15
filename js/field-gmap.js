@@ -3,72 +3,80 @@
 
 (function($) {
 
-    $(function() {
+    var CMBGmapsInit = function( fieldEl ) {
 
-        $('[data-class="CMB_Gmap_Field"]').each(function() {
-            var searchInput = $('.map-search', this).get(0);
-            var mapCanvas = $('.map', this).get(0);
-            var latitude = $('.latitude', this);
-            var longitude = $('.longitude', this);
-            var latLng = new google.maps.LatLng(54.800685, -4.130859);
-            var zoom = 5;
+        var searchInput = $('.map-search', fieldEl ).get(0);
+        var mapCanvas   = $('.map', fieldEl ).get(0);
+        var latitude    = $('.latitude', fieldEl );
+        var longitude   = $('.longitude', fieldEl );
 
-            // Map
-            if (latitude.val().length > 0 && longitude.val().length > 0) {
-                latLng = new google.maps.LatLng(latitude.val(), longitude.val());
-                zoom = 17;
-            }
+        console.log( fieldEl );
+        console.log( latitude );
+        console.log( longitude );
 
-            var mapOptions = {
-                center: latLng,
-                zoom: zoom,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            var map = new google.maps.Map(mapCanvas, mapOptions);
+        var mapOptions = {
+            center:    new google.maps.LatLng( CMBGmaps.defaults.latitude, CMBGmaps.defaults.longitude ),
+            zoom:      parseInt( CMBGmaps.defaults.zoom ),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
 
-            // Marker
-            var markerOptions = {
-                map: map,
-                draggable: true,
-                title: 'Drag to set the exact location'
-            };
-            var marker = new google.maps.Marker(markerOptions);
+        var map = new google.maps.Map( mapCanvas, mapOptions );
 
-            if (latitude.val().length > 0 && longitude.val().length > 0) {
-                marker.setPosition(latLng);
-            }
+        // Marker
+        var markerOptions = {
+            map: map,
+            draggable: true,
+            title: CMBGmaps.strings.markerTitle
+        };
 
-            google.maps.event.addListener(marker, 'drag', function() {
-                latitude.val(marker.getPosition().lat());
-                longitude.val(marker.getPosition().lng());
-            });
+        var marker = new google.maps.Marker( markerOptions );
 
-            // Search
-            var autocomplete = new google.maps.places.Autocomplete(searchInput);
-            autocomplete.bindTo('bounds', map);
+        // Set stored Coordinates
+        if ( latitude.val() && longitude.val() ) {
+            latLng = new google.maps.LatLng( latitude.val(), longitude.val() );
+            marker.setPosition(latLng);
+            map.setCenter( latLng );
+            map.setZoom(17);
+        }
 
-            google.maps.event.addListener(autocomplete, 'place_changed', function() {
-                var place = autocomplete.getPlace();
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17);
-                }
-
-                marker.setPosition(place.geometry.location);
-
-                latitude.val(place.geometry.location.lat());
-                longitude.val(place.geometry.location.lng());
-            });
-
-            $(searchInput).keypress(function(e) {
-                if (e.keyCode === 13) {
-                    e.preventDefault();
-                }
-            });
+        google.maps.event.addListener(marker, 'drag', function() {
+            latitude.val(marker.getPosition().lat());
+            longitude.val(marker.getPosition().lng());
         });
 
-    });
+        // Search
+        var autocomplete = new google.maps.places.Autocomplete(searchInput);
+        autocomplete.bindTo('bounds', map);
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+
+            marker.setPosition(place.geometry.location);
+
+            latitude.val(place.geometry.location.lat());
+            longitude.val(place.geometry.location.lng());
+        });
+
+        $(searchInput).keypress(function(e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+            }
+        });
+
+    }
+
+    CMB.addCallbackForInit( function() {
+        $('.CMB_Gmap_Field .field-item').each(function() {
+            CMBGmapsInit( $(this) );
+        });
+    } );
+
+    CMB.addCallbackForClonedField( ['CMB_Gmap_Field'], CMBGmapsInit );
 
 }(jQuery));
