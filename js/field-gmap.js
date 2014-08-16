@@ -33,7 +33,10 @@
 
 			marker.setPosition( latLng );
 			map.setCenter( latLng );
-			map.setZoom( zoom );
+
+			if ( zoom ) {
+				map.setZoom( zoom );
+			}
 
 			latitude.val( latLng.lat() );
 			longitude.val( latLng.lng() );
@@ -53,7 +56,7 @@
 		}
 
 		google.maps.event.addListener( marker, 'dragend', function() {
-			setPosition( marker.getPosition(), 17 );
+			setPosition( marker.getPosition() );
 		});
 
 		// Search
@@ -64,9 +67,6 @@
 			var place = autocomplete.getPlace();
 			if (place.geometry.viewport) {
 				map.fitBounds(place.geometry.viewport);
-			} else {
-				map.setCenter(place.geometry.location);
-				map.setZoom(17);
 			}
 
 			setPosition( place.geometry.location, 17 );
