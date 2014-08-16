@@ -28,6 +28,7 @@
 		};
 
 		var marker = new google.maps.Marker( markerOptions );
+		marker.setPosition( mapOptions.center );
 
 		function setPosition( latLng, zoom ) {
 

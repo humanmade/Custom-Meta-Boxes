@@ -1475,7 +1475,7 @@ class CMB_Gmap_Field extends CMB_Field {
 			'defaults' => array(
 				'latitude'  => '51.5073509',
 				'longitude' => '-0.12775829999998223',
-				'zoom'      => '4',
+				'zoom'      => '8',
 			),
 			'strings'  => array(
 				'markerTitle' => __( 'Drag to set the exact location', 'cmb' )
@@ -1485,8 +1485,6 @@ class CMB_Gmap_Field extends CMB_Field {
 	}
 
 	public function html() {
-
-		$value = $this->get_value();
 
 		$value = wp_parse_args(
 			$this->get_value(),
