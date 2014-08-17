@@ -8,6 +8,16 @@ class CMB_Meta_Box {
 	protected $_meta_box;
 	private $fields = array();
 
+	/**
+	 * Default Field Values
+	 */
+	protected $field_defaults = array(
+		'name' => '',
+		'desc' => '',
+		'std'  => '',
+		'cols' => 12
+	);
+
 	function __construct( $meta_box ) {
 
 		$this->_meta_box = $meta_box;
@@ -49,17 +59,7 @@ class CMB_Meta_Box {
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
 
 			$values = array();
-
-			// Set up blank or default values for empty ones
-			//
-			$defaults = array(
-				'name' => '',
-				'desc' => '',
-				'std'  => '',
-				'cols' => 12
-			);
-
-			$field = wp_parse_args( $field, $defaults );
+			$field  = wp_parse_args( $field, $this->field_defaults );
 
 			if ( 'file' == $field['type'] && ! isset( $field['allow'] ) )
 				$field['allow'] = array( 'url', 'attachment' );
@@ -321,6 +321,8 @@ class CMB_Meta_Box {
 			return $post_id;
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
+
+			$field = wp_parse_args( $field, $this->field_defaults );
 
 			// verify this meta box was shown on the page
 			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
