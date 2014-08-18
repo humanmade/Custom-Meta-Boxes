@@ -28,7 +28,7 @@ var CMB = {
 		jQuery(document).on( 'click.CMB', '.repeat-field', CMB.repeatField );
 
 		// When toggling the display of the meta box container - reinitialize
-		jQuery(document).on( 'click.CMB', '.handlediv', CMB.init )
+		jQuery(document).on( 'click.CMB', '.postbox h3, .postbox .handlediv', CMB.init );
 
 		CMB.doneInit();
 
