@@ -2,38 +2,44 @@
 
 .cmb_metabox .field {
 	overflow: hidden;
-	padding: 16px 0;
+	padding: 15px 0 20px;
 }
 
 /* Neaten up the margins when metaboxes are within the standard postbox. */
 .postbox > .inside > .cmb_metabox {
 	margin: -10px 0;
+	padding: 5px 5px 0;
 }
 
 .cmb_metabox .cmb-row {
 	overflow: hidden;
-	margin: 0 -5px;
-	border-bottom: 1px solid #DFDFDF;
+	position: relative;
+	margin: 0 -10px;
 	zoom: 1;
 }
 
-.cmb-row:last-child {
-	border-bottom: 0;
-}
-
-
-.cmb_metabox .cmb-row:before,
 .cmb_metabox .cmb-row:after {
-	content: "";
-	display: table;
-}
-.cmb_metabox .cmb-row:after {
+	content: " ";
+	position: absolute;
 	clear: both;
+	display: block;
+	border-bottom: 1px solid #DFDFDF;
+	left: 10px;
+	right: 10px;
+	bottom: 0;
+}
+
+.cmb_metabox > .cmb-row:last-child {
+	margin-bottom: -15px;
+}
+
+.cmb_metabox > .cmb-row:last-child:after {
+	display: none;
 }
 
 .cmb_metabox [class*="cmb-cell-"] {
 	float: left;
-	padding: 0 5px;
+	padding: 0 10px;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
