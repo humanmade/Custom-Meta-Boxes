@@ -183,7 +183,18 @@
 	} );
 
 	CMB.addCallbackForClonedField( 'CMB_Group_Field', function( newT ) {
-		var collapsable = new Collapsable( newT );
+
+		var instance = new Collapsable( newT );
+		var title    = 'New Group';
+		var index    = newT.find( '.cmb-collapsable-title' ).attr('name').match( /\[cmb-group-(\d+)\]/ );
+
+		if ( index[1] ) {
+			title = 'Group ' + ( parseInt( index[1] ) + 1 );
+		}
+
+		instance.collapseTitle.html( title );
+		instance.collapseTitleHiddenField.val( title );
+
 	} );
 
 	CMB.addCallbackForDeletedField( 'CMB_Group_Field', function( field ) {
