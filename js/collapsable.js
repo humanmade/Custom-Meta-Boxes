@@ -37,8 +37,6 @@
 		data = JSON.parse( cookie );
 	}
 
-	console.log( 'data', data );
-
 	var Collapsable = function( fieldEl ) {
 
 		var t = this;
@@ -54,7 +52,7 @@
 			t.toggleButton  = $('<button class="cmb-collapse-field" title="collapse field"><div class="dashicons dashicons-minus"></div></button>');
 			t.fieldID       = t.fieldEl.closest( '.field' ).attr( 'id' );
 
-			// t.initTitle();
+			t.initTitle();
 
 			t.fieldContent.before( t.toggleButton );
 			t.toggleButton.click( t.toggleField );
@@ -76,18 +74,26 @@
 
 		t.initTitle = function() {
 
-			t.collapseTitleContainer = $('<div class="cmb-collapse-title"></div>');
-			t.collapseTitle = $('<h4>Collapse Title</h4>');
-			t.collapseTitleEditButton = $('<button class="button button-small cmb-collapse-title-edit"><span class="dashicons dashicons-edit"></span></button>')
-			t.collapseTitleEditField = $('<input type="text"/>');
+			t.collapseTitleContainer     = $('<div class="cmb-collapse-title"></div>');
+			t.collapseTitle              = $('<h4></h4>');
+			t.collapseTitleEditButton    = $('<button class="button button-small cmb-collapse-title-edit"><span class="dashicons dashicons-edit"></span></button>')
+			t.collapseTitleEditField     = $('<input type="text"/>');
 			t.collapseTitleEditFieldSave = $('<button class="button button-small cmb-collapse-title-edit-save-button">Update</button>');
+			t.collapseTitleHiddenField   = t.fieldEl.find( 'input.cmb-collapsable-title' );
 
+			// Update the title with the stored value.
+			t.collapseTitle.html( t.collapseTitleHiddenField.val() );
+
+			// Insert 'title heading' & 'edit title button' elements.
 			t.collapseTitle.appendTo( t.collapseTitleContainer );
 			t.collapseTitleEditButton.appendTo( t.collapseTitleContainer );
 
+			// Insert & hide 'title edit field' & 'title edit field update button' elements.
 			t.collapseTitleEditField.appendTo( t.collapseTitleContainer ).hide();
 			t.collapseTitleEditFieldSave.appendTo( t.collapseTitleContainer ).hide();
 
+			// Show/Hide title edit fields.
+			// Update field with current title value.
 			t.collapseTitleEditButton.click( function(e) {
 
 				e.preventDefault();
@@ -101,6 +107,9 @@
 
 			} );
 
+			// Save edit title field.
+			// Show/hide fields
+			// Update hidden title field.
 			t.collapseTitleEditFieldSave.click( function(e) {
 				e.preventDefault()
 
@@ -110,9 +119,11 @@
 				t.collapseTitleEditField.hide();
 				t.collapseTitleEditFieldSave.hide();
 				t.collapseTitle.html( t.collapseTitleEditField.val() );
+				t.collapseTitleHiddenField.val( t.collapseTitle.html() );
+
 			} );
 
-
+			// Insert container.
 			t.fieldContent.before( t.collapseTitleContainer );
 
 		}

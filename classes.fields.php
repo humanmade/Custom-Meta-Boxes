@@ -1409,6 +1409,13 @@ class CMB_Group_Field extends CMB_Field {
 			<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
 		<?php endif; ?>
 
+		<?php if ( $this->args['collapsable'] ) :
+			$field_value = isset( $value['collapsable-title'] ) ? $value['collapsable-title'] : null;
+			$field_name  = str_replace( 'cmb-field-', 'cmb-group-', $this->get_the_name_attr( '[collapsable-title]' ) );
+			?>
+			<input type="hidden" class="cmb-collapsable-title" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $field_value ); ?>"/>
+		<?php endif; ?>
+
 		<?php CMB_Meta_Box::layout_fields( $fields ); ?>
 
 	<?php }
@@ -1420,6 +1427,10 @@ class CMB_Group_Field extends CMB_Field {
 
 		foreach ( $values as &$group_value ) {
 			foreach ( $group_value as $field_id => &$field_value ) {
+
+				if ( $this->args['collapsable'] && 'collapsable-title' === $field_id ) {
+					continue;
+				}
 
 				if ( ! isset( $fields[$field_id] ) ) {
 					$field_value = array();
@@ -1436,6 +1447,7 @@ class CMB_Group_Field extends CMB_Field {
 				// just store the first (and only) one directly
 				if ( ! $field->args['repeatable'] )
 					$field_value = reset( $field_value );
+
 			}
 		}
 
