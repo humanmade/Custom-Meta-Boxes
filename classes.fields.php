@@ -1445,7 +1445,7 @@ class CMB_Group_Field extends CMB_Field {
 
 				// if the field is a repeatable field, store the whole array of them, if it's not repeatble,
 				// just store the first (and only) one directly
-				if ( ! $field->args['repeatable'] )
+				if ( ! isset( $this->args['repeatable'] ) || ! $field->args['repeatable'] )
 					$field_value = reset( $field_value );
 
 			}
