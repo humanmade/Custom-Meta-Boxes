@@ -1428,7 +1428,7 @@ class CMB_Group_Field extends CMB_Field {
 		foreach ( $values as &$group_value ) {
 			foreach ( $group_value as $field_id => &$field_value ) {
 
-				if ( $this->args['collapsable'] && 'collapsable-title' === $field_id ) {
+				if ( isset( $this->args['collapsable'] ) && $this->args['collapsable'] && 'collapsable-title' === $field_id ) {
 					continue;
 				}
 
