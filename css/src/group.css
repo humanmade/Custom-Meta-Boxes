@@ -41,6 +41,52 @@
 	z-index: 1;
 }
 
+.cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-title {
+	position: absolute;
+	top: 1px;
+	left: 40px;
+	z-index: 1;
+}
+
+.cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-title h4 {
+	line-height: 30px;
+	white-space: nowrap;
+	margin: 0;
+	vertical-align: middle;
+	color: #999;
+	display: inline-block;
+}
+
+.cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-title .cmb-collapse-title-edit {
+	visibility: hidden;
+	position: relative;
+	top: 4px;
+	border: none;
+	box-shadow: none;
+	z-index: 1;
+	cursor: pointer;
+	opacity: 0.75;
+}
+
+.cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-title:hover .cmb-collapse-title-edit {
+	visibility: visible;
+}
+
+.cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-title .cmb-collapse-title-edit:hover {
+	opacity: 1;
+}
+
+.cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-title input[type="text"] {
+	font-size: 13px;
+	height: 24px;
+	margin: 4px 8px 0 0;
+	width: 12em;
+}
+
+.cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-title .cmb-collapse-title-edit-save-button {
+	margin-top: 4px;
+}
+
 .cmb_metabox .CMB_Group_Field.repeatable .cmb-collapse-field {
 	display: inline-block;
 	text-decoration: none;

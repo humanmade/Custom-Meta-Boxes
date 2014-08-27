@@ -29,9 +29,6 @@
 		document.cookie = cname + "=" + cvalue + "; " + expires;
 	}
 
-	// $.cookie( "cmb-collapsable", JSON.stringify( data ) );
-	// data = JSON.parse( getCookie( "cmb-collapsable" ) );
-
 	var data   = {};
 	var postID = getUrlParameter( 'post' );
 	var cookie = getCookie( "cmb-collapsable-" + postID );
@@ -39,6 +36,8 @@
 	if ( cookie ) {
 		data = JSON.parse( cookie );
 	}
+
+	console.log( 'data', data );
 
 	var Collapsable = function( fieldEl ) {
 
@@ -51,10 +50,11 @@
 				return;
 			}
 
-			t.fieldContent = t.fieldEl.find( '.cmb_metabox' );
-			// t.toggleButton = $('<button class="cmb-collapse-field" title="collapse field"><span class="cmb-collapse-field-icon">&#9660;</span></button>');
-			t.toggleButton = $('<button class="cmb-collapse-field" title="collapse field"><div class="dashicons dashicons-minus"></div></button>');
-			t.fieldID      = t.fieldEl.closest( '.field' ).attr( 'id' );
+			t.fieldContent  = t.fieldEl.find( '.cmb_metabox' );
+			t.toggleButton  = $('<button class="cmb-collapse-field" title="collapse field"><div class="dashicons dashicons-minus"></div></button>');
+			t.fieldID       = t.fieldEl.closest( '.field' ).attr( 'id' );
+
+			// t.initTitle();
 
 			t.fieldContent.before( t.toggleButton );
 			t.toggleButton.click( t.toggleField );
@@ -63,7 +63,6 @@
 			if ( data.hasOwnProperty( t.fieldID ) ) {
 				if ( data[ t.fieldID ][ t.fieldEl.index() ] ) {
 					t.fieldContent.slideToggle( 100, function() {
-						CMB.clonedField( t.fieldEl );
 						t.updateStatus();
 					} );
 				}
@@ -75,13 +74,55 @@
 
 		}
 
+		t.initTitle = function() {
+
+			t.collapseTitleContainer = $('<div class="cmb-collapse-title"></div>');
+			t.collapseTitle = $('<h4>Collapse Title</h4>');
+			t.collapseTitleEditButton = $('<button class="button button-small cmb-collapse-title-edit"><span class="dashicons dashicons-edit"></span></button>')
+			t.collapseTitleEditField = $('<input type="text"/>');
+			t.collapseTitleEditFieldSave = $('<button class="button button-small cmb-collapse-title-edit-save-button">Update</button>');
+
+			t.collapseTitle.appendTo( t.collapseTitleContainer );
+			t.collapseTitleEditButton.appendTo( t.collapseTitleContainer );
+
+			t.collapseTitleEditField.appendTo( t.collapseTitleContainer ).hide();
+			t.collapseTitleEditFieldSave.appendTo( t.collapseTitleContainer ).hide();
+
+			t.collapseTitleEditButton.click( function(e) {
+
+				e.preventDefault();
+
+				t.collapseTitle.hide();
+				t.collapseTitleEditButton.hide();
+
+				t.collapseTitleEditField.show();
+				t.collapseTitleEditFieldSave.show();
+				t.collapseTitleEditField.val( t.collapseTitle.html() );
+
+			} );
+
+			t.collapseTitleEditFieldSave.click( function(e) {
+				e.preventDefault()
+
+				t.collapseTitle.show();
+				t.collapseTitleEditButton.show();
+
+				t.collapseTitleEditField.hide();
+				t.collapseTitleEditFieldSave.hide();
+				t.collapseTitle.html( t.collapseTitleEditField.val() );
+			} );
+
+
+			t.fieldContent.before( t.collapseTitleContainer );
+
+		}
+
 		t.toggleField = function( e ) {
 
 			e.preventDefault();
 			t.toggleButton.blur();
 
 			t.fieldContent.slideToggle( 100, function() {
-				CMB.clonedField( t.fieldEl );
 				t.updateStatus();
 			} );
 
