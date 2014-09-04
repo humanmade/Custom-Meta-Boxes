@@ -400,8 +400,12 @@ class CMB_File_Field extends CMB_Field {
 
 	function enqueue_scripts() {
 
+		global $post_ID;
+		$post_ID = isset($post_ID) ? (int) $post_ID : 0;
+
 		parent::enqueue_scripts();
-		wp_enqueue_media();
+
+		wp_enqueue_media( array( 'post' => $post_ID ));
 		wp_enqueue_script( 'cmb-file-upload', trailingslashit( CMB_URL ) . 'js/file-upload.js', array( 'jquery', 'cmb-scripts' ) );
 
 	}
