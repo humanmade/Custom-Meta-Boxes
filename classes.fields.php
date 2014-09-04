@@ -1288,6 +1288,12 @@ class CMB_Group_Field extends CMB_Field {
 	function __construct() {
 
 		$args = func_get_args(); // you can't just put func_get_args() into a function as a parameter
+
+		$args[3] = wp_parse_args( $args[3], array(
+			'string-button-new-group'    => __( 'Add New Group', 'cmb' ),
+			'string-button-remove-group' => __( 'Remove Group', 'cmb' ),
+		) );
+
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
 		if ( ! empty( $this->args['fields'] ) ) {
@@ -1375,7 +1381,7 @@ class CMB_Group_Field extends CMB_Field {
 
 				</div>
 
-				<button class="button repeat-field"><?php esc_html_e( 'Add New Group', 'cmb' ); ?></button>
+				<button class="button repeat-field"><?php echo esc_html( $this->args['string-button-new-group'] ) ?></button>
 
 		<?php }
 
@@ -1402,7 +1408,9 @@ class CMB_Group_Field extends CMB_Field {
 		?>
 
 		<?php if ( $this->args['repeatable'] ) : ?>
-			<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
+			<button class="cmb-delete-field">
+				<span class="cmb-delete-field-icon">&times;</span> <?php echo esc_html( $this->args['string-button-remove-group'] ) ?>
+			</button>
 		<?php endif; ?>
 
 		<?php CMB_Meta_Box::layout_fields( $fields ); ?>
