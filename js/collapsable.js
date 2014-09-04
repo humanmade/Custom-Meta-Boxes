@@ -48,9 +48,9 @@
 				return;
 			}
 
-			t.fieldContent  = t.fieldEl.find( '.cmb_metabox' );
-			t.toggleButton  = $('<button class="cmb-collapse-field" title="collapse field"><div class="dashicons dashicons-minus"></div></button>');
-			t.fieldID       = t.fieldEl.closest( '.field' ).attr( 'id' );
+			t.fieldContent = t.fieldEl.find( '.cmb_metabox' );
+			t.toggleButton = $('<button class="cmb-collapse-field" title="collapse field"><div class="dashicons dashicons-minus"></div></button>');
+			t.fieldID      = t.fieldEl.closest( '.field' ).attr( 'id' );
 
 			t.initTitle();
 
@@ -184,6 +184,10 @@
 
 	CMB.addCallbackForClonedField( 'CMB_Group_Field', function( newT ) {
 
+		if ( ! newT.closest('.field').hasClass( 'cmb-collapsable' ) ) {
+			return;
+		}
+
 		var instance = new Collapsable( newT );
 		var title    = 'New Group';
 		var index    = newT.find( '.cmb-collapsable-title' ).attr('name').match( /\[cmb-group-(\d+)\]/ );
@@ -198,6 +202,10 @@
 	} );
 
 	CMB.addCallbackForDeletedField( 'CMB_Group_Field', function( field ) {
+
+		if ( ! field.closest('.field').hasClass( 'cmb-collapsable' ) ) {
+			return;
+		}
 
 		var index = field.index();
 		var id    = field.closest( '.field' ).attr( 'id' );
