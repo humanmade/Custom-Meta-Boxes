@@ -656,12 +656,14 @@ class CMB_Date_Field extends CMB_Field {
 		parent::enqueue_scripts();
 
 		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
-
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
+
 	}
 
 	/**
 	 * Return the default args for the Radio input field.
+	 *
+	 * Note that date_format and date_format_js need to be the same.
 	 *
 	 * @return array $args
 	 */
@@ -669,7 +671,8 @@ class CMB_Date_Field extends CMB_Field {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-				'date_format' => 'yy/mm/dd',
+				'date_format'    => 'Y/m/d',
+				'date_format_js' => 'yy/mm/dd',
 			)
 		);
 	}
@@ -679,11 +682,11 @@ class CMB_Date_Field extends CMB_Field {
 		<input
 			type="text"
 			<?php $this->id_attr(); ?>
-			<?php $this->boolean_attr(); ?>
-			<?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?>
 			<?php $this->name_attr(); ?>
+			<?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?>
+			<?php $this->boolean_attr(); ?>
 			value="<?php echo esc_attr( $this->value ); ?>"
-			data-date-format="<?php echo esc_attr( $this->args['date_format'] ); ?>"
+			data-date-format="<?php echo esc_attr( $this->args['date_format_js'] ); ?>"
 		/>
 
 	<?php }
@@ -730,11 +733,11 @@ class CMB_Date_Timestamp_Field extends CMB_Date_Field {
 		<input
 			type="text"
 			<?php $this->id_attr(); ?>
-			<?php $this->boolean_attr(); ?>
-			<?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?>
 			<?php $this->name_attr(); ?>
-			value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>"
-			data-date-format="<?php echo esc_attr( $this->args['date_format'] ); ?>"
+			<?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?>
+			<?php $this->boolean_attr(); ?>
+			value="<?php echo $this->value ? esc_attr( date( $this->args['date_format'], $this->value ) ) : '' ?>"
+			data-date-format="<?php echo esc_attr( $this->args['date_format_js'] ); ?>"
 		/>
 
 	<?php }
@@ -745,7 +748,7 @@ class CMB_Date_Timestamp_Field extends CMB_Date_Field {
  * Date picker for date and time (seperate fields) box.
  *
  */
-class CMB_Datetime_Timestamp_Field extends CMB_Date_Field {
+class CMB_Datetime_Timestamp_Field extends CMB_Date_Timestamp_Field {
 
 	public function enqueue_scripts() {
 
@@ -759,19 +762,19 @@ class CMB_Datetime_Timestamp_Field extends CMB_Date_Field {
 		<input
 			type="text"
 			<?php $this->id_attr('date'); ?>
-			<?php $this->boolean_attr(); ?>
+			<?php $this->name_attr('[date]'); ?>
 			<?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?>
-			<?php $this->name_attr( '[date]' ); ?>
-			value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>"
-			data-date-format="<?php echo esc_attr( $this->args['date_format'] ); ?>"
+			<?php $this->boolean_attr(); ?>
+			value="<?php echo $this->value ? esc_attr( date( $this->args['date_format'], $this->value ) ) : '' ?>"
+			data-date-format="<?php echo esc_attr( $this->args['date_format_js'] ); ?>"
 		/>
 
 		<input
 			type="text"
 			<?php $this->id_attr('time'); ?>
-			<?php $this->boolean_attr(); ?>
-			<?php $this->class_attr( 'cmb_text_small cmb_timepicker' ); ?>
 			<?php $this->name_attr( '[time]' ); ?>
+			<?php $this->class_attr( 'cmb_text_small cmb_timepicker' ); ?>
+			<?php $this->boolean_attr(); ?>
 			value="<?php echo $this->value ? esc_attr( date( 'h:i A', $this->value ) ) : '' ?>"
 		/>
 
@@ -779,17 +782,9 @@ class CMB_Datetime_Timestamp_Field extends CMB_Date_Field {
 
 	public function parse_save_values() {
 
-		// Convert all [date] and [time] values to a unix timestamp.
-		// If date is empty, assume delete. If time is empty, assume 00:00.
-		foreach( $this->values as $key => &$value ) {
-			if ( empty( $value['date'] ) )
-				unset( $this->values[$key] );
-			else
-				$value = strtotime( $value['date'] . ' ' . $value['time'] );
+		foreach ( $this->values as $key => &$value ) {
+			$value = $value['date'] . ' ' . $value['time'];
 		}
-
-		$this->values = array_filter( $this->values );
-		sort( $this->values );
 
 		parent::parse_save_values();
 
