@@ -1503,9 +1503,7 @@ class CMB_Group_Field extends CMB_Field {
 			?>
 
 				<div class="field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-
 					<?php $this->html(); ?>
-
 				</div>
 
 				<button class="button repeat-field">
