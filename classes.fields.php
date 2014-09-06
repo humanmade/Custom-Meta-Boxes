@@ -11,41 +11,19 @@ abstract class CMB_Field {
 	public $value;
 	public $field_index = 0;
 
-	public $default_field_args   = array();
-	public $default_generic_args =  array(
-		'desc' => '',
-		'repeatable'     => false,
-		'sortable'       => false,
-		'repeatable_max' => null,
-		'default'        => '',
-		'show_label'     => false,
-		'options'        => array(),
-		'cols'           => '12',
-		'readonly'       => false,
-		'disabled'       => false,
-		'style'          => '',
-		'class'          => '',
-		'data_delegate'  => null,
-		'save_callback'  => '',
-	);
-
 	public function __construct( $name, $title, array $values, $args = array() ) {
 
-		$this->id         = $name;
-		$this->name       = $name . '[]';
-		$this->title      = $title;
-
-		$args = wp_parse_args( $args, $this->default_field_args );
-		$args = wp_parse_args( $args, $this->default_generic_args );
+		$this->id    = $name;
+		$this->name  = $name . '[]';
+		$this->title = $title;
+		$this->args  = wp_parse_args( $args, $this->get_default_args() );
 
 		// Trigger deprecated argument for any arguments passed that are not required.
-		foreach ( $args as $arg => $value ) {
-			if ( ! array_key_exists( $arg, array_merge( $this->default_generic_args, $this->default_field_args ) ) ) {
+		foreach ( $this->args as $arg => $value ) {
+			if ( ! array_key_exists( $arg, $this->get_default_args() ) ) {
 				_deprecated_argument( 'CMB_Field', '0.9', sprintf( "The argument %s is not supported.", $arg ) );
 			}
 		}
-
-		$this->args = $args;
 
 		// Deprecated argument: 'std'
 		if ( ! empty( $this->args['std'] ) && empty( $this->args['default'] ) ) {
@@ -54,12 +32,10 @@ abstract class CMB_Field {
 		}
 
 		if ( ! empty( $this->args['options'] ) && is_array( reset( $this->args['options'] ) ) ) {
-
 			$re_format = array();
-
-			foreach ( $this->args['options'] as $option )
+			foreach ( $this->args['options'] as $option ){
 				$re_format[$option['value']] = $option['name'];
-
+			}
 			$this->args['options'] = $re_format;
 		}
 
@@ -71,8 +47,32 @@ abstract class CMB_Field {
 
 		$this->value = reset( $this->values );
 
+	}
 
-
+	/**
+	 * Get the default args for the abstract field.
+	 * These args are available to all fields.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array(
+			'desc'                => '',
+			'repeatable'          => false,
+			'sortable'            => false,
+			'repeatable_max'      => null,
+			'show_label'          => false,
+			'readonly'            => false,
+			'disabled'            => false,
+			'default'             => '',
+			'cols'                => '12',
+			'style'               => '',
+			'class'               => '',
+			'data_delegate'       => null,
+			'save_callback'       => null,
+			'string-repeat-field' => __( 'Add New', 'cmb' ),
+			'string-delete-field' => __( 'Remove Field', 'cmb' ),
+		);
 	}
 
 	/**
@@ -92,8 +92,7 @@ abstract class CMB_Field {
 	 *
 	 * @uses wp_enqueue_style()
 	 */
-	public function enqueue_styles() {
-	}
+	public function enqueue_styles() {}
 
 	/**
 	 * Output the field input ID attribute.
@@ -345,7 +344,9 @@ abstract class CMB_Field {
 			<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
 			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span></button>
+				<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
+					<span class="cmb-delete-field-icon">&times;</span>
+				</button>
 			<?php endif; ?>
 
 			<?php $this->html(); ?>
@@ -367,14 +368,17 @@ abstract class CMB_Field {
 			<div class="field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
 			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="Remove field"><span class="cmb-delete-field-icon">&times;</span> Remove Group</button>
+				<button class="cmb-delete-field" title="Remove field">
+					<span class="cmb-delete-field-icon">&times;</span>
+					<?php echo esc_html( $this->args['string-delete-field'] ); ?>
+				</button>
 			<?php endif; ?>
 
 			<?php $this->html(); ?>
 
 			</div>
 
-			<button class="button repeat-field"><?php esc_html_e( 'Add New', 'cmb' ); ?></button>
+			<button class="button repeat-field"><?php echo esc_html( $this->args['string-repeat-field'] ); ?></button>
 
 		<?php }
 
@@ -414,9 +418,19 @@ class CMB_Text_Small_Field extends CMB_Text_Field {
  */
 class CMB_File_Field extends CMB_Field {
 
-	public $default_field_args = array(
-		'library-type' => array( 'video', 'audio', 'text', 'application' )
-	);
+	/**
+	 * Return the default args for the File field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'library-type' => array( 'video', 'audio', 'text', 'application' )
+			)
+		);
+	}
 
 	function enqueue_scripts() {
 
@@ -482,11 +496,21 @@ class CMB_File_Field extends CMB_Field {
 
 class CMB_Image_Field extends CMB_File_Field {
 
-	public $default_field_args = array(
-		'size'         => 'thumbnail',
-		'library-type' => array( 'image' ),
-		'show_size'    => false
-	);
+	/**
+	 * Return the default args for the Image field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'size'         => 'thumbnail',
+				'library-type' => array( 'image' ),
+				'show_size'    => false
+			)
+		);
+	}
 
 	public function html() {
 
@@ -804,9 +828,19 @@ class CMB_Color_Picker extends CMB_Field {
  */
 class CMB_Radio_Field extends CMB_Field {
 
-	public $default_field_args = array(
-		'options' => array(),
-	);
+	/**
+	 * Return the default args for the Radio input field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'options' => array(),
+			)
+		);
+	}
 
 	public function html() {
 
@@ -873,9 +907,19 @@ class CMB_Title extends CMB_Field {
  */
 class CMB_wysiwyg extends CMB_Field {
 
-	public $default_field_args = array(
-		'options' => array(),
-	);
+	/**
+	 * Return the default args for the WYSIWYG field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'options' => array(),
+			)
+		);
+	}
 
 	function enqueue_scripts() {
 
@@ -952,10 +996,6 @@ class CMB_wysiwyg extends CMB_Field {
  */
 class CMB_Select extends CMB_Field {
 
-	public $default_field_args = array(
-		'options' => array(),
-	);
-
 	public function __construct() {
 
 		$args = func_get_args();
@@ -964,6 +1004,20 @@ class CMB_Select extends CMB_Field {
 
 		$this->args = wp_parse_args( $this->args, array( 'multiple' => false ) );
 
+	}
+
+	/**
+	 * Return the default args for the Select field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'options' => array(),
+			)
+		);
 	}
 
 	public function parse_save_values(){
@@ -1068,10 +1122,21 @@ class CMB_Select extends CMB_Field {
 
 class CMB_Taxonomy extends CMB_Select {
 
-	public $default_field_args = array(
-		'taxonomy'   			=> '',
-		'hide_empty' 			=> false,
-	);
+	/**
+	 * Return the default args for the Taxonomy select field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'taxonomy'   			=> '',
+				'hide_empty' 			=> false,
+			)
+		);
+	}
+
 
 	public function __construct() {
 
@@ -1119,12 +1184,6 @@ class CMB_Taxonomy extends CMB_Select {
  */
 class CMB_Post_Select extends CMB_Select {
 
-	public $default_field_args = array(
-		'query'    => array(),
-		'use_ajax' => false,
-		'multiple' => false,
-	);
-
 	public function __construct() {
 
 		$args = func_get_args();
@@ -1141,6 +1200,22 @@ class CMB_Post_Select extends CMB_Select {
 
 		}
 
+	}
+
+	/**
+	 * Return the default args for the Post select field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'query'    => array(),
+				'use_ajax' => false,
+				'multiple' => false,
+			)
+		);
 	}
 
 	public function get_delegate_data() {
@@ -1325,13 +1400,9 @@ class CMB_Group_Field extends CMB_Field {
 
 	function __construct() {
 
+		$strings =
+
 		$args = func_get_args(); // you can't just put func_get_args() into a function as a parameter
-
-		$args[3] = wp_parse_args( $args[3], array(
-			'string-button-new-group'    => __( 'Add New Group', 'cmb' ),
-			'string-button-remove-group' => __( 'Remove Group', 'cmb' ),
-		) );
-
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
 		if ( ! empty( $this->args['fields'] ) ) {
@@ -1351,16 +1422,32 @@ class CMB_Group_Field extends CMB_Field {
 
 	}
 
+	/**
+	 * Return the default args for the Group field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'fields' => array(),
+				'string-repeat-field' => __( 'Add New Group', 'cmb' ),
+				'string-delete-field' => __( 'Remove Group', 'cmb' ),
+			)
+		);
+	}
+
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
 
 		foreach ( $this->args['fields'] as $f ) {
-
 			$class = _cmb_field_class_for_type( $f['type'] );
 			$field = new $class( '', '', array(), $f );
 			$field->enqueue_scripts();
 		}
+
 	}
 
 	public function enqueue_styles() {
@@ -1411,7 +1498,9 @@ class CMB_Group_Field extends CMB_Field {
 		if ( $this->args['repeatable'] ) {
 
 			$this->field_index = 'x'; // x used to distinguish hidden fields.
-			$this->value = ''; ?>
+			$this->value = '';
+
+			?>
 
 				<div class="field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
 
@@ -1419,7 +1508,9 @@ class CMB_Group_Field extends CMB_Field {
 
 				</div>
 
-				<button class="button repeat-field"><?php echo esc_html( $this->args['string-button-new-group'] ) ?></button>
+				<button class="button repeat-field">
+					<?php echo esc_html( $this->args['string-repeat-field'] ); ?>
+				</button>
 
 		<?php }
 
@@ -1447,7 +1538,8 @@ class CMB_Group_Field extends CMB_Field {
 
 		<?php if ( $this->args['repeatable'] ) : ?>
 			<button class="cmb-delete-field">
-				<span class="cmb-delete-field-icon">&times;</span> <?php echo esc_html( $this->args['string-button-remove-group'] ) ?>
+				<span class="cmb-delete-field-icon">&times;</span>
+				<?php echo esc_html( $this->args['string-delete-field'] ) ?>
 			</button>
 		<?php endif; ?>
 
