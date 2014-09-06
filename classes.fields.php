@@ -660,11 +660,34 @@ class CMB_Date_Field extends CMB_Field {
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
 	}
 
+	/**
+	 * Return the default args for the Radio input field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'date_format' => 'yy/mm/dd',
+			)
+		);
+	}
+
 	public function html() { ?>
 
-		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
+		<input
+			type="text"
+			<?php $this->id_attr(); ?>
+			<?php $this->boolean_attr(); ?>
+			<?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?>
+			<?php $this->name_attr(); ?>
+			value="<?php echo esc_attr( $this->value ); ?>"
+			data-date-format="<?php echo esc_attr( $this->args['date_format'] ); ?>"
+		/>
 
 	<?php }
+
 }
 
 class CMB_Time_Field extends CMB_Field {
@@ -691,24 +714,7 @@ class CMB_Time_Field extends CMB_Field {
  * Date picker for date only (not time) box.
  *
  */
-class CMB_Date_Timestamp_Field extends CMB_Field {
-
-	public function enqueue_scripts() {
-
-		parent::enqueue_scripts();
-
-		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
-
-		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
-		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
-
-	}
-
-	public function html() { ?>
-
-		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr(); ?>  value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>" />
-
-	<?php }
+class CMB_Date_Timestamp_Field extends CMB_Date_Field {
 
 	public function parse_save_values() {
 
@@ -719,28 +725,55 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
 
 	}
 
+	public function html() { ?>
+
+		<input
+			type="text"
+			<?php $this->id_attr(); ?>
+			<?php $this->boolean_attr(); ?>
+			<?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?>
+			<?php $this->name_attr(); ?>
+			value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>"
+			data-date-format="<?php echo esc_attr( $this->args['date_format'] ); ?>"
+		/>
+
+	<?php }
+
 }
 
 /**
  * Date picker for date and time (seperate fields) box.
  *
  */
-class CMB_Datetime_Timestamp_Field extends CMB_Field {
+class CMB_Datetime_Timestamp_Field extends CMB_Date_Field {
 
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
-
-		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
-
 		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
-		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
+
 	}
 
 	public function html() { ?>
 
-		<input <?php $this->id_attr('date'); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr( '[date]' ); ?>  value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>" />
-		<input <?php $this->id_attr('time'); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_timepicker' ); ?> type="text" <?php $this->name_attr( '[time]' ); ?> value="<?php echo $this->value ? esc_attr( date( 'h:i A', $this->value ) ) : '' ?>" />
+		<input
+			type="text"
+			<?php $this->id_attr('date'); ?>
+			<?php $this->boolean_attr(); ?>
+			<?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?>
+			<?php $this->name_attr( '[date]' ); ?>
+			value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>"
+			data-date-format="<?php echo esc_attr( $this->args['date_format'] ); ?>"
+		/>
+
+		<input
+			type="text"
+			<?php $this->id_attr('time'); ?>
+			<?php $this->boolean_attr(); ?>
+			<?php $this->class_attr( 'cmb_text_small cmb_timepicker' ); ?>
+			<?php $this->name_attr( '[time]' ); ?>
+			value="<?php echo $this->value ? esc_attr( date( 'h:i A', $this->value ) ) : '' ?>"
+		/>
 
 	<?php }
 
