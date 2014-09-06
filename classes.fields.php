@@ -719,6 +719,11 @@ class CMB_Time_Field extends CMB_Field {
  */
 class CMB_Date_Timestamp_Field extends CMB_Date_Field {
 
+	public function enqueue_scripts() {
+		parent::enqueue_scripts();
+		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
+	}
+
 	public function parse_save_values() {
 
 		foreach( $this->values as &$value )
@@ -749,13 +754,6 @@ class CMB_Date_Timestamp_Field extends CMB_Date_Field {
  *
  */
 class CMB_Datetime_Timestamp_Field extends CMB_Date_Timestamp_Field {
-
-	public function enqueue_scripts() {
-
-		parent::enqueue_scripts();
-		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
-
-	}
 
 	public function html() { ?>
 
