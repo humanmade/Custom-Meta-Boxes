@@ -18,13 +18,6 @@ abstract class CMB_Field {
 		$this->title = $title;
 		$this->args  = wp_parse_args( $args, $this->get_default_args() );
 
-		// Trigger deprecated argument for any arguments passed that are not required.
-		foreach ( $this->args as $arg => $value ) {
-			if ( ! array_key_exists( $arg, $this->get_default_args() ) ) {
-				_deprecated_argument( 'CMB_Field', '0.9', sprintf( "The argument %s is not supported.", $arg ) );
-			}
-		}
-
 		// Deprecated argument: 'std'
 		if ( ! empty( $this->args['std'] ) && empty( $this->args['default'] ) ) {
 			$this->args['default'] = $this->args['std'];
