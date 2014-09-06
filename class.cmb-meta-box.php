@@ -25,22 +25,10 @@ class CMB_Meta_Box {
 		if ( empty( $this->_meta_box['id'] ) )
 			$this->_meta_box['id'] = sanitize_title( $this->_meta_box['title'] );
 
-		$upload = false;
-
-		foreach ( $meta_box['fields'] as $field ) {
-			if ( $field['type'] == 'file' || $field['type'] == 'file_list' ) {
-				$upload = true;
-				break;
-			}
-		}
-
 		add_action( 'dbx_post_advanced', array( &$this, 'init_fields_for_post' ) );
 		add_action( 'cmb_init_fields', array( &$this, 'init_fields' ) );
 
 		global $pagenow;
-
-		if ( $upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) )
-			add_action( 'admin_head', array( &$this, 'add_post_enctype' ) );
 
 		add_action( 'admin_menu', array( &$this, 'add' ) );
 		add_action( 'save_post', array( &$this, 'save_for_post' ) );
@@ -114,9 +102,8 @@ class CMB_Meta_Box {
 		wp_localize_script( 'cmb-scripts', 'CMBData', array(
 			'strings' => array(
 				'confirmDeleteField' => __( 'Are you sure you want to delete this field?', 'cmb' )
-				)
 			)
-		);
+		) );
 
 		foreach ( $this->fields as $field )
 			$field->enqueue_scripts();
@@ -137,23 +124,10 @@ class CMB_Meta_Box {
 
 	}
 
-	function add_post_enctype() { ?>
-
-		<script type="text/javascript">
-
-		jQuery(document).ready(function(){
-			jQuery("#post").attr("enctype", "multipart/form-data");
-			jQuery("#post").attr("encoding", "multipart/form-data");
-		} );
-
-		</script>
-
-	<?php }
-
 	// Add metabox
 	function add() {
 
-		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
+		$this->_meta_box['context']  = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
 		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'low' : $this->_meta_box['priority'];
 
 		// Backwards compatablilty.
@@ -188,8 +162,6 @@ class CMB_Meta_Box {
 
 		if ( ! $post_id || ! isset( $meta_box['show_on']['id'] ) )
 			return $display;
-
-
 
 		// If value isn't an array, turn it into one
 		$meta_box['show_on']['id'] = ! is_array( $meta_box['show_on']['id'] ) ? array( $meta_box['show_on']['id'] ) : $meta_box['show_on']['id'];
