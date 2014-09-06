@@ -11,32 +11,46 @@ abstract class CMB_Field {
 	public $value;
 	public $field_index = 0;
 
+	public $default_field_args   = array();
+	public $default_generic_args =  array(
+		'desc' => '',
+		'repeatable'     => false,
+		'sortable'       => false,
+		'repeatable_max' => null,
+		'default'        => '',
+		'show_label'     => false,
+		'options'        => array(),
+		'cols'           => '12',
+		'readonly'       => false,
+		'disabled'       => false,
+		'style'          => '',
+		'class'          => '',
+		'data_delegate'  => null,
+		'save_callback'  => '',
+	);
+
 	public function __construct( $name, $title, array $values, $args = array() ) {
 
-		$this->id 		= $name;
-		$this->name		= $name . '[]';
-		$this->title 	= $title;
+		$this->id         = $name;
+		$this->name       = $name . '[]';
+		$this->title      = $title;
 
-		$this->args		= wp_parse_args( $args, array(
-				'repeatable' 			=> false,
-				'std'        			=> '',
-				'default'    			=> '',
-				'show_label' 			=> false,
-				'taxonomy'   			=> '',
-				'hide_empty' 			=> false,
-				'data_delegate' 		=> null,
-				'options'				=> array(),
-				'cols' 					=> '12',
-				'style' 				=> '',
-				'class'					=> '',
-				'readonly'				=> false,
-				'disabled'				=> false
-			)
-		);
+		$args = wp_parse_args( $args, $this->default_field_args );
+		$args = wp_parse_args( $args, $this->default_generic_args );
 
+		// Trigger deprecated argument for any arguments passed that are not required.
+		foreach ( $args as $arg => $value ) {
+			if ( ! array_key_exists( $arg, array_merge( $this->default_generic_args, $this->default_field_args ) ) ) {
+				_deprecated_argument( 'CMB_Field', '0.9', sprintf( "The argument %s is not supported.", $arg ) );
+			}
+		}
+
+		$this->args = $args;
+
+		// Deprecated argument: 'std'
 		if ( ! empty( $this->args['std'] ) && empty( $this->args['default'] ) ) {
 			$this->args['default'] = $this->args['std'];
-			_deprecated_argument( 'CMB_Field', "'std' is deprecated, use 'default instead'", '0.9' );
+			_deprecated_argument( 'CMB_Field', '0.9', "'std' is deprecated, use 'default instead'" );
 		}
 
 		if ( ! empty( $this->args['options'] ) && is_array( reset( $this->args['options'] ) ) ) {
@@ -57,7 +71,7 @@ abstract class CMB_Field {
 
 		$this->value = reset( $this->values );
 
-		$this->description = ! empty( $this->args['desc'] ) ? $this->args['desc'] : '';
+
 
 	}
 
@@ -300,9 +314,11 @@ abstract class CMB_Field {
 
 	public function description() {
 
-		if ( $this->description ) { ?>
+		if ( ! empty( $this->args['description'] ) ) { ?>
 
-			<div class="cmb_metabox_description"><?php echo wp_kses_post( $this->description ); ?></div>
+			<div class="cmb_metabox_description">
+				<?php echo wp_kses_post( $this->args['description'] ); ?>
+			</div>
 
 		<?php }
 
@@ -398,6 +414,10 @@ class CMB_Text_Small_Field extends CMB_Text_Field {
  */
 class CMB_File_Field extends CMB_Field {
 
+	public $default_field_args = array(
+		'library-type' => array( 'video', 'audio', 'text', 'application' )
+	);
+
 	function enqueue_scripts() {
 
 		global $post_ID;
@@ -412,17 +432,13 @@ class CMB_File_Field extends CMB_Field {
 
 	public function html() {
 
-		$args = wp_parse_args( $this->args, array(
-			'library-type' => array( 'video', 'audio', 'text', 'application' )
-		) );
-
 		if ( $this->get_value() ) {
 			$src = wp_mime_type_icon( $this->get_value() );
 			$size = getimagesize($src);
 			$icon_img = '<img src="' . $src . '" ' . $size[3] . ' />';
 		}
 
-		$data_type = ( ! empty( $args['library-type'] ) ? implode( ',', $args['library-type'] ) : null );
+		$data_type = ( ! empty( $this->args['library-type'] ) ? implode( ',', $this->args['library-type'] ) : null );
 
 		?>
 
@@ -466,25 +482,25 @@ class CMB_File_Field extends CMB_Field {
 
 class CMB_Image_Field extends CMB_File_Field {
 
+	public $default_field_args = array(
+		'size'         => 'thumbnail',
+		'library-type' => array( 'image' ),
+		'show_size'    => false
+	);
+
 	public function html() {
 
-		$args = $this->args = wp_parse_args( $this->args, array(
-			'size' => 'thumbnail',
-			'library-type' => array( 'image' ),
-			'show_size' => false
-		) );
-
 		if ( $this->get_value() )
-			$image = wp_get_attachment_image_src( $this->get_value(), $args['size'], true );
+			$image = wp_get_attachment_image_src( $this->get_value(), $this->args['size'], true );
 
 		// Convert size arg to array of width, height, crop.
-		$size = $this->parse_image_size( $args['size'] );
+		$size = $this->parse_image_size( $this->args['size'] );
 
 		// Inline styles.
 		$styles              = sprintf( 'width: %1$dpx; height: %2$dpx; line-height: %2$dpx', intval( $size['width'] ), intval( $size['height'] ) );
 		$placeholder_styles  = sprintf( 'width: %dpx; height: %dpx;', intval( $size['width'] ) - 8, intval( $size['height'] ) - 8 );
 
-		$data_type = ( ! empty( $args['library-type'] ) ? implode( ',', $args['library-type'] ) : null );
+		$data_type = ( ! empty( $this->args['library-type'] ) ? implode( ',', $this->args['library-type'] ) : null );
 
 		?>
 
@@ -492,7 +508,7 @@ class CMB_Image_Field extends CMB_File_Field {
 
 			<div class="cmb-file-wrap-placeholder" style="<?php echo esc_attr( $placeholder_styles ); ?>">
 
-				<?php if ( $args['show_size'] ) : ?>
+				<?php if ( $this->args['show_size'] ) : ?>
 					<span class="dimensions">
 						<?php printf( '%dpx &times; %dpx', intval( $size['width'] ), intval( $size['height'] ) ); ?>
 					</span>
@@ -788,17 +804,21 @@ class CMB_Color_Picker extends CMB_Field {
  */
 class CMB_Radio_Field extends CMB_Field {
 
+	public $default_field_args = array(
+		'options' => array(),
+	);
+
 	public function html() {
 
 		if ( $this->has_data_delegate() )
 			$this->args['options'] = $this->get_delegate_data(); ?>
 
-			<?php foreach ( $this->args['options'] as $key => $value ): ?>
+			<?php foreach ( $this->args['options'] as $key => $value ) : ?>
 
-			<input <?php $this->id_attr( 'item-' . $key ); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="radio" <?php $this->name_attr(); ?>  value="<?php echo esc_attr( $key ); ?>" <?php checked( $key, $this->get_value() ); ?> />
-			<label <?php $this->for_attr( 'item-' . $key ); ?> style="margin-right: 20px;">
-				<?php echo esc_html( $value ); ?>
-			</label>
+				<input <?php $this->id_attr( 'item-' . $key ); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="radio" <?php $this->name_attr(); ?>  value="<?php echo esc_attr( $key ); ?>" <?php checked( $key, $this->get_value() ); ?> />
+				<label <?php $this->for_attr( 'item-' . $key ); ?> style="margin-right: 20px;">
+					<?php echo esc_html( $value ); ?>
+				</label>
 
 			<?php endforeach; ?>
 
@@ -817,7 +837,7 @@ class CMB_Checkbox extends CMB_Field {
 	public function html() { ?>
 
 		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="checkbox" <?php $this->name_attr(); ?>  value="1" <?php checked( $this->get_value() ); ?> />
-		<label <?php $this->for_attr(); ?>><?php echo esc_html( $this->args['name'] ); ?></label>
+		<label <?php $this->for_attr(); ?>><?php echo esc_html( $this->title ); ?></label>
 
 	<?php }
 
@@ -852,6 +872,10 @@ class CMB_Title extends CMB_Field {
  *
  */
 class CMB_wysiwyg extends CMB_Field {
+
+	public $default_field_args = array(
+		'options' => array(),
+	);
 
 	function enqueue_scripts() {
 
@@ -927,6 +951,10 @@ class CMB_wysiwyg extends CMB_Field {
  *     'multiple'     => bool whether multiple can be selected
  */
 class CMB_Select extends CMB_Field {
+
+	public $default_field_args = array(
+		'options' => array(),
+	);
 
 	public function __construct() {
 
@@ -1040,6 +1068,11 @@ class CMB_Select extends CMB_Field {
 
 class CMB_Taxonomy extends CMB_Select {
 
+	public $default_field_args = array(
+		'taxonomy'   			=> '',
+		'hide_empty' 			=> false,
+	);
+
 	public function __construct() {
 
 		$args = func_get_args();
@@ -1086,15 +1119,17 @@ class CMB_Taxonomy extends CMB_Select {
  */
 class CMB_Post_Select extends CMB_Select {
 
+	public $default_field_args = array(
+		'query'    => array(),
+		'use_ajax' => false,
+		'multiple' => false,
+	);
+
 	public function __construct() {
 
 		$args = func_get_args();
 
 		call_user_func_array( array( 'parent', '__construct' ), $args );
-
-		$this->args = wp_parse_args( $this->args, array( 'use_ajax' => false, 'ajax_url' => '' ) );
-
-		$this->args['query'] = isset( $this->args['query'] ) ? $this->args['query'] : array();
 
 		if ( ! $this->args['use_ajax'] ) {
 
@@ -1102,8 +1137,7 @@ class CMB_Post_Select extends CMB_Select {
 
 		} else {
 
-			$this->args['ajax_url'] = admin_url( 'admin-ajax.php' );
-			$this->args['ajax_args'] = wp_parse_args( $this->args['query'] );
+			$this->args['ajax_url']  = admin_url( 'admin-ajax.php' );
 
 		}
 
@@ -1218,7 +1252,7 @@ class CMB_Post_Select extends CMB_Select {
 						action  : 'cmb_post_select',
 						post_id : '<?php echo intval( get_the_id() ); ?>', // Used for user capabilty check.
 						nonce   : <?php echo json_encode( wp_create_nonce( 'cmb_select_field' ) ); ?>,
-						query   : <?php echo json_encode( $this->args['ajax_args'] ); ?>
+						query   : <?php echo json_encode( $this->args['query'] ); ?>
 					};
 
 					options.ajax = {
@@ -1226,13 +1260,13 @@ class CMB_Post_Select extends CMB_Select {
 						type: 'POST',
 						dataType: 'json',
 						data: function( term, page ) {
-							ajaxData.query.s = term;
+							ajaxData.query.s     = term;
 							ajaxData.query.paged = page;
 							return ajaxData;
 						},
 						results : function( results, page ) {
 							var postsPerPage = ajaxData.query.posts_per_page = ( 'posts_per_page' in ajaxData.query ) ? ajaxData.query.posts_per_page : ( 'showposts' in ajaxData.query ) ? ajaxData.query.showposts : 10;
-							var isMore = ( page * postsPerPage ) < results.total;
+							var isMore       = ( page * postsPerPage ) < results.total;
 		            		return { results: results.posts, more: isMore };
 						}
 					}

@@ -8,16 +8,6 @@ class CMB_Meta_Box {
 	protected $_meta_box;
 	private $fields = array();
 
-	/**
-	 * Default Field Values
-	 */
-	protected $field_defaults = array(
-		'name' => '',
-		'desc' => '',
-		'std'  => '',
-		'cols' => 12
-	);
-
 	function __construct( $meta_box ) {
 
 		$this->_meta_box = $meta_box;
@@ -59,27 +49,24 @@ class CMB_Meta_Box {
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
 
 			$values = array();
-			$field  = wp_parse_args( $field, $this->field_defaults );
 
-			if ( 'file' == $field['type'] && ! isset( $field['allow'] ) )
-				$field['allow'] = array( 'url', 'attachment' );
+			$args = $field;
+			unset( $args['id'] );
+			unset( $args['type'] );
+			unset( $args['name'] );
 
-			if ( 'file' == $field['type'] && ! isset( $field['save_id'] ) )
-				$field['save_id']  = false;
-
-			$field['name_attr'] = $field['id'];
 			$class = _cmb_field_class_for_type( $field['type'] );
 
 			if ( ! empty( $this->_meta_box['repeatable'] ) )
 				$field['repeatable'] = true;
 
-
 			// Else if we are on a post edit screen
-			elseif ( $post_id )
+			if ( $post_id ) {
 				$values = (array) get_post_meta( $post_id, $field['id'], false );
+			}
 
 			if ( class_exists( $class ) ) {
-				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $field );
+				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $args );
 			}
 
 		}
