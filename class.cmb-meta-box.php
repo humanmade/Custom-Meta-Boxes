@@ -198,6 +198,24 @@ class CMB_Meta_Box {
 
 	}
 
+	// Hide for ID
+	function exclude_for_id( $display, $meta_box ) {
+
+		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
+
+		if ( ! $post_id ) 
+			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
+
+		if ( ! $post_id || ! isset( $meta_box['hide_on']['id'] ) )
+			return $display;
+
+		// If value isn't an array, turn it into one
+		$meta_box['hide_on']['id'] = ! is_array( $meta_box['hide_on']['id'] ) ? array( $meta_box['hide_on']['id'] ) : $meta_box['hide_on']['id'];
+		
+		return !in_array( $post_id, $meta_box['hide_on']['id'] );
+
+	}
+
 	// Add for Page Template
 	function add_for_page_template( $display, $meta_box ) {
 
