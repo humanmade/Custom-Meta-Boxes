@@ -49,11 +49,6 @@ class CMB_Meta_Box {
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_styles' ) );
 
-		add_filter( 'cmb_show_on', array( &$this, 'add_for_id' ), 10, 2 );
-		add_filter( 'cmb_show_on', array( &$this, 'add_for_page_template' ), 10, 2 );
-		add_filter( 'cmb_show_on', array( &$this, 'hide_for_id' ), 10, 2 );
-		add_filter( 'cmb_show_on', array( &$this, 'hide_for_page_template' ), 10, 2 );
-
 	}
 
 	public function init_fields( $post_id = 0 ) {
@@ -164,9 +159,8 @@ class CMB_Meta_Box {
 			unset( $this->_meta_box['show_on']['value'] );
 		}
 
-		foreach ( (array) $this->_meta_box['pages'] as $page ) {
-			$show = apply_filters( 'cmb_show_on', true, $this->_meta_box );
-			if ( $show ) {
+		if ( $this->is_metabox_displayed( $this->_meta_box ) ) {
+			foreach ( (array) $this->_meta_box['pages'] as $page ) {
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority'] ) ;
 			}
 		}
@@ -174,10 +168,16 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Show On Filters
-	 * Use the 'cmb_show_on' filter to further refine the conditions under which a metabox is displayed.
-	 * Below you can limit it by ID and page template
+	 * Handle 'Show On' and 'hide on' Filters
 	 */
+	function is_metabox_displayed( $meta_box ) {
+		$display = true;
+		$display = $this->add_for_id( $display, $meta_box );
+		$display = $this->hide_for_id( $display, $meta_box );
+		$display = $this->add_for_page_template( $display, $meta_box );
+		$display = $this->hide_for_page_template( $display, $meta_box );
+		return $display;
+	}
 
 	// Add for ID
 	function add_for_id( $display, $meta_box ) {
@@ -259,7 +259,7 @@ class CMB_Meta_Box {
 
 	}
 
-	// Show fields
+	// display fields
 	function show() { ?>
 
 		<input type="hidden" name="wp_meta_box_nonce" value="<?php esc_attr_e( wp_create_nonce( basename(__FILE__) ) ); ?>" />
