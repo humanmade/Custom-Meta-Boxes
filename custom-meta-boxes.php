@@ -64,7 +64,7 @@ function cmb_init() {
 			new CMB_Meta_Box( $meta_box );
 
 }
-add_action( 'init', 'cmb_init' );
+add_action( 'init', 'cmb_init', 50 );
 
 /**
  * Return an array of built in available fields
