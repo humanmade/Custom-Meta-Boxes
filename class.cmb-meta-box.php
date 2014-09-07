@@ -182,14 +182,10 @@ class CMB_Meta_Box {
 	// Add for ID
 	function add_for_id( $display, $meta_box ) {
 
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
-
-		if ( ! $post_id && isset( $_POST['post_id'] ) ) {
-			$post_id = $_POST['post_id'];
-		}
-
-		if ( ! $post_id || ! isset( $meta_box['show_on']['id'] ) )
+		if ( ! isset( $meta_box['show_on']['id'] ) )
 			return $display;
+
+		$post_id = $this->get_post_id();
 
 		// If value isn't an array, turn it into one
 		$meta_box['show_on']['id'] = ! is_array( $meta_box['show_on']['id'] ) ? array( $meta_box['show_on']['id'] ) : $meta_box['show_on']['id'];
@@ -201,14 +197,14 @@ class CMB_Meta_Box {
 	// Add for ID
 	function hide_for_id( $display, $meta_box ) {
 
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
-
-		if ( ! $post_id && isset( $_POST['post_id'] ) ) {
-			$post_id = $_POST['post_id'];
-		}
-
-		if ( ! $post_id || ! isset( $meta_box['hide_on']['id'] ) )
+		if ( ! isset( $meta_box['hide_on']['id'] ) )
 			return $display;
+
+		$post_id = $this->get_post_id();
+
+		if ( ! $post_id ) {
+			return false;
+		}
 
 		// If value isn't an array, turn it into one
 		$meta_box['hide_on']['id'] = ! is_array( $meta_box['hide_on']['id'] ) ? array( $meta_box['hide_on']['id'] ) : $meta_box['hide_on']['id'];
@@ -220,14 +216,14 @@ class CMB_Meta_Box {
 	// Add for Page Template
 	function add_for_page_template( $display, $meta_box ) {
 
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
-
-		if ( ! $post_id && isset( $_POST['post_id'] ) ) {
-			$post_id = $_POST['post_id'];
+		if ( ! isset( $meta_box['show_on']['page-template'] ) ) {
+			return $display;
 		}
 
-		if ( ! $post_id || ! isset( $meta_box['hide_on']['page-template'] ) ) {
-			return $display;
+		$post_id = $this->get_post_id();
+
+		if ( ! $post_id ) {
+			return false;
 		}
 
 		// Get current template
@@ -243,14 +239,14 @@ class CMB_Meta_Box {
 	// Add for Page Template
 	function hide_for_page_template( $display, $meta_box ) {
 
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
-
-		if ( ! $post_id && isset( $_POST['post_id'] ) ) {
-			$post_id = $_POST['post_id'];
+		if ( ! isset( $meta_box['hide_on']['page-template'] ) ) {
+			return $display;
 		}
 
-		if ( ! $post_id || ! isset( $meta_box['hide_on']['page-template'] ) ) {
-			return $display;
+		$post_id = $this->get_post_id();
+
+		if ( ! $post_id ) {
+			return false;
 		}
 
 		// Get current template
@@ -403,6 +399,18 @@ class CMB_Meta_Box {
 			return $post_id;
 
 		$this->save( $post_id );
+
+	}
+
+	function get_post_id() {
+
+		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
+
+		if ( ! $post_id && isset( $_POST['post_id'] ) ) {
+			$post_id = $_POST['post_id'];
+		}
+
+		return $post_id;
 
 	}
 }
