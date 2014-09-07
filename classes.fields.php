@@ -995,14 +995,6 @@ class CMB_Select extends CMB_Field {
 
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
-		$this->args = wp_parse_args(
-			$this->args,
-			array(
-				'multiple'        => false,
-				'select2_options' => array(),
-			)
-		);
-
 	}
 
 	/**
@@ -1014,7 +1006,9 @@ class CMB_Select extends CMB_Field {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-				'options' => array(),
+				'options'         => array(),
+				'multiple'        => false,
+				'select2_options' => array(),
 			)
 		);
 	}
