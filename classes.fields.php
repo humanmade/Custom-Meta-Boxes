@@ -400,8 +400,12 @@ class CMB_File_Field extends CMB_Field {
 
 	function enqueue_scripts() {
 
+		global $post_ID;
+		$post_ID = isset($post_ID) ? (int) $post_ID : 0;
+
 		parent::enqueue_scripts();
-		wp_enqueue_media();
+
+		wp_enqueue_media( array( 'post' => $post_ID ));
 		wp_enqueue_script( 'cmb-file-upload', trailingslashit( CMB_URL ) . 'js/file-upload.js', array( 'jquery', 'cmb-scripts' ) );
 
 	}
@@ -448,7 +452,11 @@ class CMB_File_Field extends CMB_Field {
 				<?php esc_html_e( 'Remove', 'cmb' ); ?>
 			</button>
 
-			<input type="hidden" class="cmb-file-upload-input" <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
+			<input type="hidden"
+				<?php $this->class_attr( 'cmb-file-upload-input' ); ?>
+				<?php $this->name_attr(); ?>
+				value="<?php echo esc_attr( $this->value ); ?>"
+			/>
 
 		</div>
 
@@ -508,7 +516,11 @@ class CMB_Image_Field extends CMB_File_Field {
 				<?php esc_html_e( 'Remove', 'cmb' ); ?>
 			</button>
 
-			<input type="hidden" class="cmb-file-upload-input" <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
+			<input type="hidden"
+				<?php $this->class_attr( 'cmb-file-upload-input' ); ?>
+				<?php $this->name_attr(); ?>
+				value="<?php echo esc_attr( $this->value ); ?>"
+			/>
 
 		</div>
 
@@ -822,7 +834,7 @@ class CMB_Title extends CMB_Field {
 		?>
 
 		<div class="field-title">
-			<h2>
+			<h2 <?php $this->class_attr(); ?>>
 				<?php echo esc_html( $this->title ); ?>
 			</h2>
 		</div>
@@ -922,7 +934,13 @@ class CMB_Select extends CMB_Field {
 
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
-		$this->args = wp_parse_args( $this->args, array( 'multiple' => false ) );
+		$this->args = wp_parse_args(
+			$this->args,
+			array(
+				'multiple'        => false,
+				'select2_options' => array(),
+			)
+		);
 
 	}
 
@@ -945,7 +963,7 @@ class CMB_Select extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_script( 'select2', trailingslashit( CMB_URL ) . 'js/select2/select2.js', array( 'jquery' ) );
+		wp_enqueue_script( 'select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/select2.js', array( 'jquery' ) );
 		wp_enqueue_script( 'field-select', trailingslashit( CMB_URL ) . 'js/field.select.js', array( 'jquery', 'select2', 'cmb-scripts' ) );
 	}
 
@@ -953,7 +971,7 @@ class CMB_Select extends CMB_Field {
 
 		parent::enqueue_styles();
 
-		wp_enqueue_style( 'select2', trailingslashit( CMB_URL ) . 'js/select2/select2.css' );
+		wp_enqueue_style( 'select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/select2.css' );
 	}
 
 	public function html() {
@@ -982,12 +1000,12 @@ class CMB_Select extends CMB_Field {
 			<?php printf( 'name="%s"', esc_attr( $name ) ); ?>
 			<?php printf( 'data-field-id="%s" ', esc_attr( $this->get_js_id() ) ); ?>
 			<?php echo ! empty( $this->args['multiple'] ) ? 'multiple' : '' ?>
-			class="cmb_select"
+			<?php $this->class_attr( 'cmb_select' ); ?>
 			style="width: 100%"
 		>
 
 			<?php if ( ! empty( $this->args['allow_none'] ) ) : ?>
-				<option value=""><?php echo esc_html_x( 'None', 'select field', 'cmb' ) ?></option>
+				<option value=""></option>
 			<?php endif; ?>
 
 			<?php foreach ( $this->args['options'] as $value => $name ): ?>
@@ -1000,16 +1018,19 @@ class CMB_Select extends CMB_Field {
 	}
 
 	public function output_script() {
+
+		$options = wp_parse_args( $this->args['select2_options'], array(
+			'placeholder' => __( 'Type to search', 'cmb' ),
+			'allowClear'  => true,
+		) );
+
 		?>
 
 		<script type="text/javascript">
 
 			(function($) {
 
-				var options = {};
-
-				options.placeholder = <?php echo json_encode( __( 'Type to search', 'cmb' ) ) ?>;
-				options.allowClear  = true;
+				var options = <?php echo  json_encode( $options ); ?>
 
 				if ( 'undefined' === typeof( window.cmb_select_fields ) )
 					window.cmb_select_fields = {};

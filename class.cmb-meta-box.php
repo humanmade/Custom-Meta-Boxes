@@ -8,6 +8,16 @@ class CMB_Meta_Box {
 	protected $_meta_box;
 	private $fields = array();
 
+	/**
+	 * Default Field Values
+	 */
+	protected $field_defaults = array(
+		'name' => '',
+		'desc' => '',
+		'std'  => '',
+		'cols' => 12
+	);
+
 	function __construct( $meta_box ) {
 
 		$this->_meta_box = $meta_box;
@@ -49,17 +59,7 @@ class CMB_Meta_Box {
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
 
 			$values = array();
-
-			// Set up blank or default values for empty ones
-			//
-			$defaults = array(
-				'name' => '',
-				'desc' => '',
-				'std'  => '',
-				'cols' => 12
-			);
-
-			$field = wp_parse_args( $field, $defaults );
+			$field  = wp_parse_args( $field, $this->field_defaults );
 
 			if ( 'file' == $field['type'] && ! isset( $field['allow'] ) )
 				$field['allow'] = array( 'url', 'attachment' );
@@ -110,6 +110,13 @@ class CMB_Meta_Box {
 	function enqueue_scripts() {
 
 		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
+
+		wp_localize_script( 'cmb-scripts', 'CMBData', array(
+			'strings' => array(
+				'confirmDeleteField' => __( 'Are you sure you want to delete this field?', 'cmb' )
+				)
+			)
+		);
 
 		foreach ( $this->fields as $field )
 			$field->enqueue_scripts();
@@ -176,7 +183,7 @@ class CMB_Meta_Box {
 
 		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
 
-		if ( ! $post_id ) 
+		if ( ! $post_id )
 			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
 
 		if ( ! $post_id || ! isset( $meta_box['show_on']['id'] ) )
@@ -212,19 +219,23 @@ class CMB_Meta_Box {
 	// Add for Page Template
 	function add_for_page_template( $display, $meta_box ) {
 
+		if ( ! isset( $meta_box['show_on']['page-template'] ) )
+			return $display;
+
 		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
 
 		if ( ! $post_id )
 			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
 
-		if ( ! $post_id || ! isset( $meta_box['show_on']['page-template'] ) )
-			return $display;
+		if ( ! $post_id ) {
+			return false;
+		}
 
 		// Get current template
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one
-		$meta_box['show_on']['page-template'] = !is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
+		$meta_box['show_on']['page-template'] = ! is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
 
 		return in_array( $current_template, $meta_box['show_on']['page-template'] );
 
@@ -328,6 +339,8 @@ class CMB_Meta_Box {
 			return $post_id;
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
+
+			$field = wp_parse_args( $field, $this->field_defaults );
 
 			// verify this meta box was shown on the page
 			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )

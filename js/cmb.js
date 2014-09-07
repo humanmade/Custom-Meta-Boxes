@@ -15,7 +15,7 @@ var CMB = {
 
 	_sortStartCallbacks: [],
 	_sortEndCallbacks: [],
-	
+
 	init : function() {
 
 		jQuery( '.field.repeatable' ).each( function() {
@@ -28,11 +28,11 @@ var CMB = {
 		jQuery(document).on( 'click.CMB', '.repeat-field', CMB.repeatField );
 
 		// When toggling the display of the meta box container - reinitialize
-		jQuery(document).on( 'click.CMB', '.handlediv', CMB.init )
+		jQuery(document).on( 'click.CMB', '.postbox h3, .postbox .handlediv', CMB.init );
 
 		CMB.doneInit();
 
-		jQuery('.field.cmb-sortable' ).each( function() { 
+		jQuery('.field.cmb-sortable' ).each( function() {
 			CMB.sortableInit( jQuery(this) );
 		} );
 
@@ -43,7 +43,7 @@ var CMB = {
 
 		var templateField, newT, field, index, attr;
 
-		field = jQuery( this ).closest('.field' );					
+		field = jQuery( this ).closest('.field' );
 
 		e.preventDefault();
 		jQuery(this).blur();
@@ -55,7 +55,7 @@ var CMB = {
 
 		newT = templateField.clone();
 		newT.removeClass( 'hidden' );
-		
+
 		var excludeInputTypes = '[type=submit],[type=button],[type=checkbox],[type=radio],[readonly]';
 		newT.find( 'input' ).not( excludeInputTypes ).val( '' );
 
@@ -99,6 +99,10 @@ var CMB = {
 		e.preventDefault();
 		jQuery(this).blur();
 
+		if ( ! confirm( CMBData.strings.confirmDeleteField ) ) {
+			return;
+		}
+
 		fieldItem = jQuery( this ).closest('.field-item' );
 		field     = fieldItem.closest( '.field' );
 
@@ -137,7 +141,7 @@ var CMB = {
 		// Disable the add new field button?
 		if ( count >= parseInt( max, 10 ) )
 			addBtn.attr( 'disabled', 'disabled' );
-		else 
+		else
 			addBtn.removeAttr( 'disabled' );
 
 		if ( count > parseInt( max, 10 ) )
@@ -227,66 +231,66 @@ var CMB = {
 
 		})
 	},
-	
+
 	sortableInit : function( field ) {
 
 		var items = field.find(' > .field-item').not('.hidden');
-		
+
 		field.find( '> .field-item > .cmb-handle' ).remove();
 
 		items.each( function() {
 			jQuery(this).append( '<div class="cmb-handle"></div>' );
 		} );
-		
-		field.sortable( { 
+
+		field.sortable( {
 			handle: "> .cmb-handle" ,
 			cursor: "move",
 			items: " > .field-item",
 			beforeStop: function( event, ui ) { CMB.sortStart( jQuery( ui.item[0] ) ); },
 			deactivate: function( event, ui ) { CMB.sortEnd( jQuery( ui.item[0] ) ); },
 		} );
-		
+
 	},
 
 	sortStart : function ( el ) {
-		
+
 		// also check child elements
 		el.add( el.find( 'div[data-class]' ) ).each( function(i, el) {
-		
+
 			el = jQuery( el )
 			var callbacks = CMB._sortStartCallbacks[el.attr( 'data-class') ]
-		
+
 			if ( callbacks )
 				for ( var a = 0; a < callbacks.length; a++ )
 					callbacks[a]( el )
-				
+
 		})
 
 	},
 
 	addCallbackForSortStart: function( fieldName, callback ) {
-		
+
 		if ( jQuery.isArray( fieldName ) )
 			for ( var i = 0; i < fieldName.length; i++ )
 				CMB.addCallbackForSortStart( fieldName[i], callback );
-	
+
 		this._sortStartCallbacks[fieldName] = this._sortStartCallbacks[fieldName] ? this._sortStartCallbacks[fieldName] : []
 		this._sortStartCallbacks[fieldName].push( callback )
-	
+
 	},
 
 	sortEnd : function ( el ) {
 
 		// also check child elements
 		el.add( el.find( 'div[data-class]' ) ).each( function(i, el) {
-		
+
 			el = jQuery( el )
 			var callbacks = CMB._sortEndCallbacks[el.attr( 'data-class') ]
-		
+
 			if ( callbacks )
 				for ( var a = 0; a < callbacks.length; a++ )
 					callbacks[a]( el )
-				
+
 		})
 
 	},
@@ -296,12 +300,12 @@ var CMB = {
 		if ( jQuery.isArray( fieldName ) )
 			for ( var i = 0; i < fieldName.length; i++ )
 				CMB.addCallbackForSortEnd( fieldName[i], callback );
-	
+
 		this._sortEndCallbacks[fieldName] = this._sortEndCallbacks[fieldName] ? this._sortEndCallbacks[fieldName] : []
 		this._sortEndCallbacks[fieldName].push( callback )
-	
+
 	}
-	
+
 }
 
 jQuery(document).ready( function() {
