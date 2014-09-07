@@ -231,7 +231,7 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one
-		$meta_box['show_on']['page-template'] = !is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
+		$meta_box['show_on']['page-template'] = ! is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
 
 		return in_array( $current_template, $meta_box['show_on']['page-template'] );
 
