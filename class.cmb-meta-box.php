@@ -44,6 +44,7 @@ class CMB_Meta_Box {
 
 		add_action( 'admin_menu', array( &$this, 'add' ) );
 		add_action( 'save_post', array( &$this, 'save_for_post' ) );
+		add_action( 'edit_attachment', array( &$this, 'save_for_post' ) );
 		add_action( 'cmb_save_fields', array( &$this, 'save' ) );
 
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
@@ -160,7 +161,7 @@ class CMB_Meta_Box {
 		}
 
 		if ( $this->is_metabox_displayed( $this->_meta_box ) ) {
-			foreach ( (array) $this->_meta_box['pages'] as $page ) {
+		foreach ( (array) $this->_meta_box['pages'] as $page ) {
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority'] ) ;
 			}
 		}
