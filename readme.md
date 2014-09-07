@@ -43,6 +43,7 @@ See [CONTRIBUTING.md](https://github.com/humanmade/Custom-Meta-Boxes/blob/master
 ## Changelog ##
 
 **1.0.2**
+* Add google maps field
 * Add hide_on field argument
 * Add Composer support
 * Fix bug with unnatached images on custom post types
