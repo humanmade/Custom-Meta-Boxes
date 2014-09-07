@@ -1242,7 +1242,7 @@ class CMB_Post_Select extends CMB_Select {
 						results : function( results, page ) {
 							var postsPerPage = ajaxData.query.posts_per_page = ( 'posts_per_page' in ajaxData.query ) ? ajaxData.query.posts_per_page : ( 'showposts' in ajaxData.query ) ? ajaxData.query.showposts : 10;
 							var isMore = ( page * postsPerPage ) < results.total;
-		            		return { results: results.posts, more: isMore };
+							return { results: results.posts, more: isMore };
 						}
 					}
 
@@ -1472,4 +1472,56 @@ class CMB_Group_Field extends CMB_Field {
 
 	}
 
+}
+
+
+/**
+ * Google map field class for CMB
+ *
+ * It enables the google places API and doesn't store the place
+ * name. It only stores latitude and longitude of the selected area.
+ *
+ * Note
+ */
+class CMB_Gmap_Field extends CMB_Field {
+
+	public function enqueue_scripts() {
+
+		parent::enqueue_scripts();
+
+		wp_enqueue_script( 'cmb-google-maps', '//maps.google.com/maps/api/js?sensor=true&libraries=places' );
+		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery', 'cmb-google-maps' ) );
+
+		wp_localize_script( 'cmb-google-maps-script', 'CMBGmaps', array(
+			'defaults' => array(
+				'latitude'  => '51.5073509',
+				'longitude' => '-0.12775829999998223',
+				'zoom'      => '8',
+			),
+			'strings'  => array(
+				'markerTitle' => __( 'Drag to set the exact location', 'cmb' )
+			)
+		) );
+
+	}
+
+	public function html() {
+
+		$value = wp_parse_args(
+			$this->get_value(),
+			array( 'lat' => null, 'long' => null, 'elevation' => null )
+		);
+
+		?>
+
+		<input type="text" <?php $this->class_attr( 'map-search' ); ?> <?php $this->id_attr(); ?> />
+
+		<div class="map" style="width: 100%; height: 250px; border: 1px solid #eee; margin-top: 8px;"></div>
+
+		<input type="hidden" class="latitude"  <?php $this->name_attr( '[lat]' ); ?>       value="<?php echo esc_attr( $value['lat'] ); ?>" />
+		<input type="hidden" class="longitude" <?php $this->name_attr( '[long]' ); ?>      value="<?php echo esc_attr( $value['long'] ); ?>" />
+		<input type="hidden" class="elevation" <?php $this->name_attr( '[elevation]' ); ?> value="<?php echo esc_attr( $value['elevation'] ); ?>" />
+
+		<?php
+	}
 }

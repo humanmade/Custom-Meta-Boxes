@@ -98,6 +98,7 @@ function _cmb_available_fields() {
 		'colorpicker'		=> 'CMB_Color_Picker',
 		'title'				=> 'CMB_Title',
 		'group'				=> 'CMB_Group_Field',
+		'gmap'				=> 'CMB_Gmap_Field',
 	) );
 
 }
