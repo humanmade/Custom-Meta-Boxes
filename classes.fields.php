@@ -1194,10 +1194,6 @@ class CMB_Post_Select extends CMB_Select {
 
 			$this->args['data_delegate'] = array( $this, 'get_delegate_data' );
 
-		} else {
-
-			$this->args['ajax_url'] = admin_url( 'admin-ajax.php' );
-
 		}
 
 	}
@@ -1242,7 +1238,7 @@ class CMB_Post_Select extends CMB_Select {
 
 		// AJAX multi select2 data is submitted as a string of comma separated post IDs.
 		// If empty, set to false instead of empty array to ensure the meta entry is deleted.
-		if ( $this->args['ajax_url'] && $this->args['multiple'] ) {
+		if ( $this->args['use_ajax'] && $this->args['multiple'] ) {
 			$this->value = ( ! empty( $this->value ) ) ? explode( ',', $this->value ) : false;
 		}
 
@@ -1251,7 +1247,7 @@ class CMB_Post_Select extends CMB_Select {
 	public function output_field() {
 
 		// If AJAX, must use input type not standard select.
-		if ( $this->args['ajax_url'] ) :
+		if ( $this->args['use_ajax'] ) :
 
 			?>
 
@@ -1292,12 +1288,12 @@ class CMB_Post_Select extends CMB_Select {
 				var id = <?php echo json_encode( $this->get_js_id() ); ?>;
 				var options = window.cmb_select_fields[id];
 
-				<?php if ( $this->args['ajax_url'] && $this->args['multiple'] ) : ?>
+				<?php if ( $this->args['use_ajax'] && $this->args['multiple'] ) : ?>
 					// The multiple setting is required when using ajax (because an input field is used instead of select)
 					options.multiple = true;
 				<?php endif; ?>
 
-				<?php if ( $this->args['ajax_url'] && ! empty( $this->value ) ) : ?>
+				<?php if ( $this->args['use_ajax'] && ! empty( $this->value ) ) : ?>
 
 					options.initSelection = function( element, callback ) {
 
@@ -1321,7 +1317,7 @@ class CMB_Post_Select extends CMB_Select {
 
 				<?php endif; ?>
 
-				<?php if ( $this->args['ajax_url'] ) : ?>
+				<?php if ( $this->args['use_ajax'] ) : ?>
 
 					var ajaxData = {
 						action  : 'cmb_post_select',
@@ -1331,7 +1327,7 @@ class CMB_Post_Select extends CMB_Select {
 					};
 
 					options.ajax = {
-						url: <?php echo json_encode( esc_url( $this->args['ajax_url'] ) ); ?>,
+						url: <?php echo json_encode( esc_url( admin_url( 'admin-ajax.php' ) ) ); ?>,
 						type: 'POST',
 						dataType: 'json',
 						data: function( term, page ) {
