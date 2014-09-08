@@ -68,6 +68,7 @@ abstract class CMB_Field {
 				'string-repeat-field' => __( 'Add New', 'cmb' ),
 				'string-delete-field' => __( 'Remove Field', 'cmb' ),
 			),
+			get_class( $this )
 		);
 	}
 
@@ -1605,6 +1606,25 @@ class CMB_Group_Field extends CMB_Field {
  */
 class CMB_Gmap_Field extends CMB_Field {
 
+	/**
+	 * Return the default args for the Map field.
+	 *
+	 * @return array $args
+	 */
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'field_width'         => '100%',
+				'field_height'        => '250px',
+				'default_lat'         => '51.5073509',
+				'default_long'        => '-0.12775829999998223',
+				'default_zoom'        => '8',
+				'string-marker-title' => __( 'Drag to set the exact location', 'cmb' ),
+			)
+		);
+	}
+
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -1614,12 +1634,12 @@ class CMB_Gmap_Field extends CMB_Field {
 
 		wp_localize_script( 'cmb-google-maps-script', 'CMBGmaps', array(
 			'defaults' => array(
-				'latitude'  => '51.5073509',
-				'longitude' => '-0.12775829999998223',
-				'zoom'      => '8',
+				'latitude'  => $this->args['default_lat'],
+				'longitude' => $this->args['default_long'],
+				'zoom'      => $this->args['default_zoom'],
 			),
 			'strings'  => array(
-				'markerTitle' => __( 'Drag to set the exact location', 'cmb' )
+				'markerTitle' => $this->args['string-marker-title']
 			)
 		) );
 
@@ -1627,16 +1647,24 @@ class CMB_Gmap_Field extends CMB_Field {
 
 	public function html() {
 
+		// Ensure all args used are set.
 		$value = wp_parse_args(
 			$this->get_value(),
 			array( 'lat' => null, 'long' => null, 'elevation' => null )
+		);
+
+		$style = array(
+			sprintf( 'width: %s;', $this->args['field_width'] ),
+			sprintf( 'height: %s;', $this->args['field_height'] ),
+			'border: 1px solid #eee;',
+			'margin-top: 8px;'
 		);
 
 		?>
 
 		<input type="text" <?php $this->class_attr( 'map-search' ); ?> <?php $this->id_attr(); ?> />
 
-		<div class="map" style="width: 100%; height: 250px; border: 1px solid #eee; margin-top: 8px;"></div>
+		<div class="map" style="<?php echo esc_attr( implode( ' ', $style ) ); ?>"></div>
 
 		<input type="hidden" class="latitude"  <?php $this->name_attr( '[lat]' ); ?>       value="<?php echo esc_attr( $value['lat'] ); ?>" />
 		<input type="hidden" class="longitude" <?php $this->name_attr( '[long]' ); ?>      value="<?php echo esc_attr( $value['long'] ); ?>" />
