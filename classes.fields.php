@@ -1342,32 +1342,31 @@ class CMB_Group_Field extends CMB_Field {
 
 		global $post;
 
-		$field = $this->args;
+		$field  = $this->args;
+		$values = $this->get_values();
 
 		$this->title();
 		$this->description();
 
-		// if there are no values and it's not repeateble, we want to do one with empty string
-		if ( ! $this->get_values() && ! $this->args['repeatable'] )
-			$values = array( '' );
-		else
-			$values = $this->get_values();
+		if ( $values ) {
 
-		$i = 0;
-		foreach ( $values as $value ) {
+			$i = 0;
+			foreach ( $values as $value ) {
 
-			$this->field_index = $i;
-			$this->value = $value;
+				$this->field_index = $i;
+				$this->value = $value;
 
-			?>
+				?>
 
-			<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-				<?php $this->html(); ?>
-			</div>
+				<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+					<?php $this->html(); ?>
+				</div>
 
-			<?php
+				<?php
 
-			$i++;
+				$i++;
+
+			}
 
 		}
 
