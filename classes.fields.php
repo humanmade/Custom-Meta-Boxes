@@ -1391,7 +1391,7 @@ class CMB_Group_Field extends CMB_Field {
 	public function html() {
 
 		$fields = &$this->get_fields();
-		$value = $this->value;
+		$value  = $this->get_value();
 
 		// Reset all field values.
 		foreach ( $fields as $field ) {
@@ -1435,7 +1435,7 @@ class CMB_Group_Field extends CMB_Field {
 				}
 
 				$field = $fields[$field_id];
-				$field->values = $field_value;
+				$field->set_values( $field_value );
 				$field->parse_save_values();
 
 				$field_value = $field->get_values();
