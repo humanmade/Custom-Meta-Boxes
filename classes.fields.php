@@ -13,9 +13,9 @@ abstract class CMB_Field {
 
 	public function __construct( $name, $title, array $values, $args = array() ) {
 
-		$this->id 		= $name;
-		$this->name		= $name . '[]';
-		$this->title 	= $title;
+		$this->id    = $name;
+		$this->name  = $name . '[]';
+		$this->title = $title;
 		$this->args  = wp_parse_args( $args, $this->get_default_args() );
 
 		// Deprecated argument: 'std'
