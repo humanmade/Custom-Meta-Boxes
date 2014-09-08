@@ -13,9 +13,9 @@ abstract class CMB_Field {
 
 	public function __construct( $name, $title, array $values, $args = array() ) {
 
-		$this->id    = $name;
-		$this->name  = $name . '[]';
-		$this->title = $title;
+		$this->id 		= $name;
+		$this->name		= $name . '[]';
+		$this->title 	= $title;
 		$this->args  = wp_parse_args( $args, $this->get_default_args() );
 
 		// Deprecated argument: 'std'
@@ -498,9 +498,9 @@ class CMB_Image_Field extends CMB_File_Field {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-				'size'         => 'thumbnail',
-				'library-type' => array( 'image' ),
-				'show_size'    => false
+			'size' => 'thumbnail',
+			'library-type' => array( 'image' ),
+			'show_size' => false
 			)
 		);
 	}
@@ -840,12 +840,12 @@ class CMB_Radio_Field extends CMB_Field {
 		if ( $this->has_data_delegate() )
 			$this->args['options'] = $this->get_delegate_data(); ?>
 
-			<?php foreach ( $this->args['options'] as $key => $value ) : ?>
+			<?php foreach ( $this->args['options'] as $key => $value ): ?>
 
-				<input <?php $this->id_attr( 'item-' . $key ); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="radio" <?php $this->name_attr(); ?>  value="<?php echo esc_attr( $key ); ?>" <?php checked( $key, $this->get_value() ); ?> />
-				<label <?php $this->for_attr( 'item-' . $key ); ?> style="margin-right: 20px;">
-					<?php echo esc_html( $value ); ?>
-				</label>
+			<input <?php $this->id_attr( 'item-' . $key ); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="radio" <?php $this->name_attr(); ?>  value="<?php echo esc_attr( $key ); ?>" <?php checked( $key, $this->get_value() ); ?> />
+			<label <?php $this->for_attr( 'item-' . $key ); ?> style="margin-right: 20px;">
+				<?php echo esc_html( $value ); ?>
+			</label>
 
 			<?php endforeach; ?>
 
@@ -1192,7 +1192,7 @@ class CMB_Post_Select extends CMB_Select {
 
 		} else {
 
-			$this->args['ajax_url']  = admin_url( 'admin-ajax.php' );
+			$this->args['ajax_url'] = admin_url( 'admin-ajax.php' );
 
 		}
 
@@ -1331,13 +1331,13 @@ class CMB_Post_Select extends CMB_Select {
 						type: 'POST',
 						dataType: 'json',
 						data: function( term, page ) {
-							ajaxData.query.s     = term;
+							ajaxData.query.s = term;
 							ajaxData.query.paged = page;
 							return ajaxData;
 						},
 						results : function( results, page ) {
 							var postsPerPage = ajaxData.query.posts_per_page = ( 'posts_per_page' in ajaxData.query ) ? ajaxData.query.posts_per_page : ( 'showposts' in ajaxData.query ) ? ajaxData.query.showposts : 10;
-							var isMore       = ( page * postsPerPage ) < results.total;
+							var isMore = ( page * postsPerPage ) < results.total;
 		            		return { results: results.posts, more: isMore };
 						}
 					}
@@ -1395,8 +1395,6 @@ class CMB_Group_Field extends CMB_Field {
 	private $fields = array();
 
 	function __construct() {
-
-		$strings =
 
 		$args = func_get_args(); // you can't just put func_get_args() into a function as a parameter
 		call_user_func_array( array( 'parent', '__construct' ), $args );
@@ -1591,4 +1589,56 @@ class CMB_Group_Field extends CMB_Field {
 
 	}
 
+}
+
+
+/**
+ * Google map field class for CMB
+ *
+ * It enables the google places API and doesn't store the place
+ * name. It only stores latitude and longitude of the selected area.
+ *
+ * Note
+ */
+class CMB_Gmap_Field extends CMB_Field {
+
+	public function enqueue_scripts() {
+
+		parent::enqueue_scripts();
+
+		wp_enqueue_script( 'cmb-google-maps', '//maps.google.com/maps/api/js?sensor=true&libraries=places' );
+		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery', 'cmb-google-maps' ) );
+
+		wp_localize_script( 'cmb-google-maps-script', 'CMBGmaps', array(
+			'defaults' => array(
+				'latitude'  => '51.5073509',
+				'longitude' => '-0.12775829999998223',
+				'zoom'      => '8',
+			),
+			'strings'  => array(
+				'markerTitle' => __( 'Drag to set the exact location', 'cmb' )
+			)
+		) );
+
+	}
+
+	public function html() {
+
+		$value = wp_parse_args(
+			$this->get_value(),
+			array( 'lat' => null, 'long' => null, 'elevation' => null )
+		);
+
+		?>
+
+		<input type="text" <?php $this->class_attr( 'map-search' ); ?> <?php $this->id_attr(); ?> />
+
+		<div class="map" style="width: 100%; height: 250px; border: 1px solid #eee; margin-top: 8px;"></div>
+
+		<input type="hidden" class="latitude"  <?php $this->name_attr( '[lat]' ); ?>       value="<?php echo esc_attr( $value['lat'] ); ?>" />
+		<input type="hidden" class="longitude" <?php $this->name_attr( '[long]' ); ?>      value="<?php echo esc_attr( $value['long'] ); ?>" />
+		<input type="hidden" class="elevation" <?php $this->name_attr( '[elevation]' ); ?> value="<?php echo esc_attr( $value['elevation'] ); ?>" />
+
+		<?php
+	}
 }
