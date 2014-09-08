@@ -1460,8 +1460,13 @@ class CMB_Group_Field extends CMB_Field {
 
 	public function set_values( array $values ) {
 
+		$fields       = &$this->get_fields();
 		$this->values = $values;
-		$fields = &$this->get_fields();
+
+		// Reset all field values.
+		foreach ( $fields as $field ) {
+			$field->set_values( array() );
+		}
 
 		foreach ( $values as $value ) {
 			foreach ( $value as $field_id => $field_value ) {
