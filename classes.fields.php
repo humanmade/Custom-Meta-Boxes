@@ -71,10 +71,6 @@ abstract class CMB_Field {
 		if ( isset( $this->args['sortable'] ) && $this->args['sortable'] )
 			wp_enqueue_script( 'jquery-ui-sortable' );
 
-		if ( isset( $this->args['collapsable'] ) && $this->args['collapsable'] )
-			wp_enqueue_script( 'cmb-collapsable', trailingslashit( CMB_URL ) . 'js/collapsable.js', array( 'jquery' ) );
-
-
 	}
 
 	/**
@@ -1315,12 +1311,16 @@ class CMB_Group_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		foreach ( $this->args['fields'] as $f ) {
+		if ( isset( $this->args['collapsable'] ) && $this->args['collapsable'] ) {
+			wp_enqueue_script( 'cmb-collapsable', trailingslashit( CMB_URL ) . 'js/collapsable.js', array( 'jquery' ) );
+		}
 
+		foreach ( $this->args['fields'] as $f ) {
 			$class = _cmb_field_class_for_type( $f['type'] );
 			$field = new $class( '', '', array(), $f );
 			$field->enqueue_scripts();
 		}
+
 	}
 
 	public function enqueue_styles() {
@@ -1388,7 +1388,7 @@ class CMB_Group_Field extends CMB_Field {
 	public function html() {
 
 		$fields = &$this->get_fields();
-		$value = $this->value;
+		$value  = $this->value;
 
 		if ( ! empty( $value ) ) {
 			foreach ( $value as $field_id => $field_value ) {
