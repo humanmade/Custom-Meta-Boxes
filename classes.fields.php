@@ -1122,8 +1122,16 @@ class CMB_Post_Select extends CMB_Select {
 
 		$data = array();
 
-		foreach ( $this->get_posts() as $post_id )
+		foreach ( $this->get_posts() as $post_id ) {
+
 			$data[$post_id] = get_the_title( $post_id );
+
+			// If querying more than 1 post type - prepend the post type singular name.
+			if ( isset( $this->args['query']['post_type'] ) && count( $this->args['query']['post_type'] > 1 ) ) {
+				$post_type_object = get_post_type_object( get_post_type( $post_id ) );
+				$data[$post_id] = sprintf( '%s - %s', $post_type_object->labels->singular_name, $data[$post_id] );
+			}
+		}
 
 		return $data;
 
@@ -1227,7 +1235,9 @@ class CMB_Post_Select extends CMB_Select {
 						action  : 'cmb_post_select',
 						post_id : '<?php echo intval( get_the_id() ); ?>', // Used for user capabilty check.
 						nonce   : <?php echo json_encode( wp_create_nonce( 'cmb_select_field' ) ); ?>,
-						query   : <?php echo json_encode( $this->args['ajax_args'] ); ?>
+						query   : <?php echo json_encode( $this->args['ajax_args'] ); ?>,
+						// If query post type count is greater than 1 - prepend the post type.
+						prepend_post_type : <?php echo ( isset( $this->args['query']['post_type'] ) && count( $this->args['query']['post_type'] ) > 1 ) ? 'true' : 'false'; ?>,
 					};
 
 					options.ajax = {
@@ -1260,9 +1270,10 @@ class CMB_Post_Select extends CMB_Select {
 // TODO this should be in inside the class
 function cmb_ajax_post_select() {
 
-	$post_id = ! empty( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : false;
-	$nonce   = ! empty( $_POST['nonce'] ) ? $_POST['nonce'] : false;
-	$args    = ! empty( $_POST['query'] ) ? $_POST['query'] : array();
+	$post_id           = ! empty( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : false;
+	$nonce             = ! empty( $_POST['nonce'] ) ? $_POST['nonce'] : false;
+	$args              = ! empty( $_POST['query'] ) ? $_POST['query'] : array();
+	$prepend_post_type = ( true === $_POST['prepend_post_type'] || 'true' === $_POST['prepend_post_type'] ) ? true : false;
 
 	if ( ! $nonce || ! wp_verify_nonce( $nonce, 'cmb_select_field' ) || ! current_user_can( 'edit_post', $post_id ) ) {
 		echo json_encode( array( 'total' => 0, 'posts' => array() ) );
@@ -1277,6 +1288,13 @@ function cmb_ajax_post_select() {
 
 	foreach ( $query->posts as $post_id ) {
 		array_push( $json['posts'], array( 'id' => $post_id, 'text' => html_entity_decode( get_the_title( $post_id ) ) ) );
+	}
+
+	if ( $prepend_post_type ) {
+		foreach( $json['posts'] as &$post_data ) {
+			$post_type_object = get_post_type_object( get_post_type( $post_data['id'] ) );
+			$post_data['text'] = sprintf( '%s - %s', $post_type_object->labels->singular_name, $post_data['text'] );
+		}
 	}
 
 	echo json_encode( $json );
