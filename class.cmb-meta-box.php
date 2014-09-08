@@ -347,8 +347,6 @@ class CMB_Meta_Box {
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
-			$field = wp_parse_args( $field, $this->field_defaults );
-
 			// verify this meta box was shown on the page
 			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
 				continue;
@@ -363,9 +361,6 @@ class CMB_Meta_Box {
 			if ( ! $class = _cmb_field_class_for_type( $field['type'] ) ) {
 				do_action('cmb_save_' . $field['type'], $field, $value);
 			}
-
-			if ( !empty(  $this->_meta_box['repeatable'] ) )
-				$field['repeatable'] = true;
 
 			$field_obj = new $class( $field['id'], $field['name'], $value, $field );
 
