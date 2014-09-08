@@ -1398,16 +1398,13 @@ class CMB_Group_Field extends CMB_Field {
 			$field->set_values( array() );
 		}
 
+		// Set values for this field.
 		if ( ! empty( $value ) ) {
 			foreach ( $value as $field_id => $field_value ) {
 				if ( ! empty( $field_value ) && ! empty( $fields[$field_id] ) )
 					$fields[$field_id]->set_values( (array) $field_value );
 				else if ( ! empty( $fields[$field_id] ) )
 					$fields[$field_id]->set_values( array() );
-			}
-		} else {
-			foreach ( $fields as &$field ) {
-				$field->set_values( array() );
 			}
 		}
 
