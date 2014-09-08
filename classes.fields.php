@@ -310,10 +310,10 @@ abstract class CMB_Field {
 
 	public function description() {
 
-		if ( ! empty( $this->args['description'] ) ) { ?>
+		if ( ! empty( $this->args['desc'] ) ) { ?>
 
 			<div class="cmb_metabox_description">
-				<?php echo wp_kses_post( $this->args['description'] ); ?>
+				<?php echo wp_kses_post( $this->args['desc'] ); ?>
 			</div>
 
 		<?php }
