@@ -58,7 +58,7 @@ class CMB_Meta_Box {
 			if ( ! empty( $this->_meta_box['repeatable'] ) )
 				$field['repeatable'] = true;
 
-			// Else if we are on a post edit screen
+			// If we are on a post edit screen - get metadata value of the field for this post
 			if ( $post_id ) {
 				$values = (array) get_post_meta( $post_id, $field['id'], false );
 			}
@@ -339,27 +339,27 @@ class CMB_Meta_Box {
 	}
 
 	// Save data from metabox
-	function save( $post_id = 0 )  {
+	function save( $post_id = 0 ) {
 
-		// verify nonce
+		// Verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
 			return $post_id;
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
-			// verify this meta box was shown on the page
+			// Verify this meta box was shown on the page
 			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
 				continue;
 
-			if ( isset( $_POST[$field['id']] ) )
-				$value = (array) $_POST[$field['id']];
+			if ( isset( $_POST[ $field['id'] ] ) )
+				$value = (array) $_POST[ $field['id'] ];
 			else
 				$value = array();
 
 			$value = $this->strip_repeatable( $value );
 
 			if ( ! $class = _cmb_field_class_for_type( $field['type'] ) ) {
-				do_action('cmb_save_' . $field['type'], $field, $value);
+				do_action( 'cmb_save_' . $field['type'], $field, $value );
 			}
 
 			$field_obj = new $class( $field['id'], $field['name'], $value, $field );

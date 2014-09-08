@@ -21,13 +21,13 @@ abstract class CMB_Field {
 		// Deprecated argument: 'std'
 		if ( ! empty( $this->args['std'] ) && empty( $this->args['default'] ) ) {
 			$this->args['default'] = $this->args['std'];
-			_deprecated_argument( 'CMB_Field', '0.9', "'std' is deprecated, use 'default instead'" );
+			_deprecated_argument( 'CMB_Field', '0.9', "field argument 'std' is deprecated, use 'default' instead" );
 		}
 
 		if ( ! empty( $this->args['options'] ) && is_array( reset( $this->args['options'] ) ) ) {
 			$re_format = array();
-			foreach ( $this->args['options'] as $option ){
-				$re_format[$option['value']] = $option['name'];
+			foreach ( $this->args['options'] as $option ) {
+				$re_format[ $option['value'] ] = $option['name'];
 			}
 			$this->args['options'] = $re_format;
 		}
@@ -322,7 +322,7 @@ abstract class CMB_Field {
 
 	public function display() {
 
-		// if there are no values and it's not repeateble, we want to do one with empty string
+		// If there are no values and it's not repeateble, we want to do one with empty string
 		if ( ! $this->get_values() && ! $this->args['repeatable'] )
 			$values = array( '' );
 		else
@@ -338,7 +338,7 @@ abstract class CMB_Field {
 			$this->field_index = $i;
 			$this->value = $value; ?>
 
-			<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+			<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
 			<?php if ( $this->args['repeatable'] ) : ?>
 				<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
@@ -362,10 +362,10 @@ abstract class CMB_Field {
 			$this->field_index = 'x'; // x used to distinguish hidden fields.
 			$this->value = ''; ?>
 
-			<div class="field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+			<div class="field-item hidden" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
 			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="Remove field">
+				<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
 					<span class="cmb-delete-field-icon">&times;</span>
 					<?php echo esc_html( $this->args['string-delete-field'] ); ?>
 				</button>
@@ -445,7 +445,7 @@ class CMB_File_Field extends CMB_Field {
 
 		if ( $this->get_value() ) {
 			$src = wp_mime_type_icon( $this->get_value() );
-			$size = getimagesize($src);
+			$size = getimagesize( $src );
 			$icon_img = '<img src="' . $src . '" ' . $size[3] . ' />';
 		}
 
@@ -502,9 +502,9 @@ class CMB_Image_Field extends CMB_File_Field {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-			'size' => 'thumbnail',
-			'library-type' => array( 'image' ),
-			'show_size' => false
+				'size' => 'thumbnail',
+				'library-type' => array( 'image' ),
+				'show_size' => false
 			)
 		);
 	}
@@ -514,14 +514,14 @@ class CMB_Image_Field extends CMB_File_Field {
 		if ( $this->get_value() )
 			$image = wp_get_attachment_image_src( $this->get_value(), $this->args['size'], true );
 
-		// Convert size arg to array of width, height, crop.
+		// Convert size arg to array of width, height, crop
 		$size = $this->parse_image_size( $this->args['size'] );
 
-		// Inline styles.
+		// Inline styles
 		$styles              = sprintf( 'width: %1$dpx; height: %2$dpx; line-height: %2$dpx', intval( $size['width'] ), intval( $size['height'] ) );
 		$placeholder_styles  = sprintf( 'width: %dpx; height: %dpx;', intval( $size['width'] ) - 8, intval( $size['height'] ) - 8 );
 
-		$data_type = ( ! empty( $this->args['library-type'] ) ? implode( ',', $this->args['library-type'] ) : null );
+		$data_type           = ( ! empty( $this->args['library-type'] ) ? implode( ',', $this->args['library-type'] ) : null );
 
 		?>
 
@@ -844,7 +844,7 @@ class CMB_Radio_Field extends CMB_Field {
 		if ( $this->has_data_delegate() )
 			$this->args['options'] = $this->get_delegate_data(); ?>
 
-			<?php foreach ( $this->args['options'] as $key => $value ): ?>
+			<?php foreach ( $this->args['options'] as $key => $value ) : ?>
 
 			<input <?php $this->id_attr( 'item-' . $key ); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="radio" <?php $this->name_attr(); ?>  value="<?php echo esc_attr( $key ); ?>" <?php checked( $key, $this->get_value() ); ?> />
 			<label <?php $this->for_attr( 'item-' . $key ); ?> style="margin-right: 20px;">
@@ -1131,8 +1131,8 @@ class CMB_Taxonomy extends CMB_Select {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-				'taxonomy'   			=> '',
-				'hide_empty' 			=> false,
+				'taxonomy'   => '',
+				'hide_empty' => false,
 			)
 		);
 	}
@@ -1425,7 +1425,7 @@ class CMB_Group_Field extends CMB_Field {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-				'fields' => array(),
+				'fields'              => array(),
 				'string-repeat-field' => __( 'Add New Group', 'cmb' ),
 				'string-delete-field' => __( 'Remove Group', 'cmb' ),
 			)
@@ -1496,7 +1496,7 @@ class CMB_Group_Field extends CMB_Field {
 
 			?>
 
-				<div class="field-item hidden" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+				<div class="field-item hidden" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
 					<?php $this->html(); ?>
 				</div>
 
@@ -1515,10 +1515,10 @@ class CMB_Group_Field extends CMB_Field {
 
 		if ( ! empty( $value ) ) {
 			foreach ( $value as $field_id => $field_value ) {
-				if ( ! empty( $field_value ) && ! empty( $fields[$field_id] ) )
-					$fields[$field_id]->set_values( (array) $field_value );
-				else if ( ! empty( $fields[$field_id] ) )
-					$fields[$field_id]->set_values( array() );
+				if ( ! empty( $field_value ) && ! empty( $fields[ $field_id ] ) )
+					$fields[ $field_id ]->set_values( (array) $field_value );
+				else if ( ! empty( $fields[ $field_id ] ) )
+					$fields[ $field_id ]->set_values( array() );
 			}
 		} else {
 			foreach ( $fields as &$field ) {
@@ -1531,7 +1531,7 @@ class CMB_Group_Field extends CMB_Field {
 		<?php if ( $this->args['repeatable'] ) : ?>
 			<button class="cmb-delete-field">
 				<span class="cmb-delete-field-icon">&times;</span>
-				<?php echo esc_html( $this->args['string-delete-field'] ) ?>
+				<?php echo esc_html( $this->args['string-delete-field'] ); ?>
 			</button>
 		<?php endif; ?>
 
@@ -1643,7 +1643,7 @@ class CMB_Gmap_Field extends CMB_Field {
 
 	public function html() {
 
-		// Ensure all args used are set.
+		// Ensure all args used are set
 		$value = wp_parse_args(
 			$this->get_value(),
 			array( 'lat' => null, 'long' => null, 'elevation' => null )
