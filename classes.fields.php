@@ -1400,10 +1400,10 @@ class CMB_Group_Field extends CMB_Field {
 		// Set values for this field.
 		if ( ! empty( $value ) ) {
 			foreach ( $value as $field_id => $field_value ) {
-				if ( ! empty( $field_value ) && ! empty( $fields[$field_id] ) )
+				$field_value = ( ! empty( $field_value ) ) ? $field_value : array();
+				if ( ! empty( $fields[$field_id] ) ) {
 					$fields[$field_id]->set_values( (array) $field_value );
-				else if ( ! empty( $fields[$field_id] ) )
-					$fields[$field_id]->set_values( array() );
+				}
 			}
 		}
 
