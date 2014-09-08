@@ -49,22 +49,25 @@ abstract class CMB_Field {
 	 * @return array $args
 	 */
 	public function get_default_args() {
-		return array(
-			'desc'                => '',
-			'repeatable'          => false,
-			'sortable'            => false,
-			'repeatable_max'      => null,
-			'show_label'          => false,
-			'readonly'            => false,
-			'disabled'            => false,
-			'default'             => '',
-			'cols'                => '12',
-			'style'               => '',
-			'class'               => '',
-			'data_delegate'       => null,
-			'save_callback'       => null,
-			'string-repeat-field' => __( 'Add New', 'cmb' ),
-			'string-delete-field' => __( 'Remove Field', 'cmb' ),
+		return apply_filters(
+			'cmb_field_default_args',
+			array(
+				'desc'                => '',
+				'repeatable'          => false,
+				'sortable'            => false,
+				'repeatable_max'      => null,
+				'show_label'          => false,
+				'readonly'            => false,
+				'disabled'            => false,
+				'default'             => '',
+				'cols'                => '12',
+				'style'               => '',
+				'class'               => '',
+				'data_delegate'       => null,
+				'save_callback'       => null,
+				'string-repeat-field' => __( 'Add New', 'cmb' ),
+				'string-delete-field' => __( 'Remove Field', 'cmb' ),
+			),
 		);
 	}
 
