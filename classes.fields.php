@@ -1306,14 +1306,8 @@ class CMB_Group_Field extends CMB_Field {
 		if ( ! empty( $this->args['fields'] ) ) {
 			foreach ( $this->args['fields'] as $f ) {
 
-				$field_value = isset( $this->value[$f['id']] ) ? $this->value[$f['id']] : '';
-				$f['uid'] = $f['id'];
-
 				$class = _cmb_field_class_for_type( $f['type'] );
-				$f['show_label'] = true;
-
-				// Todo support for repeatable fields in groups
-				$this->add_field( new $class( $f['uid'], $f['name'], (array) $field_value, $f ) );
+				$this->add_field( new $class( $f['id'], $f['name'], array(), $f ) );
 
 			}
 		}
@@ -1398,6 +1392,11 @@ class CMB_Group_Field extends CMB_Field {
 
 		$fields = &$this->get_fields();
 		$value = $this->value;
+
+		// Reset all field values.
+		foreach ( $fields as $field ) {
+			$field->set_values( array() );
+		}
 
 		if ( ! empty( $value ) ) {
 			foreach ( $value as $field_id => $field_value ) {
