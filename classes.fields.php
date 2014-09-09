@@ -13,9 +13,9 @@ abstract class CMB_Field {
 
 	public function __construct( $name, $title, array $values, $args = array() ) {
 
-		$this->id    = $name;
-		$this->name  = $name . '[]';
-		$this->title = $title;
+		$this->id 		= $name;
+		$this->name		= $name . '[]';
+		$this->title 	= $title;
 		$this->args  = wp_parse_args( $args, $this->get_default_args() );
 
 		// Deprecated argument: 'std'
@@ -27,7 +27,7 @@ abstract class CMB_Field {
 		if ( ! empty( $this->args['options'] ) && is_array( reset( $this->args['options'] ) ) ) {
 			$re_format = array();
 			foreach ( $this->args['options'] as $option ) {
-				$re_format[ $option['value'] ] = $option['name'];
+				$re_format[$option['value']] = $option['name'];
 			}
 			$this->args['options'] = $re_format;
 		}
@@ -445,7 +445,7 @@ class CMB_File_Field extends CMB_Field {
 
 		if ( $this->get_value() ) {
 			$src = wp_mime_type_icon( $this->get_value() );
-			$size = getimagesize( $src );
+			$size = getimagesize($src);
 			$icon_img = '<img src="' . $src . '" ' . $size[3] . ' />';
 		}
 
@@ -502,9 +502,9 @@ class CMB_Image_Field extends CMB_File_Field {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-				'size' => 'thumbnail',
-				'library-type' => array( 'image' ),
-				'show_size' => false
+			'size' => 'thumbnail',
+			'library-type' => array( 'image' ),
+			'show_size' => false
 			)
 		);
 	}
@@ -844,7 +844,7 @@ class CMB_Radio_Field extends CMB_Field {
 		if ( $this->has_data_delegate() )
 			$this->args['options'] = $this->get_delegate_data(); ?>
 
-			<?php foreach ( $this->args['options'] as $key => $value ) : ?>
+			<?php foreach ( $this->args['options'] as $key => $value ): ?>
 
 			<input <?php $this->id_attr( 'item-' . $key ); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="radio" <?php $this->name_attr(); ?>  value="<?php echo esc_attr( $key ); ?>" <?php checked( $key, $this->get_value() ); ?> />
 			<label <?php $this->for_attr( 'item-' . $key ); ?> style="margin-right: 20px;">
@@ -1196,7 +1196,7 @@ class CMB_Post_Select extends CMB_Select {
 
 		}
 
-	}
+		}
 
 	/**
 	 * Return the default args for the Post select field.
@@ -1338,7 +1338,7 @@ class CMB_Post_Select extends CMB_Select {
 						results : function( results, page ) {
 							var postsPerPage = ajaxData.query.posts_per_page = ( 'posts_per_page' in ajaxData.query ) ? ajaxData.query.posts_per_page : ( 'showposts' in ajaxData.query ) ? ajaxData.query.showposts : 10;
 							var isMore = ( page * postsPerPage ) < results.total;
-		            		return { results: results.posts, more: isMore };
+							return { results: results.posts, more: isMore };
 						}
 					}
 
@@ -1402,14 +1402,8 @@ class CMB_Group_Field extends CMB_Field {
 		if ( ! empty( $this->args['fields'] ) ) {
 			foreach ( $this->args['fields'] as $f ) {
 
-				$field_value = isset( $this->value[$f['id']] ) ? $this->value[$f['id']] : '';
-				$f['uid'] = $f['id'];
-
 				$class = _cmb_field_class_for_type( $f['type'] );
-				$f['show_label'] = true;
-
-				// Todo support for repeatable fields in groups
-				$this->add_field( new $class( $f['uid'], $f['name'], (array) $field_value, $f ) );
+				$this->add_field( new $class( $f['id'], $f['name'], array(), $f ) );
 
 			}
 		}
@@ -1461,31 +1455,30 @@ class CMB_Group_Field extends CMB_Field {
 		global $post;
 
 		$field = $this->args;
+		$values = $this->get_values();
 
 		$this->title();
 		$this->description();
 
-		// if there are no values and it's not repeateble, we want to do one with empty string
-		if ( ! $this->get_values() && ! $this->args['repeatable'] )
-			$values = array( '' );
-		else
-			$values = $this->get_values();
+		if ( $values ) {
 
-		$i = 0;
-		foreach ( $values as $value ) {
+			$i = 0;
+			foreach ( $values as $value ) {
 
-			$this->field_index = $i;
-			$this->value = $value;
+				$this->field_index = $i;
+				$this->value = $value;
 
-			?>
+				?>
 
-			<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-				<?php $this->html(); ?>
-			</div>
+				<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+					<?php $this->html(); ?>
+				</div>
 
-			<?php
+				<?php
 
-			$i++;
+				$i++;
+
+			}
 
 		}
 
@@ -1511,18 +1504,20 @@ class CMB_Group_Field extends CMB_Field {
 	public function html() {
 
 		$fields = &$this->get_fields();
-		$value = $this->value;
+		$value  = $this->get_value();
 
+		// Reset all field values.
+		foreach ( $fields as $field ) {
+			$field->set_values( array() );
+		}
+
+		// Set values for this field.
 		if ( ! empty( $value ) ) {
 			foreach ( $value as $field_id => $field_value ) {
-				if ( ! empty( $field_value ) && ! empty( $fields[ $field_id ] ) )
-					$fields[ $field_id ]->set_values( (array) $field_value );
-				else if ( ! empty( $fields[ $field_id ] ) )
-					$fields[ $field_id ]->set_values( array() );
+				$field_value = ( ! empty( $field_value ) ) ? $field_value : array();
+				if ( ! empty( $fields[$field_id] ) ) {
+					$fields[$field_id]->set_values( (array) $field_value );
 			}
-		} else {
-			foreach ( $fields as &$field ) {
-				$field->set_values( array() );
 			}
 		}
 
@@ -1553,7 +1548,7 @@ class CMB_Group_Field extends CMB_Field {
 				}
 
 				$field = $fields[$field_id];
-				$field->values = $field_value;
+				$field->set_values( $field_value );
 				$field->parse_save_values();
 
 				$field_value = $field->get_values();
@@ -1578,8 +1573,13 @@ class CMB_Group_Field extends CMB_Field {
 
 	public function set_values( array $values ) {
 
+		$fields       = &$this->get_fields();
 		$this->values = $values;
-		$fields = &$this->get_fields();
+
+		// Reset all field values.
+		foreach ( $fields as $field ) {
+			$field->set_values( array() );
+		}
 
 		foreach ( $values as $value ) {
 			foreach ( $value as $field_id => $field_value ) {
