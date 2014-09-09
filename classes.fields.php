@@ -1306,14 +1306,8 @@ class CMB_Group_Field extends CMB_Field {
 		if ( ! empty( $this->args['fields'] ) ) {
 			foreach ( $this->args['fields'] as $f ) {
 
-				$field_value = isset( $this->value[$f['id']] ) ? $this->value[$f['id']] : '';
-				$f['uid'] = $f['id'];
-
 				$class = _cmb_field_class_for_type( $f['type'] );
-				$f['show_label'] = true;
-
-				// Todo support for repeatable fields in groups
-				$this->add_field( new $class( $f['uid'], $f['name'], (array) $field_value, $f ) );
+				$this->add_field( new $class( $f['id'], $f['name'], array(), $f ) );
 
 			}
 		}
@@ -1348,32 +1342,31 @@ class CMB_Group_Field extends CMB_Field {
 
 		global $post;
 
-		$field = $this->args;
+		$field  = $this->args;
+		$values = $this->get_values();
 
 		$this->title();
 		$this->description();
 
-		// if there are no values and it's not repeateble, we want to do one with empty string
-		if ( ! $this->get_values() && ! $this->args['repeatable'] )
-			$values = array( '' );
-		else
-			$values = $this->get_values();
+		if ( $values ) {
 
-		$i = 0;
-		foreach ( $values as $value ) {
+			$i = 0;
+			foreach ( $values as $value ) {
 
-			$this->field_index = $i;
-			$this->value = $value;
+				$this->field_index = $i;
+				$this->value = $value;
 
-			?>
+				?>
 
-			<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-				<?php $this->html(); ?>
-			</div>
+				<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+					<?php $this->html(); ?>
+				</div>
 
-			<?php
+				<?php
 
-			$i++;
+				$i++;
+
+			}
 
 		}
 
@@ -1397,18 +1390,20 @@ class CMB_Group_Field extends CMB_Field {
 	public function html() {
 
 		$fields = &$this->get_fields();
-		$value = $this->value;
+		$value  = $this->get_value();
 
+		// Reset all field values.
+		foreach ( $fields as $field ) {
+			$field->set_values( array() );
+		}
+
+		// Set values for this field.
 		if ( ! empty( $value ) ) {
 			foreach ( $value as $field_id => $field_value ) {
-				if ( ! empty( $field_value ) && ! empty( $fields[$field_id] ) )
+				$field_value = ( ! empty( $field_value ) ) ? $field_value : array();
+				if ( ! empty( $fields[$field_id] ) ) {
 					$fields[$field_id]->set_values( (array) $field_value );
-				else if ( ! empty( $fields[$field_id] ) )
-					$fields[$field_id]->set_values( array() );
-			}
-		} else {
-			foreach ( $fields as &$field ) {
-				$field->set_values( array() );
+				}
 			}
 		}
 
@@ -1436,7 +1431,7 @@ class CMB_Group_Field extends CMB_Field {
 				}
 
 				$field = $fields[$field_id];
-				$field->values = $field_value;
+				$field->set_values( $field_value );
 				$field->parse_save_values();
 
 				$field_value = $field->get_values();
@@ -1461,8 +1456,13 @@ class CMB_Group_Field extends CMB_Field {
 
 	public function set_values( array $values ) {
 
+		$fields       = &$this->get_fields();
 		$this->values = $values;
-		$fields = &$this->get_fields();
+
+		// Reset all field values.
+		foreach ( $fields as $field ) {
+			$field->set_values( array() );
+		}
 
 		foreach ( $values as $value ) {
 			foreach ( $value as $field_id => $field_value ) {
