@@ -190,7 +190,7 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one
-		$meta_box['show_on']['page-template'] = ! is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
+		$meta_box['show_on']['page-template'] = !is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
 
 		return in_array( $current_template, $meta_box['show_on']['page-template'] );
 
@@ -259,6 +259,9 @@ class CMB_Meta_Box {
 				if ( ! empty( $field->args['sortable'] ) )
 					$classes[] = 'cmb-sortable';
 
+				if ( ! empty( $field->args['collapsable'] ) )
+					$classes[] = 'cmb-collapsable';
+
 				$attrs = array(
 					sprintf( 'id="%s"', sanitize_html_class( $field->id ) ),
 					sprintf( 'class="%s"', esc_attr( implode(' ', array_map( 'sanitize_html_class', $classes ) ) ) )
@@ -310,7 +313,7 @@ class CMB_Meta_Box {
 	}
 
 	// Save data from metabox
-	function save( $post_id = 0 ) {
+	function save( $post_id = 0 )  {
 
 		// Verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
@@ -322,15 +325,15 @@ class CMB_Meta_Box {
 			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
 				continue;
 
-			if ( isset( $_POST[ $field['id'] ] ) )
-				$value = (array) $_POST[ $field['id'] ];
+			if ( isset( $_POST[$field['id']] ) )
+				$value = (array) $_POST[$field['id']];
 			else
 				$value = array();
 
 			$value = $this->strip_repeatable( $value );
 
 			if ( ! $class = _cmb_field_class_for_type( $field['type'] ) ) {
-				do_action( 'cmb_save_' . $field['type'], $field, $value );
+				do_action('cmb_save_' . $field['type'], $field, $value);
 			}
 
 			$field_obj = new $class( $field['id'], $field['name'], $value, $field );

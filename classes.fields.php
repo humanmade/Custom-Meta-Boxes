@@ -1338,7 +1338,7 @@ class CMB_Post_Select extends CMB_Select {
 						results : function( results, page ) {
 							var postsPerPage = ajaxData.query.posts_per_page = ( 'posts_per_page' in ajaxData.query ) ? ajaxData.query.posts_per_page : ( 'showposts' in ajaxData.query ) ? ajaxData.query.showposts : 10;
 							var isMore = ( page * postsPerPage ) < results.total;
-							return { results: results.posts, more: isMore };
+		            		return { results: results.posts, more: isMore };
 						}
 					}
 
@@ -1430,6 +1430,10 @@ class CMB_Group_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
+		if ( isset( $this->args['collapsable'] ) && $this->args['collapsable'] ) {
+			wp_enqueue_script( 'cmb-collapsable', trailingslashit( CMB_URL ) . 'js/collapsable.js', array( 'jquery' ) );
+		}
+
 		foreach ( $this->args['fields'] as $f ) {
 			$class = _cmb_field_class_for_type( $f['type'] );
 			$field = new $class( '', '', array(), $f );
@@ -1462,23 +1466,23 @@ class CMB_Group_Field extends CMB_Field {
 
 		if ( $values ) {
 
-			$i = 0;
-			foreach ( $values as $value ) {
+		$i = 0;
+		foreach ( $values as $value ) {
 
-				$this->field_index = $i;
-				$this->value = $value;
+			$this->field_index = $i;
+			$this->value = $value;
 
-				?>
+			?>
 
-				<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-					<?php $this->html(); ?>
-				</div>
+			<div class="field-item" data-class="<?php echo esc_attr( get_class($this) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+				<?php $this->html(); ?>
+			</div>
 
-				<?php
+			<?php
 
-				$i++;
+			$i++;
 
-			}
+		}
 
 		}
 
@@ -1530,6 +1534,13 @@ class CMB_Group_Field extends CMB_Field {
 			</button>
 		<?php endif; ?>
 
+		<?php if ( $this->args['collapsable'] ) :
+			$field_value = isset( $value['collapsable-title'] ) ? $value['collapsable-title'] : null;
+			$field_name  = str_replace( 'cmb-field-', 'cmb-group-', $this->get_the_name_attr( '[collapsable-title]' ) );
+			?>
+			<input type="hidden" class="cmb-collapsable-title" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $field_value ); ?>"/>
+		<?php endif; ?>
+
 		<?php CMB_Meta_Box::layout_fields( $fields ); ?>
 
 	<?php }
@@ -1541,6 +1552,10 @@ class CMB_Group_Field extends CMB_Field {
 
 		foreach ( $values as &$group_value ) {
 			foreach ( $group_value as $field_id => &$field_value ) {
+
+				if ( isset( $this->args['collapsable'] ) && $this->args['collapsable'] && 'collapsable-title' === $field_id ) {
+					continue;
+				}
 
 				if ( ! isset( $fields[$field_id] ) ) {
 					$field_value = array();
@@ -1557,6 +1572,7 @@ class CMB_Group_Field extends CMB_Field {
 				// just store the first (and only) one directly
 				if ( ! $field->args['repeatable'] )
 					$field_value = reset( $field_value );
+
 			}
 		}
 
