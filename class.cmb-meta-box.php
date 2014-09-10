@@ -132,32 +132,32 @@ class CMB_Meta_Box {
 	 */
 	function is_metabox_displayed() {
 		$display = true;
-		$display = $this->add_for_id( $display, $this->_meta_box );
-		$display = $this->hide_for_id( $display, $this->_meta_box );
-		$display = $this->add_for_page_template( $display, $this->_meta_box );
-		$display = $this->hide_for_page_template( $display, $this->_meta_box );
+		$display = $this->add_for_id( $display );
+		$display = $this->hide_for_id( $display );
+		$display = $this->add_for_page_template( $display );
+		$display = $this->hide_for_page_template( $display );
 		return $display;
 	}
 
 	// Add for ID
-	function add_for_id( $display, $meta_box ) {
+	function add_for_id( $display ) {
 
-		if ( ! isset( $meta_box['show_on']['id'] ) )
+		if ( ! isset( $this->_meta_box['show_on']['id'] ) )
 			return $display;
 
 		$post_id = $this->get_post_id();
 
 		// If value isn't an array, turn it into one
-		$meta_box['show_on']['id'] = ! is_array( $meta_box['show_on']['id'] ) ? array( $meta_box['show_on']['id'] ) : $meta_box['show_on']['id'];
+		$this->_meta_box['show_on']['id'] = ! is_array( $this->_meta_box['show_on']['id'] ) ? array( $this->_meta_box['show_on']['id'] ) : $this->_meta_box['show_on']['id'];
 
-		return in_array( $post_id, $meta_box['show_on']['id'] );
+		return in_array( $post_id, $this->_meta_box['show_on']['id'] );
 
 	}
 
 	// Add for ID
-	function hide_for_id( $display, $meta_box ) {
+	function hide_for_id( $display ) {
 
-		if ( ! isset( $meta_box['hide_on']['id'] ) )
+		if ( ! isset( $this->_meta_box['hide_on']['id'] ) )
 			return $display;
 
 		$post_id = $this->get_post_id();
@@ -167,16 +167,16 @@ class CMB_Meta_Box {
 		}
 
 		// If value isn't an array, turn it into one
-		$meta_box['hide_on']['id'] = ! is_array( $meta_box['hide_on']['id'] ) ? array( $meta_box['hide_on']['id'] ) : $meta_box['hide_on']['id'];
+		$this->_meta_box['hide_on']['id'] = ! is_array( $this->_meta_box['hide_on']['id'] ) ? array( $this->_meta_box['hide_on']['id'] ) : $this->_meta_box['hide_on']['id'];
 
-		return ! in_array( $post_id, $meta_box['hide_on']['id'] );
+		return ! in_array( $post_id, $this->_meta_box['hide_on']['id'] );
 
 	}
 
 	// Add for Page Template
-	function add_for_page_template( $display, $meta_box ) {
+	function add_for_page_template( $display ) {
 
-		if ( ! isset( $meta_box['show_on']['page-template'] ) ) {
+		if ( ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
 			return $display;
 		}
 
@@ -190,16 +190,16 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one
-		$meta_box['show_on']['page-template'] = !is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
+		$this->_meta_box['show_on']['page-template'] = ! is_array( $this->_meta_box['show_on']['page-template'] ) ? array( $this->_meta_box['show_on']['page-template'] ) : $this->_meta_box['show_on']['page-template'];
 
-		return in_array( $current_template, $meta_box['show_on']['page-template'] );
+		return in_array( $current_template, $this->_meta_box['show_on']['page-template'] );
 
 	}
 
 	// Add for Page Template
-	function hide_for_page_template( $display, $meta_box ) {
+	function hide_for_page_template( $display ) {
 
-		if ( ! isset( $meta_box['hide_on']['page-template'] ) ) {
+		if ( ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
 			return $display;
 		}
 
@@ -213,9 +213,9 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one
-		$meta_box['hide_on']['page-template'] = ! is_array( $meta_box['hide_on']['page-template'] ) ? array( $meta_box['hide_on']['page-template'] ) : $meta_box['hide_on']['page-template'];
+		$this->_meta_box['hide_on']['page-template'] = ! is_array( $this->_meta_box['hide_on']['page-template'] ) ? array( $this->_meta_box['hide_on']['page-template'] ) : $this->_meta_box['hide_on']['page-template'];
 
-		return ! in_array( $current_template, $meta_box['hide_on']['page-template'] );
+		return ! in_array( $current_template, $this->_meta_box['hide_on']['page-template'] );
 
 	}
 
@@ -258,9 +258,6 @@ class CMB_Meta_Box {
 
 				if ( ! empty( $field->args['sortable'] ) )
 					$classes[] = 'cmb-sortable';
-
-				if ( ! empty( $field->args['collapsable'] ) )
-					$classes[] = 'cmb-collapsable';
 
 				$attrs = array(
 					sprintf( 'id="%s"', sanitize_html_class( $field->id ) ),
@@ -313,7 +310,7 @@ class CMB_Meta_Box {
 	}
 
 	// Save data from metabox
-	function save( $post_id = 0 )  {
+	function save( $post_id = 0 ) {
 
 		// Verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
@@ -325,15 +322,15 @@ class CMB_Meta_Box {
 			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
 				continue;
 
-			if ( isset( $_POST[$field['id']] ) )
-				$value = (array) $_POST[$field['id']];
+			if ( isset( $_POST[ $field['id'] ] ) )
+				$value = (array) $_POST[ $field['id'] ];
 			else
 				$value = array();
 
 			$value = $this->strip_repeatable( $value );
 
 			if ( ! $class = _cmb_field_class_for_type( $field['type'] ) ) {
-				do_action('cmb_save_' . $field['type'], $field, $value);
+				do_action( 'cmb_save_' . $field['type'], $field, $value );
 			}
 
 			$field_obj = new $class( $field['id'], $field['name'], $value, $field );
