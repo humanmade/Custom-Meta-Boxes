@@ -863,7 +863,55 @@ class CMB_Radio_Field extends CMB_Field {
  */
 class CMB_Checkbox extends CMB_Field {
 
+	public function __construct( $name, $title, array $values, $args = array() ) {
+
+		if ( isset( $args['default'] ) ) {
+			unset( $args['default'] );
+			_deprecated_argument( 'CMB_Checkbox', "The checkbox field does not support the default arg. Maybe consider the 'inverse' arg instead.", '1.1' );
+		}
+
+		parent::__construct( $name, $title, $values, $args );
+
+
+	}
 	public function title() {}
+
+	/**
+	 * For checkbox field - ensure never more than 1 field.
+	 *
+	 * @return null
+	 */
+	public function &get_values() {
+		$_values = array_slice( $this->values, 0, 1 );
+		return $_values;
+	}
+
+	public function get_value() {
+		// If inverse, do inverse logic.
+		if ( isset( $this->args['inverse'] ) && $this->args['inverse'] ) {
+			return ! parent::get_value();
+		}
+		return parent::get_value();
+	}
+
+	/**
+	 * For checkbox field - ensure never more than 1 field.
+	 * Handle inverse logic.
+	 *
+	 * @return null
+	 */
+	public function parse_save_values() {
+
+		// If inverse, do inverse logic.
+		if ( isset( $this->args['inverse'] ) && $this->args['inverse'] ) {
+
+			$this->values = ( empty( $this->values ) ) ? array( true ) : array();
+
+		}
+
+		$this->values = array_slice( $this->values, 0, 1 );
+
+	}
 
 	public function html() { ?>
 
