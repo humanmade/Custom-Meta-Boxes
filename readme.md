@@ -42,6 +42,18 @@ See [CONTRIBUTING.md](https://github.com/humanmade/Custom-Meta-Boxes/blob/master
 
 ## Changelog ##
 
+**1.0.2**
+* Add google maps field
+* Add hide_on field argument
+* Add Composer support
+* Enhancement - enable for attachments
+* Fix bug with unnatached images on custom post types
+* Fix error in WYSIWYG
+* Fix fields not getting correctly initialized if meta box is collapsed on page load
+* Fix bug with page-template restricted meta boxes showing if the post hasn't been saved at all.
+* Hook CMB in later - most post types & taxonomies should be registered then.
+* Fix Issue where different default values are used on save and init.
+
 **1.0.1**
 * Fix bug - AJAX post select field displaying incorrect content.
 

@@ -1,6 +1,6 @@
 {
   "name": "custom-meta-boxes",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "http://hmn.md/tools/",
   "authors": [
     "Human Made Limited"
@@ -16,6 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "select2": "~3.4.8"
+    "select2": "~3.5.1"
   }
 }
