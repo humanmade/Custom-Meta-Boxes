@@ -1,14 +1,14 @@
 {
   "name": "Custom-Meta-Boxes",
   "version": "1.0.1",
-  "description": "Custom Meta Boxes is a framework for easily adding custom fields to the WordPress post edit page.",
+  "description": "Lets you easily create metaboxes with custom fields that will blow your mind.",
   "homepage": "https://github.com/humanmade/Custom-Meta-Boxes/",
   "repository": {
     "type": "git",
     "url": "git://github.com/humanmade/Custom-Meta-Boxes.git"
   },
   "author": "Human Made Limited",
-  "license": "GPL",
+  "license": "GPL-2.0+",
   "readmeFilename": "readme.md",
   "gitHead": "c94fbd6ddd89684e18670968c02abc383c640224",
   "bugs": {

@@ -15,22 +15,10 @@ class CMB_Meta_Box {
 		if ( empty( $this->_meta_box['id'] ) )
 			$this->_meta_box['id'] = sanitize_title( $this->_meta_box['title'] );
 
-		$upload = false;
-
-		foreach ( $meta_box['fields'] as $field ) {
-			if ( $field['type'] == 'file' || $field['type'] == 'file_list' ) {
-				$upload = true;
-				break;
-			}
-		}
-
 		add_action( 'dbx_post_advanced', array( &$this, 'init_fields_for_post' ) );
 		add_action( 'cmb_init_fields', array( &$this, 'init_fields' ) );
 
 		global $pagenow;
-
-		if ( $upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) )
-			add_action( 'admin_head', array( &$this, 'add_post_enctype' ) );
 
 		add_action( 'admin_menu', array( &$this, 'add' ) );
 		add_action( 'save_post', array( &$this, 'save_for_post' ) );
@@ -38,9 +26,6 @@ class CMB_Meta_Box {
 
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_styles' ) );
-
-		add_filter( 'cmb_show_on', array( &$this, 'add_for_id' ), 10, 2 );
-		add_filter( 'cmb_show_on', array( &$this, 'add_for_page_template' ), 10, 2 );
 
 	}
 
@@ -50,36 +35,20 @@ class CMB_Meta_Box {
 
 			$values = array();
 
-			// Set up blank or default values for empty ones
-			//
-			$defaults = array(
-				'name' => '',
-				'desc' => '',
-				'std'  => '',
-				'cols' => 12
-			);
+			$args = $field;
+			unset( $args['id'] );
+			unset( $args['type'] );
+			unset( $args['name'] );
 
-			$field = wp_parse_args( $field, $defaults );
-
-			if ( 'file' == $field['type'] && ! isset( $field['allow'] ) )
-				$field['allow'] = array( 'url', 'attachment' );
-
-			if ( 'file' == $field['type'] && ! isset( $field['save_id'] ) )
-				$field['save_id']  = false;
-
-			$field['name_attr'] = $field['id'];
 			$class = _cmb_field_class_for_type( $field['type'] );
 
-			if ( ! empty( $this->_meta_box['repeatable'] ) )
-				$field['repeatable'] = true;
-
-
-			// Else if we are on a post edit screen
-			elseif ( $post_id )
+			// If we are on a post edit screen - get metadata value of the field for this post
+			if ( $post_id ) {
 				$values = (array) get_post_meta( $post_id, $field['id'], false );
+			}
 
 			if ( class_exists( $class ) ) {
-				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $field );
+				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $args );
 			}
 
 		}
@@ -111,6 +80,12 @@ class CMB_Meta_Box {
 
 		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
 
+		wp_localize_script( 'cmb-scripts', 'CMBData', array(
+			'strings' => array(
+				'confirmDeleteField' => __( 'Are you sure you want to delete this field?', 'cmb' )
+			)
+		) );
+
 		foreach ( $this->fields as $field )
 			$field->enqueue_scripts();
 
@@ -129,19 +104,6 @@ class CMB_Meta_Box {
 			$field->enqueue_styles();
 
 	}
-
-	function add_post_enctype() { ?>
-
-		<script type="text/javascript">
-
-		jQuery(document).ready(function(){
-			jQuery("#post").attr("enctype", "multipart/form-data");
-			jQuery("#post").attr("encoding", "multipart/form-data");
-		} );
-
-		</script>
-
-	<?php }
 
 	// Add metabox
 	function add() {
@@ -166,23 +128,24 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Show On Filters
-	 * Use the 'cmb_show_on' filter to further refine the conditions under which a metabox is displayed.
-	 * Below you can limit it by ID and page template
+	 * Handle 'Show On' and 'hide on' Filters
 	 */
+	function is_metabox_displayed( $meta_box ) {
+		$display = true;
+		$display = $this->add_for_id( $display, $meta_box );
+		$display = $this->hide_for_id( $display, $meta_box );
+		$display = $this->add_for_page_template( $display, $meta_box );
+		$display = $this->hide_for_page_template( $display, $meta_box );
+		return $display;
+	}
 
 	// Add for ID
 	function add_for_id( $display, $meta_box ) {
 
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
-
-		if ( ! $post_id )
-			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
-
-		if ( ! $post_id || ! isset( $meta_box['show_on']['id'] ) )
+		if ( ! isset( $meta_box['show_on']['id'] ) )
 			return $display;
 
-
+		$post_id = $this->get_post_id();
 
 		// If value isn't an array, turn it into one
 		$meta_box['show_on']['id'] = ! is_array( $meta_box['show_on']['id'] ) ? array( $meta_box['show_on']['id'] ) : $meta_box['show_on']['id'];
@@ -191,16 +154,37 @@ class CMB_Meta_Box {
 
 	}
 
+	// Add for ID
+	function hide_for_id( $display, $meta_box ) {
+
+		if ( ! isset( $meta_box['hide_on']['id'] ) )
+			return $display;
+
+		$post_id = $this->get_post_id();
+
+		if ( ! $post_id ) {
+			return false;
+		}
+
+		// If value isn't an array, turn it into one
+		$meta_box['hide_on']['id'] = ! is_array( $meta_box['hide_on']['id'] ) ? array( $meta_box['hide_on']['id'] ) : $meta_box['hide_on']['id'];
+
+		return ! in_array( $post_id, $meta_box['hide_on']['id'] );
+
+	}
+
 	// Add for Page Template
 	function add_for_page_template( $display, $meta_box ) {
 
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
-
-		if ( ! $post_id )
-			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
-
-		if ( ! $post_id || ! isset( $meta_box['show_on']['page-template'] ) )
+		if ( ! isset( $meta_box['show_on']['page-template'] ) ) {
 			return $display;
+		}
+
+		$post_id = $this->get_post_id();
+
+		if ( ! $post_id ) {
+			return false;
+		}
 
 		// Get current template
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
@@ -212,7 +196,30 @@ class CMB_Meta_Box {
 
 	}
 
-	// Show fields
+	// Add for Page Template
+	function hide_for_page_template( $display, $meta_box ) {
+
+		if ( ! isset( $meta_box['hide_on']['page-template'] ) ) {
+			return $display;
+		}
+
+		$post_id = $this->get_post_id();
+
+		if ( ! $post_id ) {
+			return false;
+		}
+
+		// Get current template
+		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
+
+		// If value isn't an array, turn it into one
+		$meta_box['hide_on']['page-template'] = ! is_array( $meta_box['hide_on']['page-template'] ) ? array( $meta_box['hide_on']['page-template'] ) : $meta_box['hide_on']['page-template'];
+
+		return ! in_array( $current_template, $meta_box['hide_on']['page-template'] );
+
+	}
+
+	// display fields
 	function show() { ?>
 
 		<input type="hidden" name="wp_meta_box_nonce" value="<?php esc_attr_e( wp_create_nonce( basename(__FILE__) ) ); ?>" />
@@ -308,13 +315,13 @@ class CMB_Meta_Box {
 	// Save data from metabox
 	function save( $post_id = 0 )  {
 
-		// verify nonce
+		// Verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
 			return $post_id;
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
-			// verify this meta box was shown on the page
+			// Verify this meta box was shown on the page
 			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
 				continue;
 
@@ -328,9 +335,6 @@ class CMB_Meta_Box {
 			if ( ! $class = _cmb_field_class_for_type( $field['type'] ) ) {
 				do_action('cmb_save_' . $field['type'], $field, $value);
 			}
-
-			if ( !empty(  $this->_meta_box['repeatable'] ) )
-				$field['repeatable'] = true;
 
 			$field_obj = new $class( $field['id'], $field['name'], $value, $field );
 
@@ -353,6 +357,18 @@ class CMB_Meta_Box {
 			return $post_id;
 
 		$this->save( $post_id );
+
+	}
+
+	function get_post_id() {
+
+		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
+
+		if ( ! $post_id && isset( $_POST['post_id'] ) ) {
+			$post_id = $_POST['post_id'];
+		}
+
+		return $post_id;
 
 	}
 }
