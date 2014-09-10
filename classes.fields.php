@@ -1468,6 +1468,7 @@ class CMB_Group_Field extends CMB_Field {
 			parent::get_default_args(),
 			array(
 				'fields'              => array(),
+				'collapsable'         => false,
 				'string-repeat-field' => __( 'Add New Group', 'cmb' ),
 				'string-delete-field' => __( 'Remove Group', 'cmb' ),
 			)
