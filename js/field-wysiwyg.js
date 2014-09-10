@@ -3,8 +3,9 @@ CMB.addCallbackForDeletedField( 'CMB_wysiwyg', function( el ) {
 	// Destroy WYSIWYG editors instances.
 	el.find( '.cmb-wysiwyg textarea' ).each( function() {
 		var instance = tinyMCE.get( jQuery(this).attr('id') );
-		if ( instance !== null && typeof( instance ) !== 'undefined' )
+		if ( instance !== null && typeof( instance ) !== 'undefined' ) {
 			instance.remove();
+		}
 	} );
 
 } );

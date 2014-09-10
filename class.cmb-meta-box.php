@@ -259,6 +259,9 @@ class CMB_Meta_Box {
 				if ( ! empty( $field->args['sortable'] ) )
 					$classes[] = 'cmb-sortable';
 
+				if ( ! empty( $field->args['collapsable'] ) )
+					$classes[] = 'cmb-collapsable';
+
 				$attrs = array(
 					sprintf( 'id="%s"', sanitize_html_class( $field->id ) ),
 					sprintf( 'class="%s"', esc_attr( implode(' ', array_map( 'sanitize_html_class', $classes ) ) ) )
