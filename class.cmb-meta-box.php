@@ -130,34 +130,34 @@ class CMB_Meta_Box {
 	/**
 	 * Handle 'Show On' and 'hide on' Filters
 	 */
-	function is_metabox_displayed( $meta_box ) {
+	function is_metabox_displayed() {
 		$display = true;
-		$display = $this->add_for_id( $display, $meta_box );
-		$display = $this->hide_for_id( $display, $meta_box );
-		$display = $this->add_for_page_template( $display, $meta_box );
-		$display = $this->hide_for_page_template( $display, $meta_box );
+		$display = $this->add_for_id( $display );
+		$display = $this->hide_for_id( $display );
+		$display = $this->add_for_page_template( $display );
+		$display = $this->hide_for_page_template( $display );
 		return $display;
 	}
 
 	// Add for ID
-	function add_for_id( $display, $meta_box ) {
+	function add_for_id( $display ) {
 
-		if ( ! isset( $meta_box['show_on']['id'] ) )
+		if ( ! isset( $this->_meta_box['show_on']['id'] ) )
 			return $display;
 
 		$post_id = $this->get_post_id();
 
 		// If value isn't an array, turn it into one
-		$meta_box['show_on']['id'] = ! is_array( $meta_box['show_on']['id'] ) ? array( $meta_box['show_on']['id'] ) : $meta_box['show_on']['id'];
+		$this->_meta_box['show_on']['id'] = ! is_array( $this->_meta_box['show_on']['id'] ) ? array( $this->_meta_box['show_on']['id'] ) : $this->_meta_box['show_on']['id'];
 
-		return in_array( $post_id, $meta_box['show_on']['id'] );
+		return in_array( $post_id, $this->_meta_box['show_on']['id'] );
 
 	}
 
 	// Add for ID
-	function hide_for_id( $display, $meta_box ) {
+	function hide_for_id( $display ) {
 
-		if ( ! isset( $meta_box['hide_on']['id'] ) )
+		if ( ! isset( $this->_meta_box['hide_on']['id'] ) )
 			return $display;
 
 		$post_id = $this->get_post_id();
@@ -167,16 +167,16 @@ class CMB_Meta_Box {
 		}
 
 		// If value isn't an array, turn it into one
-		$meta_box['hide_on']['id'] = ! is_array( $meta_box['hide_on']['id'] ) ? array( $meta_box['hide_on']['id'] ) : $meta_box['hide_on']['id'];
+		$this->_meta_box['hide_on']['id'] = ! is_array( $this->_meta_box['hide_on']['id'] ) ? array( $this->_meta_box['hide_on']['id'] ) : $this->_meta_box['hide_on']['id'];
 
-		return ! in_array( $post_id, $meta_box['hide_on']['id'] );
+		return ! in_array( $post_id, $this->_meta_box['hide_on']['id'] );
 
 	}
 
 	// Add for Page Template
-	function add_for_page_template( $display, $meta_box ) {
+	function add_for_page_template( $display ) {
 
-		if ( ! isset( $meta_box['show_on']['page-template'] ) ) {
+		if ( ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
 			return $display;
 		}
 
@@ -190,16 +190,16 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one
-		$meta_box['show_on']['page-template'] = ! is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
+		$this->_meta_box['show_on']['page-template'] = ! is_array( $this->_meta_box['show_on']['page-template'] ) ? array( $this->_meta_box['show_on']['page-template'] ) : $this->_meta_box['show_on']['page-template'];
 
-		return in_array( $current_template, $meta_box['show_on']['page-template'] );
+		return in_array( $current_template, $this->_meta_box['show_on']['page-template'] );
 
 	}
 
 	// Add for Page Template
-	function hide_for_page_template( $display, $meta_box ) {
+	function hide_for_page_template( $display ) {
 
-		if ( ! isset( $meta_box['hide_on']['page-template'] ) ) {
+		if ( ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
 			return $display;
 		}
 
@@ -213,9 +213,9 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one
-		$meta_box['hide_on']['page-template'] = ! is_array( $meta_box['hide_on']['page-template'] ) ? array( $meta_box['hide_on']['page-template'] ) : $meta_box['hide_on']['page-template'];
+		$this->_meta_box['hide_on']['page-template'] = ! is_array( $this->_meta_box['hide_on']['page-template'] ) ? array( $this->_meta_box['hide_on']['page-template'] ) : $this->_meta_box['hide_on']['page-template'];
 
-		return ! in_array( $current_template, $meta_box['hide_on']['page-template'] );
+		return ! in_array( $current_template, $this->_meta_box['hide_on']['page-template'] );
 
 	}
 
