@@ -15,26 +15,13 @@ class CMB_Meta_Box {
 		if ( empty( $this->_meta_box['id'] ) )
 			$this->_meta_box['id'] = sanitize_title( $this->_meta_box['title'] );
 
-		$upload = false;
-
-		foreach ( $meta_box['fields'] as $field ) {
-			if ( $field['type'] == 'file' || $field['type'] == 'file_list' ) {
-				$upload = true;
-				break;
-			}
-		}
-
 		add_action( 'dbx_post_advanced', array( &$this, 'init_fields_for_post' ) );
 		add_action( 'cmb_init_fields', array( &$this, 'init_fields' ) );
 
 		global $pagenow;
 
-		if ( $upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) )
-			add_action( 'admin_head', array( &$this, 'add_post_enctype' ) );
-
 		add_action( 'admin_menu', array( &$this, 'add' ) );
 		add_action( 'save_post', array( &$this, 'save_for_post' ) );
-		add_action( 'edit_attachment', array( &$this, 'save_for_post' ) );
 		add_action( 'cmb_save_fields', array( &$this, 'save' ) );
 
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
@@ -96,9 +83,8 @@ class CMB_Meta_Box {
 		wp_localize_script( 'cmb-scripts', 'CMBData', array(
 			'strings' => array(
 				'confirmDeleteField' => __( 'Are you sure you want to delete this field?', 'cmb' )
-				)
 			)
-		);
+		) );
 
 		foreach ( $this->fields as $field )
 			$field->enqueue_scripts();
@@ -119,19 +105,6 @@ class CMB_Meta_Box {
 
 	}
 
-	function add_post_enctype() { ?>
-
-		<script type="text/javascript">
-
-		jQuery(document).ready(function(){
-			jQuery("#post").attr("enctype", "multipart/form-data");
-			jQuery("#post").attr("encoding", "multipart/form-data");
-		} );
-
-		</script>
-
-	<?php }
-
 	// Add metabox
 	function add() {
 
@@ -145,8 +118,9 @@ class CMB_Meta_Box {
 			unset( $this->_meta_box['show_on']['value'] );
 		}
 
-		if ( $this->is_metabox_displayed( $this->_meta_box ) ) {
 		foreach ( (array) $this->_meta_box['pages'] as $page ) {
+			$show = apply_filters( 'cmb_show_on', true, $this->_meta_box );
+			if ( $show ) {
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority'] ) ;
 			}
 		}
