@@ -8,16 +8,6 @@ class CMB_Meta_Box {
 	protected $_meta_box;
 	private $fields = array();
 
-	/**
-	 * Default Field Values
-	 */
-	protected $field_defaults = array(
-		'name' => '',
-		'desc' => '',
-		'std'  => '',
-		'cols' => 12
-	);
-
 	function __construct( $meta_box ) {
 
 		$this->_meta_box = $meta_box;
@@ -57,26 +47,21 @@ class CMB_Meta_Box {
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
 
 			$values = array();
-			$field  = wp_parse_args( $field, $this->field_defaults );
 
-			if ( 'file' == $field['type'] && ! isset( $field['allow'] ) )
-				$field['allow'] = array( 'url', 'attachment' );
+			$args = $field;
+			unset( $args['id'] );
+			unset( $args['type'] );
+			unset( $args['name'] );
 
-			if ( 'file' == $field['type'] && ! isset( $field['save_id'] ) )
-				$field['save_id']  = false;
-
-			$field['name_attr'] = $field['id'];
 			$class = _cmb_field_class_for_type( $field['type'] );
 
-			if ( ! empty( $this->_meta_box['repeatable'] ) )
-				$field['repeatable'] = true;
-
-			// Else if we are on a post edit screen
-			elseif ( $post_id )
+			// If we are on a post edit screen - get metadata value of the field for this post
+			if ( $post_id ) {
 				$values = (array) get_post_meta( $post_id, $field['id'], false );
+			}
 
 			if ( class_exists( $class ) ) {
-				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $field );
+				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $args );
 			}
 
 		}
@@ -351,33 +336,28 @@ class CMB_Meta_Box {
 	}
 
 	// Save data from metabox
-	function save( $post_id = 0 )  {
+	function save( $post_id = 0 ) {
 
-		// verify nonce
+		// Verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
 			return $post_id;
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
-			$field = wp_parse_args( $field, $this->field_defaults );
-
-			// verify this meta box was shown on the page
+			// Verify this meta box was shown on the page
 			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
 				continue;
 
-			if ( isset( $_POST[$field['id']] ) )
-				$value = (array) $_POST[$field['id']];
+			if ( isset( $_POST[ $field['id'] ] ) )
+				$value = (array) $_POST[ $field['id'] ];
 			else
 				$value = array();
 
 			$value = $this->strip_repeatable( $value );
 
 			if ( ! $class = _cmb_field_class_for_type( $field['type'] ) ) {
-				do_action('cmb_save_' . $field['type'], $field, $value);
+				do_action( 'cmb_save_' . $field['type'], $field, $value );
 			}
-
-			if ( !empty(  $this->_meta_box['repeatable'] ) )
-				$field['repeatable'] = true;
 
 			$field_obj = new $class( $field['id'], $field['name'], $value, $field );
 
