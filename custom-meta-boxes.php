@@ -3,7 +3,7 @@
 Plugin Name: Custom Meta Boxes
 Plugin URI: https://github.com/humanmade/Custom-Meta-Boxes
 Description: Lets you easily create metaboxes with custom fields that will blow your mind. Originally a fork of https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress.
-Version: 1.0.1
+Version: 1.0.2
 License: GPL-2.0+
 Author: Human Made Limited
 Author URI: http://hmn.md
@@ -64,7 +64,7 @@ function cmb_init() {
 			new CMB_Meta_Box( $meta_box );
 
 }
-add_action( 'init', 'cmb_init' );
+add_action( 'init', 'cmb_init', 50 );
 
 /**
  * Return an array of built in available fields
@@ -98,6 +98,7 @@ function _cmb_available_fields() {
 		'colorpicker'		=> 'CMB_Color_Picker',
 		'title'				=> 'CMB_Title',
 		'group'				=> 'CMB_Group_Field',
+		'gmap'				=> 'CMB_Gmap_Field',
 	) );
 
 }
