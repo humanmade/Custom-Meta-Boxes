@@ -119,7 +119,7 @@ class CMB_Meta_Box {
 		}
 
 		foreach ( (array) $this->_meta_box['pages'] as $page ) {
-			$show = apply_filters( 'cmb_show_on', true, $this->_meta_box );
+			$show = $this->is_metabox_displayed();
 			if ( $show ) {
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority'] ) ;
 			}
@@ -130,12 +130,12 @@ class CMB_Meta_Box {
 	/**
 	 * Handle 'Show On' and 'hide on' Filters
 	 */
-	function is_metabox_displayed( $meta_box ) {
+	function is_metabox_displayed() {
 		$display = true;
-		$display = $this->add_for_id( $display, $meta_box );
-		$display = $this->hide_for_id( $display, $meta_box );
-		$display = $this->add_for_page_template( $display, $meta_box );
-		$display = $this->hide_for_page_template( $display, $meta_box );
+		$display = $this->add_for_id( $display, $this->_meta_box );
+		$display = $this->hide_for_id( $display, $this->_meta_box );
+		$display = $this->add_for_page_template( $display, $this->_meta_box );
+		$display = $this->hide_for_page_template( $display, $this->_meta_box );
 		return $display;
 	}
 
