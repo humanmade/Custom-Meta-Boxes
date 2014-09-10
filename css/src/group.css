@@ -14,7 +14,7 @@
 }
 
 .cmb_metabox .CMB_Group_Field.repeatable > .field-item {
-	padding: 33px 10px 0;
+	padding: 30px 15px 0;
 	margin-bottom: 16px;
 	border: 1px solid #DDD;
 	background: #FAFAFA;
@@ -163,7 +163,4 @@
 
 .CMB_Group_Field.cmb-sortable > .ui-sortable-placeholder {
 	margin-bottom: 16px !important;
-}
-.CMB_Group_Field .cmb_metabox > .cmb-row:last-child {
-	margin-bottom: 0;
 }
