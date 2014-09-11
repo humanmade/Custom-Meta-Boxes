@@ -445,7 +445,7 @@ class CMB_File_Field extends CMB_Field {
 
 		if ( $this->get_value() ) {
 			$src = wp_mime_type_icon( $this->get_value() );
-			$size = getimagesize($src);
+			$size = getimagesize( str_replace( site_url(), ABSPATH, $src ) );
 			$icon_img = '<img src="' . $src . '" ' . $size[3] . ' />';
 		}
 
