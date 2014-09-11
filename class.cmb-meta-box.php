@@ -142,10 +142,10 @@ class CMB_Meta_Box {
 	// Add for ID
 	function add_for_id( $display ) {
 
-		if ( ! isset( $this->_meta_box['show_on']['id'] ) )
-			return $display;
-
 		$post_id = $this->get_post_id();
+
+		if ( ! $post_id || ! isset( $this->_meta_box['show_on']['id'] ) )
+			return $display;
 
 		// If value isn't an array, turn it into one
 		$this->_meta_box['show_on']['id'] = ! is_array( $this->_meta_box['show_on']['id'] ) ? array( $this->_meta_box['show_on']['id'] ) : $this->_meta_box['show_on']['id'];
@@ -157,14 +157,10 @@ class CMB_Meta_Box {
 	// Add for ID
 	function hide_for_id( $display ) {
 
-		if ( ! isset( $this->_meta_box['hide_on']['id'] ) )
-			return $display;
-
 		$post_id = $this->get_post_id();
 
-		if ( ! $post_id ) {
-			return false;
-		}
+		if ( ! $post_id || ! isset( $this->_meta_box['hide_on']['id'] ) )
+			return $display;
 
 		// If value isn't an array, turn it into one
 		$this->_meta_box['hide_on']['id'] = ! is_array( $this->_meta_box['hide_on']['id'] ) ? array( $this->_meta_box['hide_on']['id'] ) : $this->_meta_box['hide_on']['id'];
@@ -176,14 +172,10 @@ class CMB_Meta_Box {
 	// Add for Page Template
 	function add_for_page_template( $display ) {
 
-		if ( ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
-			return $display;
-		}
-
 		$post_id = $this->get_post_id();
 
-		if ( ! $post_id ) {
-			return false;
+		if ( ! $post_id || ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
+			return $display;
 		}
 
 		// Get current template
@@ -199,14 +191,10 @@ class CMB_Meta_Box {
 	// Add for Page Template
 	function hide_for_page_template( $display ) {
 
-		if ( ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
-			return $display;
-		}
-
 		$post_id = $this->get_post_id();
 
-		if ( ! $post_id ) {
-			return false;
+		if ( ! $post_id || ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
+			return $display;
 		}
 
 		// Get current template
