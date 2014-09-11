@@ -445,7 +445,7 @@ class CMB_File_Field extends CMB_Field {
 
 		if ( $this->get_value() ) {
 			$src = wp_mime_type_icon( $this->get_value() );
-			$size = getimagesize($src);
+			$size = getimagesize( str_replace( site_url(), ABSPATH, $src ) );
 			$icon_img = '<img src="' . $src . '" ' . $size[3] . ' />';
 		}
 
@@ -1513,8 +1513,6 @@ class CMB_Group_Field extends CMB_Field {
 		$this->title();
 		$this->description();
 
-		if ( $values ) {
-
 		$i = 0;
 		foreach ( $values as $value ) {
 
@@ -1531,7 +1529,7 @@ class CMB_Group_Field extends CMB_Field {
 
 			$i++;
 
-		}
+		// }
 
 		}
 
@@ -1570,7 +1568,7 @@ class CMB_Group_Field extends CMB_Field {
 				$field_value = ( ! empty( $field_value ) ) ? $field_value : array();
 				if ( ! empty( $fields[$field_id] ) ) {
 					$fields[$field_id]->set_values( (array) $field_value );
-			}
+				}
 			}
 		}
 
@@ -1634,6 +1632,13 @@ class CMB_Group_Field extends CMB_Field {
 
 	public function &get_fields() {
 		return $this->fields;
+	}
+
+	public function &get_values() {
+		if ( ! $this->args['repeatable'] && empty( $this->values ) ) {
+			$this->values = array('');
+		}
+		return parent::get_values();
 	}
 
 	public function set_values( array $values ) {
