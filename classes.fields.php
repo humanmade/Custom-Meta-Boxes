@@ -1460,7 +1460,7 @@ class CMB_Group_Field extends CMB_Field {
 		$this->title();
 		$this->description();
 
-		if ( $this->args['repeatable'] && empty( $values ) ) {
+		if ( ! $this->args['repeatable'] && empty( $values ) ) {
 			$values = array( null );
 		}
 
