@@ -128,7 +128,7 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Handle 'Show On' and 'hide on' Filters
+	 * Handle 'Show On' and 'Hide On' Filters
 	 */
 	function is_metabox_displayed() {
 		$display = true;
@@ -139,13 +139,19 @@ class CMB_Meta_Box {
 		return $display;
 	}
 
-	// Add for ID
+	// Add CMB for ID
 	function add_for_id( $display ) {
 
+		if ( ! isset( $this->_meta_box['show_on']['id'] ) ) {
+			return $display;
+		}
+
+		// Don't show CMB if we can't identify ID of a post
 		$post_id = $this->get_post_id();
 
-		if ( ! $post_id || ! isset( $this->_meta_box['show_on']['id'] ) )
-			return $display;
+		if ( ! isset( $post_id ) ) {
+			return false;
+		}
 
 		// If value isn't an array, turn it into one
 		$this->_meta_box['show_on']['id'] = ! is_array( $this->_meta_box['show_on']['id'] ) ? array( $this->_meta_box['show_on']['id'] ) : $this->_meta_box['show_on']['id'];
@@ -154,13 +160,19 @@ class CMB_Meta_Box {
 
 	}
 
-	// Add for ID
+	// Hide CMB for ID
 	function hide_for_id( $display ) {
 
+		if ( ! isset( $this->_meta_box['hide_on']['id'] ) ) {
+			return $display;
+		}
+
+		// Don't show CMB if we can't identify ID of a post
 		$post_id = $this->get_post_id();
 
-		if ( ! $post_id || ! isset( $this->_meta_box['hide_on']['id'] ) )
-			return $display;
+		if ( ! isset( $post_id ) ) {
+			return false;
+		}
 
 		// If value isn't an array, turn it into one
 		$this->_meta_box['hide_on']['id'] = ! is_array( $this->_meta_box['hide_on']['id'] ) ? array( $this->_meta_box['hide_on']['id'] ) : $this->_meta_box['hide_on']['id'];
@@ -169,13 +181,18 @@ class CMB_Meta_Box {
 
 	}
 
-	// Add for Page Template
+	// Add CMB for Page Template
 	function add_for_page_template( $display ) {
 
+		if ( ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
+			return $display;
+		}
+
+		// Don't show CMB if we can't identify ID of a post and hence its current template
 		$post_id = $this->get_post_id();
 
-		if ( ! $post_id || ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
-			return $display;
+		if ( ! isset( $post_id ) ) {
+			return false;
 		}
 
 		// Get current template
@@ -188,13 +205,18 @@ class CMB_Meta_Box {
 
 	}
 
-	// Add for Page Template
+	// Hide CMB for Page Template
 	function hide_for_page_template( $display ) {
 
+		if ( ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
+			return $display;
+		}
+
+		// Don't show CMB if we can't identify ID of a post and hence its current template
 		$post_id = $this->get_post_id();
 
-		if ( ! $post_id || ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
-			return $display;
+		if ( ! isset( $post_id ) ) {
+			return false;
 		}
 
 		// Get current template
