@@ -22,6 +22,7 @@ class CMB_Meta_Box {
 
 		add_action( 'admin_menu', array( &$this, 'add' ) );
 		add_action( 'save_post', array( &$this, 'save_for_post' ) );
+		add_action( 'edit_attachment', array( &$this, 'save_for_post' ) );
 		add_action( 'cmb_save_fields', array( &$this, 'save' ) );
 
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
