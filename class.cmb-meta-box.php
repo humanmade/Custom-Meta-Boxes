@@ -168,11 +168,10 @@ class CMB_Meta_Box {
 			return $display;
 		}
 
-		// Don't show CMB if we can't identify ID of a post
+		// Return if we can't identify ID of a post
 		$post_id = $this->get_post_id();
-
 		if ( ! isset( $post_id ) ) {
-			return false;
+			return $display;
 		}
 
 		// If value isn't an array, turn it into one
@@ -189,9 +188,8 @@ class CMB_Meta_Box {
 			return $display;
 		}
 
-		// Don't show CMB if we can't identify ID of a post and hence its current template
+		// Return false if we can't identify ID of a post
 		$post_id = $this->get_post_id();
-
 		if ( ! isset( $post_id ) ) {
 			return false;
 		}
@@ -213,11 +211,11 @@ class CMB_Meta_Box {
 			return $display;
 		}
 
-		// Don't show CMB if we can't identify ID of a post and hence its current template
+		// Return $display if we can't identify ID of a post and hence its current template
 		$post_id = $this->get_post_id();
 
 		if ( ! isset( $post_id ) ) {
-			return false;
+			return $display;
 		}
 
 		// Get current template
