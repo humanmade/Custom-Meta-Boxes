@@ -120,8 +120,7 @@ class CMB_Meta_Box {
 		}
 
 		foreach ( (array) $this->_meta_box['pages'] as $page ) {
-			$show = apply_filters( 'cmb_show_on', true, $this->_meta_box );
-			if ( $show ) {
+			if ( $this->is_metabox_displayed() ) {
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority'] ) ;
 			}
 		}
