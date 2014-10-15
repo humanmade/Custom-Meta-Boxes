@@ -867,7 +867,7 @@ class CMB_Checkbox extends CMB_Field {
 
 	public function html() { ?>
 
-		<input <?php $this->id_attr(); ?> type="hidden" <?php $this->name_attr(); ?> value="0">
+		<input type="hidden" <?php $this->name_attr(); ?> value="0">
 		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> type="checkbox" <?php $this->name_attr(); ?>  value="1" <?php checked( $this->get_value() ); ?> />
 		<label <?php $this->for_attr(); ?>><?php echo esc_html( $this->title ); ?></label>
 
