@@ -324,9 +324,9 @@ class CMB_Meta_Box {
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
 			return $post_id;
       
-    // Verify this meta box is for the right post type
-    if ( ! in_array( get_post_type( $post_id ), (array) $this->_meta_box['pages'] ) )
-    	return $post_id;
+		// Verify this meta box is for the right post type
+		if ( ! in_array( get_post_type( $post_id ), (array) $this->_meta_box['pages'] ) )
+			return $post_id;
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
