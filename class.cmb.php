@@ -40,9 +40,9 @@ abstract class CMB {
 
 		$this->_object_id = $object_id;
 
-		$this->setup_hooks();
-
 		$this->init_fields( $this->args['fields'] );
+		
+		$this->setup_hooks();
 
 	}
 
