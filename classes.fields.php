@@ -633,6 +633,28 @@ add_action( 'wp_ajax_cmb_request_image', array( 'CMB_Image_Field', 'request_imag
  * Standard text meta box for a URL.
  *
  */
+class CMB_Number_Field extends CMB_Field {
+
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'step' => '',
+			)
+		);
+	}
+
+	public function html() { ?>
+
+		<input step="<?php echo esc_attr( $this->args['step'] ) ?>" type="number" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_number code' ); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( esc_url( $this->value ) ); ?>" />
+
+	<?php }
+}
+
+/**
+ * Standard text meta box for a URL.
+ *
+ */
 class CMB_URL_Field extends CMB_Field {
 
 	public function html() { ?>
