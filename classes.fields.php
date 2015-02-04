@@ -988,7 +988,7 @@ class CMB_wysiwyg extends CMB_Field {
  * @supports "data_delegate"
  * @args
  *     'options'     => array Array of options to show in the select, optionally use data_delegate instead
- *     'allow_none'   => bool Allow no option to be selected (will palce a "None" at the top of the select)
+ *     'allow_none'   => bool|string Allow no option to be selected (will place a "None" at the top of the select)
  *     'multiple'     => bool whether multiple can be selected
  */
 class CMB_Select extends CMB_Field {
@@ -1065,6 +1065,8 @@ class CMB_Select extends CMB_Field {
 		$name = $this->get_the_name_attr();
 		$name .= ! empty( $this->args['multiple'] ) ? '[]' : null;
 
+		$none = is_string( $this->args['allow_none'] ) ? $this->args['allow_none'] : __( 'None', 'cmb' );
+
 		?>
 
 		<select
@@ -1077,8 +1079,8 @@ class CMB_Select extends CMB_Field {
 			style="width: 100%"
 		>
 
-			<?php if ( ! empty( $this->args['allow_none'] ) ) : ?>
-				<option value=""></option>
+			<?php if ( $this->args['allow_none'] ) : ?>
+				<option value=""><?php echo $none; ?></option>
 			<?php endif; ?>
 
 			<?php foreach ( $this->args['options'] as $value => $name ): ?>
