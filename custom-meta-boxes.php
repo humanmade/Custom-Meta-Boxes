@@ -99,6 +99,7 @@ function _cmb_available_fields() {
 		'title'				=> 'CMB_Title',
 		'group'				=> 'CMB_Group_Field',
 		'gmap'				=> 'CMB_Gmap_Field',
+		'number'			=> 'CMB_Number_Field'
 	) );
 
 }
