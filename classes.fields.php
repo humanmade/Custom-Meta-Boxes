@@ -816,13 +816,11 @@ class CMB_Date_Field extends CMB_Field {
 	}
 
 	function convert_to_utc( $value ) {
-		$offset = current_time( 'H', true ) - current_time( 'H', false );
-		return $value - ( HOUR_IN_SECONDS * $offset );
+		return $value - ( current_time( 'U', true ) - current_time( 'U', false ) );
 	}
 
 	function convert_from_utc( $value  ) {
-		$offset = current_time( 'H', true ) - current_time( 'H', false );
-		return $value + ( HOUR_IN_SECONDS * $offset );
+		return $value + ( current_time( 'U', true ) - current_time( 'U', false ) );
 	}
 
 }
