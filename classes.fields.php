@@ -787,7 +787,8 @@ class CMB_Date_Field extends CMB_Field {
 		// Then handle GMT offset if required.
 		// Then convert to desired format.
 		// If date is empty, assume delete. If time is empty, assume 00:00.
-		foreach ( $this->get_values() as $key => &$value ) {
+		$values = &$this->get_values();
+		foreach ( $values as $key => &$value ) {
 
 			if ( empty( $value['date'] ) ) {
 				unset( $this->values[$key] );
