@@ -720,7 +720,13 @@ class CMB_Date_Field extends CMB_Field {
 			return null;
 		}
 
-		$value = date_create_from_format( $this->args['format'], $this->value )->getTimestamp();
+		$date = date_create_from_format( $this->args['format'], $this->value );
+
+		if ( ! $date ) {
+			return null;
+		}
+
+		$value = $date->getTimestamp();
 
 		if ( $this->args['store_utc'] ) {
 			$value = $this->convert_from_utc( $value );
