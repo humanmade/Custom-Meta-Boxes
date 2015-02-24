@@ -91,9 +91,7 @@ function _cmb_available_fields() {
 		'select'			=> 'CMB_Select',
 		'taxonomy_select'	=> 'CMB_Taxonomy',
 		'post_select'		=> 'CMB_Post_Select',
-		'date'				=> 'CMB_Date_Field',
-		'date_unix'			=> 'CMB_Date_Timestamp_Field',
-		'datetime_unix'		=> 'CMB_Datetime_Timestamp_Field',
+		'new_date'          => 'CMB_Date_Field',
 		'time'				=> 'CMB_Time_Field',
 		'colorpicker'		=> 'CMB_Color_Picker',
 		'title'				=> 'CMB_Title',
@@ -158,3 +156,42 @@ function cmb_fix_meta_query_order($query) {
 
 if ( version_compare( get_bloginfo( 'version' ), '3.8', '<' ) )
 	add_filter( 'query', 'cmb_fix_meta_query_order', 1 );
+
+
+
+add_filter( 'cmb_meta_boxes', function( $meta_boxes ) {
+	foreach ( $meta_boxes as &$meta_box ) {
+		$meta_box['fields'] = cmb_date_field_backwards_compatability( $meta_box['fields'] );
+	}
+	return $meta_boxes;
+}, 10000 );
+
+function cmb_date_field_backwards_compatability( $fields ) {
+
+	foreach ( $fields as &$field ) {
+		if ( 'group' === $field['type'] ) {
+			$field['fields'] = cmb_date_field_backwards_compatability( $field['fields'] );
+		} elseif ( 'date' === $field['type'] ) {
+			$field['type'] = 'new_date';
+			$field['time'] = false;
+			$field['store_utc'] = false;
+		} elseif ( 'datetime' === $field['type'] ) {
+			$field['type'] = 'new_date';
+			$field['time'] = true;
+			$field['store_utc'] = false;
+		} elseif ( 'date_unix' === $field['type'] ) {
+			$field['type'] = 'new_date';
+			$field['time'] = true;
+			$field['format'] = 'U';
+			$field['store_utc'] = false;
+		} elseif ( 'datetime_unix' === $field['type'] ) {
+			$field['type'] = 'new_date';
+			$field['time'] = true;
+			$field['format'] = 'U';
+			$field['store_utc'] = false;
+		}
+
+	}
+
+	return $fields;
+}
