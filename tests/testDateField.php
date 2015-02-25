@@ -34,17 +34,19 @@ class DateFieldsAssetsTestCase extends WP_UnitTestCase {
 		$scripts_output = get_echo( 'wp_print_scripts' );
 		$styles_output  = get_echo( 'wp_print_styles' );
 
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
 		// Scripts
 		$this->assertContains( '/js/field.datetime.js', $scripts_output );
 		$this->assertContains( '/js/cmb.js', $scripts_output );
 		$this->assertNotContains( CMB_URL . '/js/jquery.timePicker.js', $scripts_output );
 
 		if ( version_compare( $wp_version, '4.1', '>=' ) ) {
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/core.js', $scripts_output );
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/datepicker.js', $scripts_output );
+			$this->assertContains( site_url() . "/wp-includes/js/jquery/ui/core$suffix.js", $scripts_output );
+			$this->assertContains( site_url() . "/wp-includes/js/jquery/ui/datepicker$suffix.js", $scripts_output );
 		} else {
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/jquery.ui.core.js', $scripts_output );
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/jquery.ui.datepicker.js', $scripts_output );
+			$this->assertContains( site_url() . "/wp-includes/js/jquery/ui/jquery.ui.core$suffix.js", $scripts_output );
+			$this->assertContains( site_url() . "/wp-includes/js/jquery/ui/jquery.ui.datepicker$suffix.js", $scripts_output );
 		}
 
 		// Styles
@@ -70,17 +72,19 @@ class DateFieldsAssetsTestCase extends WP_UnitTestCase {
 		$scripts_output = get_echo( 'wp_print_scripts' );
 		$styles_output  = get_echo( 'wp_print_styles' );
 
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
 		// Scripts
 		$this->assertContains( '/js/field.datetime.js', $scripts_output );
 		$this->assertContains( '/js/cmb.js', $scripts_output );
 		$this->assertContains( CMB_URL . '/js/jquery.timePicker.min.js', $scripts_output );
 
 		if ( version_compare( $wp_version, '4.1', '>=' ) ) {
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/core.js', $scripts_output );
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/datepicker.js', $scripts_output );
+			$this->assertContains( site_url() . "/wp-includes/js/jquery/ui/core$suffix.js", $scripts_output );
+			$this->assertContains( site_url() . "/wp-includes/js/jquery/ui/datepicker$suffix.js", $scripts_output );
 		} else {
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/jquery.ui.core.js', $scripts_output );
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/jquery.ui.datepicker.js', $scripts_output );
+			$this->assertContains( site_url() . "/wp-includes/js/jquery/ui/jquery.ui.core$suffix.js", $scripts_output );
+			$this->assertContains( site_url() . "/wp-includes/js/jquery/ui/jquery.ui.datepicker$suffix.js", $scripts_output );
 		}
 
 		// Styles
