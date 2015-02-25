@@ -157,15 +157,24 @@ function cmb_fix_meta_query_order($query) {
 if ( version_compare( get_bloginfo( 'version' ), '3.8', '<' ) )
 	add_filter( 'query', 'cmb_fix_meta_query_order', 1 );
 
+add_filter( 'cmb_meta_boxes', 'cmb_backwards_compatability', 10000 );
 
-
-add_filter( 'cmb_meta_boxes', function( $meta_boxes ) {
+/**
+ * Handle backwards compatability.
+ */
+function cmb_backwards_compatability( $meta_boxes ) {
 	foreach ( $meta_boxes as &$meta_box ) {
 		$meta_box['fields'] = cmb_date_field_backwards_compatability( $meta_box['fields'] );
 	}
 	return $meta_boxes;
-}, 10000 );
+}
 
+/**
+ * Map any old date fields to the new date field.
+ *
+ * @param  array
+ * @return array
+ */
 function cmb_date_field_backwards_compatability( $fields ) {
 
 	foreach ( $fields as &$field ) {
