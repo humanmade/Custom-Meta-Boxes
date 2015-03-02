@@ -184,6 +184,7 @@ function cmb_date_field_backwards_compatability( $fields ) {
 			$field['type'] = 'new_date';
 			$field['time'] = false;
 			$field['store_utc'] = false;
+			$field['format'] = 'm/d/Y';
 		} elseif ( 'datetime' === $field['type'] ) {
 			$field['type'] = 'new_date';
 			$field['time'] = true;
