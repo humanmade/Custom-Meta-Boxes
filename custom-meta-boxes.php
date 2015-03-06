@@ -51,8 +51,9 @@ include_once( CMB_PATH . '/class.cmb-post.php' );
 include_once( CMB_PATH . '/class.cmb-group.php' );
 include_once( CMB_PATH . '/class.cmb-option.php' );
 include_once( CMB_PATH . '/class.cmb-user.php' );
+include_once( CMB_PATH . '/class.cmb-taxonomy.php' );
 
-// include_once( CMB_PATH . '/example-functions.php' );
+ include_once( CMB_PATH . '/example-functions.php' );
 
 /**
  * Get all the meta boxes on init
@@ -81,8 +82,12 @@ function cmb_init() {
 	}
 
 	foreach ( (array) apply_filters( 'cmb_user_meta', array() ) as $meta_box ) {
-		new CMB_User( $meta_box );
-	}
+        new CMB_User( $meta_box );
+    }
+
+    foreach ( (array) apply_filters( 'cmb_taxonomies', array() ) as $meta_box ) {
+        new CMB_Taxonomies( $meta_box );
+    }
 
 }
 add_action( 'init', 'cmb_init' );
