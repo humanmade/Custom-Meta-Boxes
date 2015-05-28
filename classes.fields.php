@@ -1086,7 +1086,7 @@ class CMB_Select extends CMB_Field {
 
 		$name = $this->get_the_name_attr();
 		$name .= ! empty( $this->args['multiple'] ) ? '[]' : null;
-
+		$this->args['allow_none'] = '';
 		$none = is_string( $this->args['allow_none'] ) ? $this->args['allow_none'] : __( 'None', 'cmb' );
 
 		?>
