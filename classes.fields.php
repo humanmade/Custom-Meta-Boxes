@@ -1035,6 +1035,7 @@ class CMB_Select extends CMB_Field {
 				'options'         => array(),
 				'multiple'        => false,
 				'select2_options' => array(),
+				'allow_none'      => false,
 			)
 		);
 	}
