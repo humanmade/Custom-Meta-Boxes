@@ -196,6 +196,18 @@ class CMB_Meta_Box {
 		// Get current template
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
+		// Do we need to probe deeper?
+		if ($current_template=='default') {
+
+			// If it's just set to "Default Template", check to see if that means front-page or home
+
+			if ($post_id == get_option('page_on_front')) {
+				$current_template = 'front-page.php';
+			} else if ($post_id == get_option('page_for_posts')) {
+				$current_template = 'home.php';
+			}
+		}
+
 		// If value isn't an array, turn it into one
 		$this->_meta_box['show_on']['page-template'] = ! is_array( $this->_meta_box['show_on']['page-template'] ) ? array( $this->_meta_box['show_on']['page-template'] ) : $this->_meta_box['show_on']['page-template'];
 
@@ -219,6 +231,18 @@ class CMB_Meta_Box {
 
 		// Get current template
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
+
+		// Do we need to probe deeper?
+		if ($current_template=='default') {
+
+			// If it's just set to "Default Template", check to see if that means front-page or home
+
+			if ($post_id == get_option('page_on_front')) {
+				$current_template = 'front-page.php';
+			} else if ($post_id == get_option('page_for_posts')) {
+				$current_template = 'home.php';
+			}
+		}
 
 		// If value isn't an array, turn it into one
 		$this->_meta_box['hide_on']['page-template'] = ! is_array( $this->_meta_box['hide_on']['page-template'] ) ? array( $this->_meta_box['hide_on']['page-template'] ) : $this->_meta_box['hide_on']['page-template'];
