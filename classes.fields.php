@@ -333,6 +333,9 @@ abstract class CMB_Field {
 		$this->description();
 
 		$i = 0;
+		if( $this->args['type'] == 'gmap' ) {
+			$values = array( $values );
+		}
 		foreach ( $values as $key => $value ) {
 
 			$this->field_index = $i;
