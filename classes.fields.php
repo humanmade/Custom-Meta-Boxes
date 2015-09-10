@@ -1344,6 +1344,8 @@ class CMB_Post_Select extends CMB_Select {
 
 				<?php if ( $this->args['use_ajax'] ) : ?>
 
+					<?php $this->args['query']['fields'] = 'ids'; ?>
+
 					var ajaxData = {
 						action  : 'cmb_post_select',
 						post_id : '<?php echo intval( get_the_id() ); ?>', // Used for user capabilty check.
