@@ -333,7 +333,7 @@ abstract class CMB_Field {
 		$this->description();
 
 		$i = 0;
-		if( $this->args['type'] == 'gmap' ) {
+		if( isset( $this->args['type'] ) && $this->args['type'] == 'gmap' ) {
 			$values = array( $values );
 		}
 		foreach ( $values as $key => $value ) {
