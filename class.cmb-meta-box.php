@@ -225,8 +225,22 @@ class CMB_Meta_Box {
 
 	}
 
+	function description() {
+
+		if ( ! empty( $this->_meta_box['desc'] ) ) { ?>
+
+			<div class="cmb_metabox_description">
+				<?php echo wp_kses_post( $this->_meta_box['desc'] ); ?>
+			</div>
+
+		<?php }
+
+	}
+
 	// display fields
-	function show() { ?>
+	function show() {
+
+		$this->description(); ?>
 
 		<input type="hidden" name="wp_meta_box_nonce" value="<?php esc_attr_e( wp_create_nonce( basename(__FILE__) ) ); ?>" />
 
