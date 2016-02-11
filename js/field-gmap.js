@@ -3,6 +3,11 @@
 
 (function($) {
 
+	if ( 'undefined' == typeof google ) {
+		$('.map').css('textAlign','center').append( 'Google Maps API not loaded.' );
+		return;
+	}
+
 	var CMBGmapsInit = function( fieldEl ) {
 
 		var searchInput = $('.map-search', fieldEl ).get(0);
