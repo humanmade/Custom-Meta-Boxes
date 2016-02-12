@@ -10,8 +10,14 @@
 
 	var CMBGmapsInit = function( fieldEl ) {
 
+		var mapCanvas = $('.map', fieldEl ).get(0);
+
+		if ( 'undefined' == typeof google ) {
+			$('<div>'+CMBData.strings.googleMapsApiNotLoaded+'</div>').css({'width':'100%','textAlign':'center','marginTop':'1em'}).appendTo( mapCanvas );
+			return;
+		}
+
 		var searchInput = $('.map-search', fieldEl ).get(0);
-		var mapCanvas   = $('.map', fieldEl ).get(0);
 		var latitude    = $('.latitude', fieldEl );
 		var longitude   = $('.longitude', fieldEl );
 		var elevation   = $('.elevation', fieldEl );
