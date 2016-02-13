@@ -8,7 +8,7 @@
 		var mapCanvas = $('.map', fieldEl ).get(0);
 
 		if ( 'undefined' == typeof google ) {
-			$('<div>'+CMBData.strings.googleMapsApiNotLoaded+'</div>').css({'width':'100%','textAlign':'center','marginTop':'1em'}).appendTo( mapCanvas );
+			$('<div>'+CMBGmaps.strings.googleMapsApiNotLoaded+'</div>').css({'width':'100%','textAlign':'center','marginTop':'1em'}).appendTo( mapCanvas );
 			return;
 		}
 

@@ -82,7 +82,6 @@ class CMB_Meta_Box {
 		wp_localize_script( 'cmb-scripts', 'CMBData', array(
 			'strings' => array(
 				'confirmDeleteField' => esc_html__( 'Are you sure you want to delete this field?', 'cmb' ),
-				'googleMapsApiNotLoaded' => esc_html__( 'Google Maps API not loaded.', 'cmb' ),
 			)
 		) );
 
