@@ -9,7 +9,7 @@
 
 		if ( 'undefined' === typeof google ) {
 			$( '<div>' + CMBGmaps.strings.googleMapsApiNotLoaded + '</div>' )
-				.css({ 'marginTop': '1em', 'textAlign': 'center', 'width': '100%' })
+				.css({ 'padding': '1em', 'textAlign': 'center', 'width': '100%' })
 				.appendTo( mapCanvas );
 			return;
 		}
