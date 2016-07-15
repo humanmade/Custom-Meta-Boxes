@@ -5,17 +5,19 @@
 
 	var CMBGmapsInit = function( fieldEl ) {
 
-		var mapCanvas = $('.map', fieldEl ).get(0);
+		var mapCanvas = $( '.map', fieldEl ).get(0);
 
-		if ( 'undefined' == typeof google ) {
-			$('<div>'+CMBGmaps.strings.googleMapsApiNotLoaded+'</div>').css({'width':'100%','textAlign':'center','marginTop':'1em'}).appendTo( mapCanvas );
+		if ( 'undefined' === typeof google ) {
+			$( '<div>' + CMBGmaps.strings.googleMapsApiNotLoaded + '</div>' )
+				.css({ 'marginTop': '1em', 'textAlign': 'center', 'width': '100%' })
+				.appendTo( mapCanvas );
 			return;
 		}
 
-		var searchInput = $('.map-search', fieldEl ).get(0);
-		var latitude    = $('.latitude', fieldEl );
-		var longitude   = $('.longitude', fieldEl );
-		var elevation   = $('.elevation', fieldEl );
+		var searchInput = $( '.map-search', fieldEl ).get(0);
+		var latitude    = $( '.latitude', fieldEl );
+		var longitude   = $( '.longitude', fieldEl );
+		var elevation   = $( '.elevation', fieldEl );
 		var elevator    = new google.maps.ElevationService();
 
 		var mapOptions = {
@@ -24,7 +26,7 @@
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 
-		var map      = new google.maps.Map( mapCanvas, mapOptions );
+		var map = new google.maps.Map( mapCanvas, mapOptions );
 
 		// Marker
 		var markerOptions = {
