@@ -1651,6 +1651,7 @@ class CMB_Gmap_Field extends CMB_Field {
 				'default_long'        => '-0.12775829999998223',
 				'default_zoom'        => '8',
 				'string-marker-title' => __( 'Drag to set the exact location', 'cmb' ),
+				'google_api_key'      => '',
 			)
 		);
 	}
@@ -1659,7 +1660,12 @@ class CMB_Gmap_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_script( 'cmb-google-maps', '//maps.google.com/maps/api/js?libraries=places' );
+		$key = '';
+		if ( ! empty( $this->args['google_api_key'] ) ){
+			$key = $this->args['google_api_key'];
+		}
+
+		wp_enqueue_script( 'cmb-google-maps', '//maps.google.com/maps/api/js?libraries=places&key=' . $key );
 		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery', 'cmb-google-maps' ) );
 
 		wp_localize_script( 'cmb-google-maps-script', 'CMBGmaps', array(
