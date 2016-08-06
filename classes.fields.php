@@ -13,10 +13,10 @@ abstract class CMB_Field {
 
 	public function __construct( $name, $title, array $values, $args = array() ) {
 
-		$this->id 		= $name;
-		$this->name		= $name . '[]';
-		$this->title 	= $title;
-		$this->args  = wp_parse_args( $args, $this->get_default_args() );
+		$this->id       = $name;
+		$this->name     = $name . '[]';
+		$this->title    = $title;
+		$this->args     = wp_parse_args( $args, $this->get_default_args() );
 
 		// Deprecated argument: 'std'
 		if ( ! empty( $this->args['std'] ) && empty( $this->args['default'] ) ) {
@@ -236,7 +236,7 @@ abstract class CMB_Field {
 	}
 
 	public function get_value() {
-	   return ( $this->value || $this->value === '0' ) ? $this->value : $this->args['default'];
+		return ( $this->value || $this->value === '0' ) ? $this->value : $this->args['default'];
 	}
 
 	public function &get_values() {
@@ -667,27 +667,6 @@ class CMB_URL_Field extends CMB_Field {
 	<?php }
 }
 
-/**
- * Date picker box.
- *
- */
-class CMB_Date_Field extends CMB_Field {
-
-	public function enqueue_scripts() {
-
-		parent::enqueue_scripts();
-
-		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
-
-		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
-	}
-
-	public function html() { ?>
-
-		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
-
-	<?php }
-}
 
 class CMB_Time_Field extends CMB_Field {
 
@@ -696,9 +675,9 @@ class CMB_Time_Field extends CMB_Field {
 		parent::enqueue_scripts();
 
 		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
-
-		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
+		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
+
 	}
 
 	public function html() { ?>
@@ -709,72 +688,126 @@ class CMB_Time_Field extends CMB_Field {
 
 }
 
-/**
- * Date picker for date only (not time) box.
- *
- */
-class CMB_Date_Timestamp_Field extends CMB_Field {
+class CMB_Date_Field extends CMB_Field {
+
+	public function get_default_args() {
+		return array_merge(
+			parent::get_default_args(),
+			array(
+				'date' => true,
+				'time' => true,
+				'format' => 'Y-m-d H:i:s', // MYSQL date format. Any format is OK as long as it can be passed to strtotime.
+				'store_utc' => true,
+			)
+		);
+	}
 
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
-
-		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
+		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css' );
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
+
+		if ( $this->args['time'] ) {
+			wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
+		}
+
+	}
+
+	function get_value() {
+
+		if ( empty( $this->value ) ) {
+			return null;
+		}
+
+		$date = date_create_from_format( $this->args['format'], $this->value );
+
+		if ( ! $date ) {
+			return null;
+		}
+
+		$value = $date->getTimestamp();
+
+		if ( $this->args['store_utc'] ) {
+			$value = $this->convert_from_utc( $value );
+		}
+
+		return $value;
 
 	}
 
 	public function html() { ?>
 
-		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr(); ?>  value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>" />
+		<?php
+
+		$value['raw'] = $this->get_value();
+		$value['date'] = ( ! empty( $value['raw'] ) ) ? date( 'Y-m-d', $value['raw'] ) : null;
+		$value['time'] = ( ! empty( $value['raw'] ) ) ? date( 'g:ia', $value['raw'] ) : null;
+
+		?>
+
+		<?php if ( $this->args['date'] ) : ?>
+
+			<input
+				type="text"
+				data-alt-field="#<?php echo esc_attr( $this->get_the_id_attr('-alt-field') ); ?>"
+				<?php $this->id_attr(); ?>
+				<?php $this->boolean_attr(); ?>
+				<?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?>
+			/>
+
+			<input
+				type="hidden"
+				value="<?php echo esc_attr( $value['date'] );?>"
+				<?php $this->id_attr('-alt-field'); ?>
+				<?php $this->boolean_attr(); ?>
+				<?php $this->name_attr('[date]'); ?>
+			/>
+
+		<?php endif; ?>
+
+		<?php if ( $this->args['time'] ) : ?>
+
+			<input
+			 	type="text"
+			 	value="<?php echo esc_attr( $value['time'] );?>"
+				<?php $this->id_attr(); ?>
+				<?php $this->boolean_attr(); ?>
+				<?php $this->class_attr( 'cmb_text_small cmb_timepicker' ); ?>
+				<?php $this->name_attr('[time]'); ?>
+			/>
+
+		<?php endif; ?>
 
 	<?php }
 
-	public function parse_save_values() {
-
-		foreach( $this->values as &$value )
-			$value = strtotime( $value );
-
-		sort( $this->values );
-
-	}
-
-}
-
-/**
- * Date picker for date and time (seperate fields) box.
- *
- */
-class CMB_Datetime_Timestamp_Field extends CMB_Field {
-
-	public function enqueue_scripts() {
-
-		parent::enqueue_scripts();
-
-		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
-
-		wp_enqueue_script( 'cmb-timepicker', trailingslashit( CMB_URL ) . 'js/jquery.timePicker.min.js', array( 'jquery', 'cmb-scripts' ) );
-		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
-	}
-
-	public function html() { ?>
-
-		<input <?php $this->id_attr('date'); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr( '[date]' ); ?>  value="<?php echo $this->value ? esc_attr( date( 'm\/d\/Y', $this->value ) ) : '' ?>" />
-		<input <?php $this->id_attr('time'); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_timepicker' ); ?> type="text" <?php $this->name_attr( '[time]' ); ?> value="<?php echo $this->value ? esc_attr( date( 'h:i A', $this->value ) ) : '' ?>" />
-
-	<?php }
-
-	public function parse_save_values() {
+	function parse_save_values() {
 
 		// Convert all [date] and [time] values to a unix timestamp.
+		// Then handle GMT offset if required.
+		// Then convert to desired format.
 		// If date is empty, assume delete. If time is empty, assume 00:00.
-		foreach( $this->values as $key => &$value ) {
-			if ( empty( $value['date'] ) )
+		$values = &$this->get_values();
+		foreach ( $values as $key => &$value ) {
+
+			if ( empty( $value['date'] ) ) {
 				unset( $this->values[$key] );
-			else
-				$value = strtotime( $value['date'] . ' ' . $value['time'] );
+				continue;
+			}
+
+			$value = strtotime( sprintf(
+				'%s %s',
+				$value['date'],
+				isset( $value['time'] ) ? $value['time'] : '00:00'
+			) );
+
+			if ( $this->args['store_utc'] ) {
+				$value = $this->convert_to_utc( $value );
+			}
+
+			$value = date( $this->args['format'], $value );
+
 		}
 
 		$this->values = array_filter( $this->values );
@@ -782,6 +815,14 @@ class CMB_Datetime_Timestamp_Field extends CMB_Field {
 
 		parent::parse_save_values();
 
+	}
+
+	function convert_to_utc( $value ) {
+		return $value - ( current_time( 'U', true ) - current_time( 'U', false ) );
+	}
+
+	function convert_from_utc( $value  ) {
+		return $value + ( current_time( 'U', true ) - current_time( 'U', false ) );
 	}
 
 }
