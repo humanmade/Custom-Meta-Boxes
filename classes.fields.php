@@ -1660,7 +1660,13 @@ class CMB_Gmap_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_script( 'cmb-google-maps', '//maps.google.com/maps/api/js?libraries=places' );
+		$maps_src = '//maps.google.com/maps/api/js?libraries=places';
+
+		if ( defined( 'CMB_GAPI_KEY' ) ) {
+			$maps_src = add_query_arg( 'key', urlencode( CMB_GAPI_KEY ), $maps_src );
+		}
+
+		wp_enqueue_script( 'cmb-google-maps', $maps_src );
 		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery', 'cmb-google-maps' ) );
 
 		wp_localize_script( 'cmb-google-maps-script', 'CMBGmaps', array(
