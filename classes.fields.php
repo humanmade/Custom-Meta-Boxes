@@ -1645,12 +1645,13 @@ class CMB_Gmap_Field extends CMB_Field {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-				'field_width'         => '100%',
-				'field_height'        => '250px',
-				'default_lat'         => '51.5073509',
-				'default_long'        => '-0.12775829999998223',
-				'default_zoom'        => '8',
-				'string-marker-title' => __( 'Drag to set the exact location', 'cmb' ),
+				'field_width'                 => '100%',
+				'field_height'                => '250px',
+				'default_lat'                 => '51.5073509',
+				'default_long'                => '-0.12775829999998223',
+				'default_zoom'                => '8',
+				'string-marker-title'         => esc_html__( 'Drag to set the exact location', 'cmb' ),
+				'string-gmaps-api-not-loaded' => esc_html__( 'Google Maps API not loaded.', 'cmb' ),
 			)
 		);
 	}
@@ -1669,7 +1670,8 @@ class CMB_Gmap_Field extends CMB_Field {
 				'zoom'      => $this->args['default_zoom'],
 			),
 			'strings'  => array(
-				'markerTitle' => $this->args['string-marker-title']
+				'markerTitle'            => $this->args['string-marker-title'],
+				'googleMapsApiNotLoaded' => $this->args['string-gmaps-api-not-loaded'],
 			)
 		) );
 
