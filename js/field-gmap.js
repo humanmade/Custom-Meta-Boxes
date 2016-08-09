@@ -3,18 +3,21 @@
 
 (function($) {
 
-	if ( 'undefined' == typeof google ) {
-		$('.map').css('textAlign','center').append( 'Google Maps API not loaded.' );
-		return;
-	}
-
 	var CMBGmapsInit = function( fieldEl ) {
 
-		var searchInput = $('.map-search', fieldEl ).get(0);
-		var mapCanvas   = $('.map', fieldEl ).get(0);
-		var latitude    = $('.latitude', fieldEl );
-		var longitude   = $('.longitude', fieldEl );
-		var elevation   = $('.elevation', fieldEl );
+		var mapCanvas = $( '.map', fieldEl ).get(0);
+
+		if ( 'undefined' === typeof google ) {
+			$( '<div>' + CMBGmaps.strings.googleMapsApiNotLoaded + '</div>' )
+				.css({ 'padding': '1em', 'textAlign': 'center', 'width': '100%' })
+				.appendTo( mapCanvas );
+			return;
+		}
+
+		var searchInput = $( '.map-search', fieldEl ).get(0);
+		var latitude    = $( '.latitude', fieldEl );
+		var longitude   = $( '.longitude', fieldEl );
+		var elevation   = $( '.elevation', fieldEl );
 		var elevator    = new google.maps.ElevationService();
 
 		var mapOptions = {
@@ -23,7 +26,7 @@
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 
-		var map      = new google.maps.Map( mapCanvas, mapOptions );
+		var map = new google.maps.Map( mapCanvas, mapOptions );
 
 		// Marker
 		var markerOptions = {

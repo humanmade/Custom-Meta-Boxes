@@ -1,10 +1,25 @@
-# HM Custom Meta Boxes for WordPress
-
-Custom Meta Boxes is a framework for easily adding custom fields  to the WordPress post edit page.
+<table width="100%">
+	<tr>
+		<td align="left" width="70">
+			<strong>HM Custom Meta Boxes for WordPress</strong><br />
+			A framework for easily adding custom fields  to the WordPress post edit page
+		</td>
+		<td align="right" width="20%">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			A <strong><a href="https://hmn.md/">Human Made</a></strong> project. Maintained by @mikeselander.
+		</td>
+		<td align="center">
+			<img src="https://hmn.md/content/themes/hmnmd/assets/images/hm-logo.svg" width="100" />
+		</td>
+	</tr>
+</table>
 
 It includes several field types including WYSIWYG, media upload and dates ([see wiki for a full list](https://github.com/humanmade/Custom-Meta-Boxes/wiki)). It also supports repeatable and grouped fields.
 
-This project is aimed at developers and is easily extended and customised. It takes a highly modular, Object Orientated approach, with each field as an extension of the CMB_Field abstract class.
+This project is aimed at developers and is easily extended and customized. It takes a highly modular, Object Orientated approach, with each field as an extension of the CMB_Field abstract class.
 
 The framework also features a basic layout engine for fields, allowing you to align fields to a simple 12 column grid.
 
@@ -13,14 +28,14 @@ The framework also features a basic layout engine for fields, allowing you to al
 ## Usage
 
 * Include the custom-meta-boxes.php framework file.
-  * In your theme: include the CMB directory to your theme directory, and add `require_once( 'Custom-Meta-Boxes/custom-meta-boxes.php' );` to functions.php
-  * As an MU Plugin: [Refer to the WordPress Codex here for more information](http://codex.wordpress.org/Must_Use_Plugins)
+    * In your theme: include the CMB directory to your theme directory, and add `require_once( 'Custom-Meta-Boxes/custom-meta-boxes.php' );` to functions.php
+    * As an MU Plugin: [Refer to the WordPress Codex here for more information](http://codex.wordpress.org/Must_Use_Plugins)
 * Filter `cmb_meta_boxes` to add your own meta boxes. [The wiki has more details and example code](https://github.com/humanmade/Custom-Meta-Boxes/wiki/Create-a-Meta-Box)
 
 ## Help
 
 * For more information, including example code for usage of each field and instructions on how to create your own fields, refer to the [Wiki](https://github.com/humanmade/Custom-Meta-Boxes/wiki/).
-* Not covered in the Wiki? Need more help? Get in touch. support@humanmade.co.uk
+* Not covered in the Wiki? Need more help? Get in touch. support@humanmade.co.uk or ping @mikeselander
 * Found a bug? Feature requests? [Create an issue - Thanks!](https://github.com/humanmade/Custom-Meta-Boxes/issues/new)
 
 ## About
@@ -32,9 +47,6 @@ It began as a fork of [Custom Meta Boxes](https://github.com/jaredatch/Custom-Me
 ## Known Issues
 * Some fields do not work well as repeatable fields.
 * Some fields do not work well in repeatable groups.
-
-## To Do
-* Make hooking / registering nicer.
 
 ## Contribution Guidelines ##
 
