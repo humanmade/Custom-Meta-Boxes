@@ -279,6 +279,13 @@ class CMB_Meta_Box {
 				if ( ! empty( $field->args['sortable'] ) )
 					$classes[] = 'cmb-sortable';
 
+				// Assign extra class for has label or has no label
+				if ( ! empty( $field->title ) ) {
+					$label_designation = 'cmb-has-label';
+				} else {
+					$label_designation = 'cmb-no-label';
+				}
+
 				$attrs = array(
 					sprintf( 'id="%s"', sanitize_html_class( $field->id ) ),
 					sprintf( 'class="%s"', esc_attr( implode(' ', array_map( 'sanitize_html_class', $classes ) ) ) )
@@ -290,7 +297,7 @@ class CMB_Meta_Box {
 
 				?>
 
-				<div class="cmb-cell-<?php echo intval( $field->args['cols'] ); ?>">
+				<div class="cmb-cell-<?php echo intval( $field->args['cols'] ); ?> <?php echo esc_attr( $label_designation ); ?>">
 
 						<div <?php echo implode( ' ', $attrs ); ?>>
 							<?php $field->display(); ?>
