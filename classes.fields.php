@@ -1661,12 +1661,22 @@ class CMB_Gmap_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		$key = '';
+		$maps_src = '//maps.google.com/maps/api/js?libraries=places';
+
+		// Check for our key with either a field argument or constant.
 		if ( ! empty( $this->args['google_api_key'] ) ){
 			$key = $this->args['google_api_key'];
+		} if ( defined( 'CMB_GAPI_KEY' ) ) {
+			$key = CMB_GAPI_KEY;
 		}
 
-		wp_enqueue_script( 'cmb-google-maps', '//maps.google.com/maps/api/js?libraries=places&key=' . $key );
+		// Only add the key argument if it's been set.
+		if ( ! empty( $key ) ) {
+			$maps_src = add_query_arg( 'key', $key, $maps_src );
+		}
+
+		// Enqueue our scripts.
+		wp_enqueue_script( 'cmb-google-maps', $maps_src );
 		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery', 'cmb-google-maps' ) );
 
 		wp_localize_script( 'cmb-google-maps-script', 'CMBGmaps', array(
