@@ -1666,7 +1666,7 @@ class CMB_Gmap_Field extends CMB_Field {
 		// Check for our key with either a field argument or constant.
 		if ( ! empty( $this->args['google_api_key'] ) ){
 			$key = $this->args['google_api_key'];
-		} if ( defined( 'CMB_GAPI_KEY' ) ) {
+		} elseif ( defined( 'CMB_GAPI_KEY' ) ) {
 			$key = CMB_GAPI_KEY;
 		}
 
