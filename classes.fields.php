@@ -649,7 +649,7 @@ class CMB_Number_Field extends CMB_Field {
 
 	public function html() { ?>
 
-		<input step="<?php echo esc_attr( $this->args['step'] ); ?>" type="number" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_number code' ); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
+		<input step="<?php echo esc_attr( $this->args['step'] ); ?>" type="number" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_number code' ); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->get_value() ); ?>" />
 
 	<?php }
 }
