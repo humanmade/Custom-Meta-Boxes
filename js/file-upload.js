@@ -9,7 +9,7 @@ jQuery( document ).ready( function() {
 
 		var frameArgs = {
 			multiple: false,
-			title: 'Select File',
+			title: CMBFile.strings.selectFile
 		}
 
 		library = container.attr( 'data-type' ).split(',');
