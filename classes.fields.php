@@ -511,9 +511,10 @@ class CMB_Image_Field extends CMB_File_Field {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-			'size' => 'thumbnail',
-			'library-type' => array( 'image' ),
-			'show_size' => false
+				'size'               => 'thumbnail',
+				'library-type'       => array( 'image' ),
+				'show_size'          => false,
+				'string-select-file' => esc_html__( 'Select Image', 'cmb' ),
 			)
 		);
 	}
