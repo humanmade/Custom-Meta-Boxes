@@ -67,6 +67,7 @@ abstract class CMB_Field {
 				'save_callback'       => null,
 				'string-repeat-field' => __( 'Add New', 'cmb' ),
 				'string-delete-field' => __( 'Remove Field', 'cmb' ),
+				'confirm_delete'      => true,
 			),
 			get_class( $this )
 		);

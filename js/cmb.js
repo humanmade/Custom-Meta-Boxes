@@ -99,12 +99,12 @@ var CMB = {
 		e.preventDefault();
 		jQuery(this).blur();
 
-		if ( ! confirm( CMBData.strings.confirmDeleteField ) ) {
+		fieldItem = jQuery( this ).closest('.field-item' );
+		field = fieldItem.closest( '.field' );
+
+		if ( 1 === field.data('confirm-delete') && ! confirm( CMBData.strings.confirmDeleteField ) ) {
 			return;
 		}
-
-		fieldItem = jQuery( this ).closest('.field-item' );
-		field     = fieldItem.closest( '.field' );
 
 		CMB.isMaxFields( field, -1 );
 		CMB.deletedField( fieldItem );
