@@ -43,7 +43,7 @@ class CMB_Meta_Box {
 
 			// If we are on a post edit screen - get metadata value of the field for this post
 			if ( $post_id ) {
-				$single = ! empty( $field['repeatable'] ) ? ! $field['repeatable'] : true;
+				$single = ( ! isset( $field['repeatable'] ) || false === $field['repeatable'] );
 				$values = (array) get_post_meta( $post_id, $field['id'], $single );
 			}
 
