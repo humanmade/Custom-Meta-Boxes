@@ -40,10 +40,15 @@ class CMB_Meta_Box {
 			unset( $args['name'] );
 
 			$class = _cmb_field_class_for_type( $field['type'] );
+			$single = empty( $field['repeatable'] );
 
 			// If we are on a post edit screen - get metadata value of the field for this post
 			if ( $post_id ) {
-				$values = (array) get_post_meta( $post_id, $field['id'], ! empty( $field['repeatable'] ) );
+				$values = (array) get_post_meta( $post_id, $field['id'], $single );
+			}
+			
+			if ( 'group' === $field['type'] && $single ) {
+				$values = array( $values );
 			}
 
 			if ( class_exists( $class ) ) {
