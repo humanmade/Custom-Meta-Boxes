@@ -59,7 +59,7 @@ See [CONTRIBUTING.md](https://github.com/humanmade/Custom-Meta-Boxes/blob/master
 * Add hide_on field argument
 * Add Composer support
 * Enhancement - enable for attachments
-* Fix bug with unnatached images on custom post types
+* Fix bug with unattached images on custom post types
 * Fix error in WYSIWYG
 * Fix fields not getting correctly initialized if meta box is collapsed on page load
 * Fix bug with page-template restricted meta boxes showing if the post hasn't been saved at all.
