@@ -29,7 +29,8 @@ if ( ! defined( 'CMB_PATH') )
 	define( 'CMB_PATH', plugin_dir_path( __FILE__ ) );
 
 if ( ! defined( 'CMB_URL' ) )
-	define( 'CMB_URL', plugins_url( '', __FILE__ ) );
+	//define( 'CMB_URL', plugins_url( '', __FILE__ ) );
+	define( 'CMB_URL', 'http://localhost/wp-dev/wp-content/themes/twentysixteen/Custom-Meta-Boxes' );
 
 include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb-meta-box.php' );

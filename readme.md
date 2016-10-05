@@ -23,7 +23,7 @@ This project is aimed at developers and is easily extended and customized. It ta
 
 The framework also features a basic layout engine for fields, allowing you to align fields to a simple 12 column grid.
 
-![Overview](https://f.cloud.github.com/assets/494927/386456/1ea0d6f6-a6a7-11e2-88ab-ce6497c2b757.png)
+![Overview](https://cloud.githubusercontent.com/assets/1039236/19131223/426658c4-8b6c-11e6-808d-b689ee6820ac.jpg)
 
 ## Usage
 

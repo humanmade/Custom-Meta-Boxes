@@ -6,8 +6,7 @@
  * @return array
  */
 function cmb_sample_metaboxes( array $meta_boxes ) {
-
-	// Example of all available fields
+   // Example of all available fields
 
 	$fields = array(
 
@@ -44,7 +43,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 		array( 'id' => 'field-22', 'name' => 'Color', 'type' => 'colorpicker' ),
 
-		array( 'id' => 'field-23', 'name' => 'Location', 'type' => 'gmap', 'google_api_key' => '{CUSTOM_KEY}' ),
+		array( 'id' => 'field-23', 'name' => 'Location', 'type' => 'gmap' ),
 
 		array( 'id' => 'field-24', 'name' => 'Title Field', 'type' => 'title' ),
 
@@ -52,7 +51,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 	$meta_boxes[] = array(
 		'title' => 'CMB Test - all fields',
-		'pages' => 'post',
+		'pages' => array('post','page'),
 		'fields' => $fields
 	);
 
@@ -73,7 +72,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 	$meta_boxes[] = array(
 		'title' => 'Groups and Columns',
-		'pages' => 'post',
+		'pages' => array('post','page'),
 		'fields' => $groups_and_cols
 	);
 
@@ -86,7 +85,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 	$meta_boxes[] = array(
 		'title' => 'CMB Test - group (all fields)',
-		'pages' => 'post',
+		'pages' => array('post','page'),
 		'fields' => array(
 			array(
 				'id' => 'gp',
@@ -98,6 +97,60 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc' => 'This is the group description.'
 			)
 		)
+	);
+
+	// Main Screenshot Demo
+	$prefix = "example-";
+	$cmb_samples = array(
+
+		array( 'id' => $prefix.'field-0',  'name' => 'Title field (Display plain text)', 'type' => 'title' ),
+
+		array( 'id' => $prefix.'field-2',  'name' => 'WYSIWYG field', 'type' => 'wysiwyg', 'options' => array( 'editor_height' => '100'),'cols' => 4 ),
+		array( 'id' => $prefix.'field-6',  'name' => 'Textare field', 'type' => 'textarea','rows' => 11, 'cols' => 4 ),
+		array( 'id' => $prefix.'field-7',  'name' => 'Code field', 'type' => 'textarea_code','rows' => 11,'cols' => 4 ),
+
+		array( 'id' => $prefix.'field-13', 'name' => 'Location', 'type' => 'gmap','cols' => 6),
+			array( 'id' => $prefix.'field-1',  'name' => 'Text input field', 'type' => 'text','cols' => 5 ),
+			array( 'id' => $prefix.'field-8',  'name' => 'URL field', 'type' => 'text_url','cols' => 5 ),
+			array( 'id' => $prefix.'field-9',  'name' => 'Text small field', 'type' => 'text_small','cols' => 2 ),
+			array( 'id' => $prefix.'field-10',  'name' => 'A unix date field', 'type' => 'date_unix','cols' => 2 ),
+			array( 'id' => $prefix.'field-11',  'name' => 'A time field', 'type' => 'time','cols' => 2 ),
+			array( 
+		    'id'      => $prefix.'field-13', 
+		    'name'    => 'Select Field', 
+		    'type'    => 'select', 
+		    'cols' => 5,
+		    'options' => array(
+		        'option-1' => 'Option 1',
+		        'option-2' => 'Option 2',
+		        'option-3' => 'Option 3',
+		    )
+		),
+			
+		array( 'id' => $prefix.'field-4', 'name' => 'File field', 'type' => 'file', 'file_type' => 'image','cols' => 2),
+		array( 'id' => $prefix.'field-5', 'name' => 'Image upload field', 'type' => 'image', 'show_size' => true,'cols' => 2 ),
+		array( 'id' => $prefix.'field-3', 'name' => 'Date (unix) input field', 'type' => 'datetime_unix','repeatable' => true, 'repeatable_max' => 5, 'sortable' => false,'cols' => 3  ),
+		array( 'id' => $prefix.'field-12', 'name' => 'Color', 'type' => 'colorpicker','cols' => 4 ),
+		
+		
+		array( 
+				    'id'      => $prefix.'field-12', 
+				    'type'    => 'radio', 
+				    'name'	  => 'Radio field',
+				    'cols'	  => 5,
+				    'options' => array( 
+				        'option-1' => 'Option 1', 
+				        'option-2' => 'Option 2',
+				        'option-3' => 'Option 3',
+				    )
+			),
+		array( 'id' => $prefix.'field-12',  'name' => 'Checkbox field', 'type' => 'checkbox', 'cols'	  => 2 ),
+	);
+
+	$meta_boxes[] = array(
+		'title' => 'Custom Meta Boxes - Example',
+		'pages' => array('post','page'),
+		'fields' => $cmb_samples
 	);
 
 	return $meta_boxes;
