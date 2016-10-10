@@ -88,14 +88,19 @@
 			}
 		});
 
-	}
+	};
 
-	CMB.addCallbackForInit( function() {
-		$('.CMB_Gmap_Field .field-item').each(function() {
-			CMBGmapsInit( $(this) );
-		});
-	} );
+	window.CMB_CMAPS_INIT = function() {
+		'use strict';
 
-	CMB.addCallbackForClonedField( ['CMB_Gmap_Field'], CMBGmapsInit );
+		$( '.CMB_Gmap_Field .field-item' ).each( function() {
+			CMBGmapsInit( $( this ) );
+		} );
+
+		CMB.addCallbackForClonedField( ['CMB_Gmap_Field'], CMBGmapsInit );
+	};
+
+	$.getScript( 'https://maps.google.com/maps/api/js?sensor=true&libraries=places&callback=CMB_CMAPS_INIT&key=' + CMBGmaps.key );
+
 
 }(jQuery));
