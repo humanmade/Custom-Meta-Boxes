@@ -100,7 +100,7 @@
 		CMB.addCallbackForClonedField( ['CMB_Gmap_Field'], CMBGmapsInit );
 	};
 
-	$.getScript( 'https://maps.google.com/maps/api/js?sensor=true&libraries=places&callback=CMB_CMAPS_INIT&key=' + CMBGmaps.key );
+	$.getScript( '//maps.google.com/maps/api/js?sensor=true&libraries=places&callback=CMB_CMAPS_INIT&key=' + CMBGmaps.key );
 
 
 }(jQuery));
