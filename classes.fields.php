@@ -66,7 +66,7 @@ abstract class CMB_Field {
 				'data_delegate'       => null,
 				'save_callback'       => null,
 				'string-repeat-field' => __( 'Add New', 'cmb' ),
-				'string-delete-field' => __( 'Remove Field', 'cmb' ),
+				'string-delete-field' => __( 'Remove', 'cmb' ),
 			),
 			get_class( $this )
 		);
@@ -649,7 +649,7 @@ class CMB_Number_Field extends CMB_Field {
 
 	public function html() { ?>
 
-		<input step="<?php echo esc_attr( $this->args['step'] ); ?>" type="number" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_number code' ); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
+		<input step="<?php echo esc_attr( $this->args['step'] ); ?>" type="number" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_number code' ); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->get_value() ); ?>" />
 
 	<?php }
 }
@@ -674,17 +674,18 @@ class CMB_URL_Field extends CMB_Field {
 class CMB_Date_Field extends CMB_Field {
 
 	public function enqueue_scripts() {
-
 		parent::enqueue_scripts();
-
 		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
-
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
 	}
 
-	public function html() { ?>
+	public function html() {
+		// If the user has set a cols arg of less than 6 columns, allow the intput
+		// to go full-width.
+		$classes = ( is_int( $this->args['cols'] ) && $this->args['cols'] <= 6 ) ? 'cmb_datepicker' : 'cmb_text_small cmb_datepicker' ;
+		?>
 
-		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_small cmb_datepicker' ); ?> type="text" <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
+		<input <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( $classes ); ?> type="text" <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->value ); ?>" />
 
 	<?php }
 }
@@ -796,7 +797,7 @@ class CMB_Textarea_Field extends CMB_Field {
 
 	public function html() { ?>
 
-		<textarea <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> rows="<?php echo ! empty( $this->args['rows'] ) ? esc_attr( $this->args['rows'] ) : 4; ?>" <?php $this->name_attr(); ?>><?php echo esc_html( $this->value ); ?></textarea>
+		<textarea <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr(); ?> rows="<?php echo ! empty( $this->args['rows'] ) ? esc_attr( $this->args['rows'] ) : 4; ?>" <?php $this->name_attr(); ?>><?php echo esc_textarea( $this->value ); ?></textarea>
 
 	<?php }
 
@@ -1645,12 +1646,14 @@ class CMB_Gmap_Field extends CMB_Field {
 		return array_merge(
 			parent::get_default_args(),
 			array(
-				'field_width'         => '100%',
-				'field_height'        => '250px',
-				'default_lat'         => '51.5073509',
-				'default_long'        => '-0.12775829999998223',
-				'default_zoom'        => '8',
-				'string-marker-title' => __( 'Drag to set the exact location', 'cmb' ),
+				'field_width'                 => '100%',
+				'field_height'                => '250px',
+				'default_lat'                 => '51.5073509',
+				'default_long'                => '-0.12775829999998223',
+				'default_zoom'                => '8',
+				'string-marker-title'         => esc_html__( 'Drag to set the exact location', 'cmb' ),
+				'string-gmaps-api-not-loaded' => esc_html__( 'Google Maps API not loaded.', 'cmb' ),
+				'google_api_key'              => '',
 			)
 		);
 	}
@@ -1659,17 +1662,26 @@ class CMB_Gmap_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_script( 'cmb-google-maps', '//maps.google.com/maps/api/js?sensor=true&libraries=places' );
-		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery', 'cmb-google-maps' ) );
+		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery' ) );
+
+		// Check for our key with either a field argument or constant.
+		$key = '';
+		if ( ! empty( $this->args['google_api_key'] ) ){
+			$key = $this->args['google_api_key'];
+		} elseif ( defined( 'CMB_GAPI_KEY' ) ) {
+			$key = CMB_GAPI_KEY;
+		}
 
 		wp_localize_script( 'cmb-google-maps-script', 'CMBGmaps', array(
+			'key'      => $key,
 			'defaults' => array(
 				'latitude'  => $this->args['default_lat'],
 				'longitude' => $this->args['default_long'],
 				'zoom'      => $this->args['default_zoom'],
 			),
 			'strings'  => array(
-				'markerTitle' => $this->args['string-marker-title']
+				'markerTitle'            => $this->args['string-marker-title'],
+				'googleMapsApiNotLoaded' => $this->args['string-gmaps-api-not-loaded'],
 			)
 		) );
 

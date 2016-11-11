@@ -5,11 +5,19 @@
 
 	var CMBGmapsInit = function( fieldEl ) {
 
-		var searchInput = $('.map-search', fieldEl ).get(0);
-		var mapCanvas   = $('.map', fieldEl ).get(0);
-		var latitude    = $('.latitude', fieldEl );
-		var longitude   = $('.longitude', fieldEl );
-		var elevation   = $('.elevation', fieldEl );
+		var mapCanvas = $( '.map', fieldEl ).get(0);
+
+		if ( 'undefined' === typeof google ) {
+			$( '<div>' + CMBGmaps.strings.googleMapsApiNotLoaded + '</div>' )
+				.css({ 'padding': '1em', 'textAlign': 'center', 'width': '100%' })
+				.appendTo( mapCanvas );
+			return;
+		}
+
+		var searchInput = $( '.map-search', fieldEl ).get(0);
+		var latitude    = $( '.latitude', fieldEl );
+		var longitude   = $( '.longitude', fieldEl );
+		var elevation   = $( '.elevation', fieldEl );
 		var elevator    = new google.maps.ElevationService();
 
 		var mapOptions = {
@@ -18,7 +26,7 @@
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 
-		var map      = new google.maps.Map( mapCanvas, mapOptions );
+		var map = new google.maps.Map( mapCanvas, mapOptions );
 
 		// Marker
 		var markerOptions = {
@@ -80,14 +88,19 @@
 			}
 		});
 
-	}
+	};
 
-	CMB.addCallbackForInit( function() {
-		$('.CMB_Gmap_Field .field-item').each(function() {
-			CMBGmapsInit( $(this) );
-		});
-	} );
+	window.CMB_CMAPS_INIT = function() {
+		'use strict';
 
-	CMB.addCallbackForClonedField( ['CMB_Gmap_Field'], CMBGmapsInit );
+		$( '.CMB_Gmap_Field .field-item' ).each( function() {
+			CMBGmapsInit( $( this ) );
+		} );
+
+		CMB.addCallbackForClonedField( ['CMB_Gmap_Field'], CMBGmapsInit );
+	};
+
+	$.getScript( '//maps.google.com/maps/api/js?sensor=true&libraries=places&callback=CMB_CMAPS_INIT&key=' + CMBGmaps.key );
+
 
 }(jQuery));
