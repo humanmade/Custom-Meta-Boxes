@@ -1692,7 +1692,12 @@ class CMB_Gmap_Field extends CMB_Field {
 		// Ensure all args used are set
 		$value = wp_parse_args(
 			$this->get_value(),
-			array( 'lat' => null, 'long' => null, 'elevation' => null )
+			array(
+				'lat'       => null,
+				'long'      => null,
+				'elevation' => null,
+				'text'      => null
+			)
 		);
 
 		$style = array(
@@ -1704,7 +1709,7 @@ class CMB_Gmap_Field extends CMB_Field {
 
 		?>
 
-		<input type="text" <?php $this->class_attr( 'map-search' ); ?> <?php $this->id_attr(); ?> />
+		<input type="text" <?php $this->class_attr( 'map-search' ); ?> <?php $this->id_attr(); ?> <?php $this->name_attr( '[text]' ); ?> value="<?php echo esc_attr( $value['text'] ); ?>" />
 
 		<div class="map" style="<?php echo esc_attr( implode( ' ', $style ) ); ?>"></div>
 
