@@ -1692,7 +1692,12 @@ class CMB_Gmap_Field extends CMB_Field {
 		// Ensure all args used are set
 		$value = wp_parse_args(
 			$this->get_value(),
-			array( 'lat' => null, 'long' => null, 'elevation' => null, 'text' => null )
+			array(
+				'lat'       => null,
+				'long'      => null,
+				'elevation' => null,
+				'text'      => null
+			)
 		);
 
 		$style = array(
