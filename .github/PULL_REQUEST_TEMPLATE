@@ -1,0 +1,10 @@
+{{Description of feature here}}
+
+Resolves # .
+
+*I have:*
+ - [ ] Run WP VIP PHPCS and code parses without errors
+ - [ ] Run PHPUnit and all tests are passing after adding any necessary new tests
+ - [ ] Tested feature/bugfix on single and multisite install
+
+@mikeselander
