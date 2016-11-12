@@ -22,22 +22,23 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-if ( ! defined( 'CMB_DEV') )
+if ( ! defined( 'CMB_DEV' ) ) {
 	define( 'CMB_DEV', false );
+}
 
-if ( ! defined( 'CMB_PATH') )
+if ( ! defined( 'CMB_PATH' ) ) {
 	define( 'CMB_PATH', plugin_dir_path( __FILE__ ) );
+}
 
-if ( ! defined( 'CMB_URL' ) )
+if ( ! defined( 'CMB_URL' ) ) {
 	define( 'CMB_URL', plugins_url( '', __FILE__ ) );
+}
 
 include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb-meta-box.php' );
 
 // Make it possible to add fields in locations other than post edit screen.
 include_once( CMB_PATH . '/fields-anywhere.php' );
-
-// include_once( CMB_PATH . '/example-functions.php' );
 
 /**
  * Get all the meta boxes on init
@@ -46,8 +47,9 @@ include_once( CMB_PATH . '/fields-anywhere.php' );
  */
 function cmb_init() {
 
-	if ( ! is_admin() )
+	if ( ! is_admin() ) {
 		return;
+	}
 
 	// Load translations
 	$textdomain = 'cmb';
@@ -59,9 +61,11 @@ function cmb_init() {
 
 	$meta_boxes = apply_filters( 'cmb_meta_boxes', array() );
 
-	if ( ! empty( $meta_boxes ) )
-		foreach ( $meta_boxes as $meta_box )
+	if ( ! empty( $meta_boxes ) ) {
+		foreach ( $meta_boxes as $meta_box ) {
 			new CMB_Meta_Box( $meta_box );
+		}
+	}
 
 }
 add_action( 'init', 'cmb_init', 50 );
@@ -99,7 +103,7 @@ function _cmb_available_fields() {
 		'title'				=> 'CMB_Title',
 		'group'				=> 'CMB_Group_Field',
 		'gmap'				=> 'CMB_Gmap_Field',
-		'number'			=> 'CMB_Number_Field'
+		'number'			=> 'CMB_Number_Field',
 	) );
 
 }
@@ -114,8 +118,9 @@ function _cmb_field_class_for_type( $type ) {
 
 	$map = _cmb_available_fields();
 
-	if ( isset( $map[$type] ) )
-		return $map[$type];
+	if ( isset( $map[ $type ] ) ) {
+		return $map[ $type ];
+	}
 
 	return false;
 
@@ -131,30 +136,31 @@ function _cmb_field_class_for_type( $type ) {
  * @param  string $query
  * @return string $query
  */
-function cmb_fix_meta_query_order($query) {
+function cmb_fix_meta_query_order( $query ) {
 
-    $pattern = '/^SELECT (post_id|user_id), meta_key, meta_value FROM \w* WHERE post_id IN \([\d|,]*\)$/';
+	$pattern = '/^SELECT (post_id|user_id), meta_key, meta_value FROM \w* WHERE post_id IN \([\d|,]*\)$/';
 
-    if (
-            0 === strpos( $query, "SELECT post_id, meta_key, meta_value" ) &&
-            preg_match( $pattern, $query, $matches )
-    ) {
+	if (
+		0 === strpos( $query, 'SELECT post_id, meta_key, meta_value' ) &&
+		preg_match( $pattern, $query, $matches )
+	) {
+		if ( isset( $matches[1] ) && 'user_id' == $matches[1] ) {
+			$meta_id_column = 'umeta_id';
+		} else {
+			$meta_id_column = 'meta_id';
+		}
 
-            if ( isset( $matches[1] ) && 'user_id' == $matches[1] )
-                    $meta_id_column = 'umeta_id';
-            else
-                    $meta_id_column = 'meta_id';
+		$meta_query_orderby = ' ORDER BY ' . $meta_id_column;
 
-            $meta_query_orderby = ' ORDER BY ' . $meta_id_column;
+		if ( false === strpos( $query, $meta_query_orderby ) ) {
+			$query .= $meta_query_orderby;
+		}
+	}
 
-            if ( false === strpos( $query, $meta_query_orderby ) )
-                    $query .= $meta_query_orderby;
-
-    }
-
-    return $query;
+	return $query;
 
 }
 
-if ( version_compare( get_bloginfo( 'version' ), '3.8', '<' ) )
+if ( version_compare( get_bloginfo( 'version' ), '3.8', '<' ) ) {
 	add_filter( 'query', 'cmb_fix_meta_query_order', 1 );
+}

@@ -13,7 +13,7 @@ class IsMetaBoxDisplayedTestCase extends WP_UnitTestCase {
 			'post_status' => 'publish',
 			'post_content' => rand_str(),
 			'post_title' => rand_str(),
-			'post_type' => 'post'
+			'post_type' => 'post',
 		);
 
 		$id = wp_insert_post( $args );
@@ -40,9 +40,9 @@ class IsMetaBoxDisplayedTestCase extends WP_UnitTestCase {
 					'id' => 'test',
 					'name' => 'Test',
 					'type' => 'text',
-				)
+				),
 			),
-			'show_on' => array( 'id' => 2 )
+			'show_on' => array( 'id' => 2 ),
 		) );
 
 		$this->assertFalse( $mb->add_for_id( false ) );
@@ -67,9 +67,9 @@ class IsMetaBoxDisplayedTestCase extends WP_UnitTestCase {
 					'id' => 'test',
 					'name' => 'Test',
 					'type' => 'text',
-				)
+				),
 			),
-			'show_on' => array( 'page-template' => 'test.php' )
+			'show_on' => array( 'page-template' => 'test.php' ),
 		) );
 
 		$this->assertFalse( $mb->add_for_page_template( true ) );
@@ -94,9 +94,9 @@ class IsMetaBoxDisplayedTestCase extends WP_UnitTestCase {
 					'id' => 'test',
 					'name' => 'Test',
 					'type' => 'text',
-				)
+				),
 			),
-			'hide_on' => array( 'id' => 2 )
+			'hide_on' => array( 'id' => 2 ),
 		) );
 
 		// Test is shown when no ID is set.
@@ -127,9 +127,9 @@ class IsMetaBoxDisplayedTestCase extends WP_UnitTestCase {
 					'id' => 'test',
 					'name' => 'Test',
 					'type' => 'text',
-				)
+				),
 			),
-			'hide_on' => array( 'page-template' => 'test.php' )
+			'hide_on' => array( 'page-template' => 'test.php' ),
 		) );
 
 		$this->assertTrue( $mb->hide_for_page_template( true ) );
@@ -143,5 +143,4 @@ class IsMetaBoxDisplayedTestCase extends WP_UnitTestCase {
 		unset( $_GET['post'] );
 
 	}
-
 }
