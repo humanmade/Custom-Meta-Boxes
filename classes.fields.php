@@ -643,7 +643,7 @@ class CMB_Image_Field extends CMB_File_Field {
 			return;
 		}
 
-		$id = intval( $_POST['id'] );
+		$id = absint( $_POST['id'] );
 
 		$size = array(
 			intval( $_POST['width'] ),
@@ -652,7 +652,7 @@ class CMB_Image_Field extends CMB_File_Field {
 		);
 
 		$image = wp_get_attachment_image_src( $id, $size );
-		echo reset( $image );
+		echo esc_url( reset( $image ) );
 
 		die(); // this is required to return a proper result
 	}
@@ -1019,7 +1019,7 @@ class CMB_wysiwyg extends CMB_Field {
 			<script>
 				if ( 'undefined' === typeof( cmb_wysiwyg_editors ) )
 					var cmb_wysiwyg_editors = {};
-				cmb_wysiwyg_editors.<?php echo $field_id; ?> = '<?php echo $editor; ?>';
+				cmb_wysiwyg_editors.<?php echo esc_js( $field_id ); ?> = '<?php echo esc_js( $editor ); ?>';
 			</script>
 
 			<?php
@@ -1434,7 +1434,7 @@ class CMB_Post_Select extends CMB_Select {
 // TODO this should be in inside the class
 function cmb_ajax_post_select() {
 
-	$post_id = ! empty( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : false;
+	$post_id = ! empty( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : false;
 	$nonce   = ! empty( $_POST['nonce'] ) ? $_POST['nonce'] : false;
 	$args    = ! empty( $_POST['query'] ) ? $_POST['query'] : array();
 

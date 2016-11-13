@@ -56,17 +56,22 @@ class CMB_Meta_Box {
 	public function init_fields_for_post() {
 
 		global $post;
+		$post_id = null;
 
 		// Get the current ID
 		if ( isset( $_GET['post'] ) ) {
-			$post_id = $_GET['post'];
+			$post_id = wp_unslash( $_GET['post'] );
 		} elseif ( isset( $_POST['post_ID'] ) ) {
-			$post_id = $_POST['post_ID'];
+			$post_id = wp_unslash( $_POST['post_ID'] );
 		} elseif ( ! empty( $post->ID ) ) {
 			$post_id = $post->ID;
 		}
 
 		if ( is_page() || ! isset( $post_id ) ) {
+			return false;
+		}
+
+		if ( ! is_numeric( $post_id ) || $post_id != floor( $post_id ) ) {
 			return false;
 		}
 
@@ -392,13 +397,13 @@ class CMB_Meta_Box {
 
 	function get_post_id() {
 
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
+		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : null;
 
 		if ( ! $post_id && isset( $_POST['post_id'] ) ) {
-			$post_id = $_POST['post_id'];
+			$post_id = absint( $_POST['post_id'] );
 		}
 
-		return $post_id;
+		return (int) $post_id;
 
 	}
 }
