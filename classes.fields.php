@@ -1662,25 +1662,18 @@ class CMB_Gmap_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		$maps_src = '//maps.google.com/maps/api/js?libraries=places';
+		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery' ) );
 
 		// Check for our key with either a field argument or constant.
+		$key = '';
 		if ( ! empty( $this->args['google_api_key'] ) ){
 			$key = $this->args['google_api_key'];
 		} elseif ( defined( 'CMB_GAPI_KEY' ) ) {
 			$key = CMB_GAPI_KEY;
 		}
 
-		// Only add the key argument if it's been set.
-		if ( ! empty( $key ) ) {
-			$maps_src = add_query_arg( 'key', $key, $maps_src );
-		}
-
-		// Enqueue our scripts.
-		wp_enqueue_script( 'cmb-google-maps', $maps_src );
-		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery', 'cmb-google-maps' ) );
-
 		wp_localize_script( 'cmb-google-maps-script', 'CMBGmaps', array(
+			'key'      => $key,
 			'defaults' => array(
 				'latitude'  => $this->args['default_lat'],
 				'longitude' => $this->args['default_long'],
@@ -1699,7 +1692,12 @@ class CMB_Gmap_Field extends CMB_Field {
 		// Ensure all args used are set
 		$value = wp_parse_args(
 			$this->get_value(),
-			array( 'lat' => null, 'long' => null, 'elevation' => null )
+			array(
+				'lat'       => null,
+				'long'      => null,
+				'elevation' => null,
+				'text'      => null
+			)
 		);
 
 		$style = array(
@@ -1711,7 +1709,7 @@ class CMB_Gmap_Field extends CMB_Field {
 
 		?>
 
-		<input type="text" <?php $this->class_attr( 'map-search' ); ?> <?php $this->id_attr(); ?> />
+		<input type="text" <?php $this->class_attr( 'map-search' ); ?> <?php $this->id_attr(); ?> <?php $this->name_attr( '[text]' ); ?> value="<?php echo esc_attr( $value['text'] ); ?>" />
 
 		<div class="map" style="<?php echo esc_attr( implode( ' ', $style ) ); ?>"></div>
 
