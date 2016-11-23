@@ -4,16 +4,15 @@
 			<strong>HM Custom Meta Boxes for WordPress</strong><br />
 			A framework for easily adding custom fields  to the WordPress post edit page
 		</td>
-		<td align="right" width="20%">
+		<td align="center" width="20%">
+		    <img src="https://hmn.md/content/themes/hmnmd/assets/images/hm-logo.svg" width="100" />
 		</td>
 	</tr>
 	<tr>
 		<td>
 			A <strong><a href="https://hmn.md/">Human Made</a></strong> project. Maintained by @mikeselander.
 		</td>
-		<td align="center">
-			<img src="https://hmn.md/content/themes/hmnmd/assets/images/hm-logo.svg" width="100" />
-		</td>
+		<td align="center"></td>
 	</tr>
 </table>
 
@@ -27,6 +26,7 @@ The framework also features a basic layout engine for fields, allowing you to al
 
 ## Usage
 
+* Download the latest release [here](https://github.com/humanmade/Custom-Meta-Boxes/releases/latest) or clone from master.
 * Include the custom-meta-boxes.php framework file.
     * In your theme: include the CMB directory to your theme directory, and add `require_once( 'Custom-Meta-Boxes/custom-meta-boxes.php' );` to functions.php
     * As an MU Plugin: [Refer to the WordPress Codex here for more information](http://codex.wordpress.org/Must_Use_Plugins)
