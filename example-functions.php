@@ -44,7 +44,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 		array( 'id' => 'field-22', 'name' => 'Color', 'type' => 'colorpicker' ),
 
-		array( 'id' => 'field-23', 'name' => 'Location', 'type' => 'gmap' ),
+		array( 'id' => 'field-23', 'name' => 'Location', 'type' => 'gmap', 'google_api_key' => '{CUSTOM_KEY}' ),
 
 		array( 'id' => 'field-24', 'name' => 'Title Field', 'type' => 'title' ),
 

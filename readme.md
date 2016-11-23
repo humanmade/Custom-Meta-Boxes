@@ -4,16 +4,15 @@
 			<strong>HM Custom Meta Boxes for WordPress</strong><br />
 			A framework for easily adding custom fields  to the WordPress post edit page
 		</td>
-		<td align="right" width="20%">
+		<td align="center" width="20%">
+		    <img src="https://hmn.md/content/themes/hmnmd/assets/images/hm-logo.svg" width="100" />
 		</td>
 	</tr>
 	<tr>
 		<td>
 			A <strong><a href="https://hmn.md/">Human Made</a></strong> project. Maintained by @mikeselander.
 		</td>
-		<td align="center">
-			<img src="https://hmn.md/content/themes/hmnmd/assets/images/hm-logo.svg" width="100" />
-		</td>
+		<td align="center"></td>
 	</tr>
 </table>
 
@@ -23,10 +22,11 @@ This project is aimed at developers and is easily extended and customized. It ta
 
 The framework also features a basic layout engine for fields, allowing you to align fields to a simple 12 column grid.
 
-![Overview](https://f.cloud.github.com/assets/494927/386456/1ea0d6f6-a6a7-11e2-88ab-ce6497c2b757.png)
+![Overview](https://cloud.githubusercontent.com/assets/1039236/19131223/426658c4-8b6c-11e6-808d-b689ee6820ac.jpg)
 
 ## Usage
 
+* Download the latest release [here](https://github.com/humanmade/Custom-Meta-Boxes/releases/latest) or clone from master.
 * Include the custom-meta-boxes.php framework file.
     * In your theme: include the CMB directory to your theme directory, and add `require_once( 'Custom-Meta-Boxes/custom-meta-boxes.php' );` to functions.php
     * As an MU Plugin: [Refer to the WordPress Codex here for more information](http://codex.wordpress.org/Must_Use_Plugins)
@@ -59,7 +59,7 @@ See [CONTRIBUTING.md](https://github.com/humanmade/Custom-Meta-Boxes/blob/master
 * Add hide_on field argument
 * Add Composer support
 * Enhancement - enable for attachments
-* Fix bug with unnatached images on custom post types
+* Fix bug with unattached images on custom post types
 * Fix error in WYSIWYG
 * Fix fields not getting correctly initialized if meta box is collapsed on page load
 * Fix bug with page-template restricted meta boxes showing if the post hasn't been saved at all.
