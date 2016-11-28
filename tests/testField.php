@@ -34,39 +34,49 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
 		$this->assertEquals( $field->get_values(), array( 1 ) );
 
-		// // Multiple Values - eg repeatable.
+		// Single, saved value.
+		$field_value  = array( 'one' );
+		$field->save( $this->post->ID, $field_value );
+		$this->assertEquals( $field->get_values(), $field_value );
+
+		// Multiple Values - eg repeatable.
 		$field = new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ), array( 'repeatable' => true ) );
 		$this->assertEquals( $field->get_values(), array( 1, 2 ) );
+
+		// Multiple, saved values.
+		$repeat_value = array( 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'zero' );
+		$field->save( $this->post->ID, $repeat_value );
+		$this->assertEquals( $field->get_values(), $repeat_value );
 
 	}
 
 	function testSaveValues() {
 
-		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
+		$field        = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
+		$field_value  = array( 'one' );
 
 		if ( ! $this->post )
 			$this->markTestSkipped( 'Post not found' );
 
-		$field->save( $this->post->ID, array( 1 ) );
+		$field->save( $this->post->ID, $field_value );
 
-		$meta = get_post_meta( $this->post->ID, 'foo', false );
-
-		$this->assertEquals( $meta, array( 1 ) );
+		// Verify single value is properly saved.
+		$this->assertEquals( get_post_meta( $this->post->ID, 'foo', false ), $field_value );
 
 	}
 
 	function testSaveValuesOnRepeatable() {
 
-		$field = new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ), array( 'repeatable' => true ) );
+		$field        = new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ), array( 'repeatable' => true ) );
+		$repeat_value = array( 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'zero' );
 
 		if ( ! $this->post )
 			$this->markTestSkipped( 'Post not found' );
 
-		$field->save( $this->post->ID, array( 1, 2 ) );
+		$field->save( $this->post->ID, $repeat_value );
 
-		$meta = get_post_meta( $this->post->ID, 'foo', false );
-
-		$this->assertEquals( $meta, array( 1, 2 ) );
+		// Test that the repeatable field is saved properly.
+		$this->assertEquals( get_post_meta( $this->post->ID, 'foo', false ), $repeat_value );
 
 	}
 
@@ -118,6 +128,37 @@ class FieldTestCase extends WP_UnitTestCase {
 		$id_attr = $field->get_the_name_attr();
 		$this->assertEquals( $id_attr, 'foo[cmb-field-12]' );
 
+	}
+
+	function testEmptyFieldOutput() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
+
+		if ( ! $this->post ) {
+			$this->markTestSkipped( 'Post not found' );
+		}
+
+		// Test empty output
+		$this->expectOutputRegex( '/(value=\"1\")/s' );
+
+		// Trigger output.
+		$field->html();
+
+	}
+
+	function testSavedFieldOutput() {
+		$field        = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
+		$field_value  = array( 'one' );
+
+		if ( ! $this->post ) {
+			$this->markTestSkipped( 'Post not found' );
+		}
+
+		$field->save( $this->post->ID, $field_value );
+
+		$this->expectOutputRegex( '/(value=\"one\")/s' );
+
+		// Trigger output.
+		$field->html();
 	}
 
 }
