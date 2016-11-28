@@ -11,7 +11,7 @@
 /**
  * Draw the meta boxes in places other than the post edit screen.
  *
- * @param string|object $screen Screen identifier.
+ * @param string|object $pages Post type or screen identifier.
  * @param string        $context Optional. box context.
  * @param mixed         $object gets passed to the box callback function as first parameter.
  */
