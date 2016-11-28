@@ -761,7 +761,7 @@ class CMB_Image_Field extends CMB_File_Field {
 add_action( 'wp_ajax_cmb_request_image', array( 'CMB_Image_Field', 'request_image_ajax_callback' ) );
 
 /**
- * Number meta box for a URL.
+ * Number meta box.
  *
  * @since 1.0.0
  *

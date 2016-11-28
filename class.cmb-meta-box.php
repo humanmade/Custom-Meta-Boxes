@@ -14,7 +14,7 @@
 class CMB_Meta_Box {
 
 	/**
-	 * Meta box group data.
+	 * Meta box set collection data.
 	 *
 	 * @access protected
 	 *
@@ -23,7 +23,7 @@ class CMB_Meta_Box {
 	protected $_meta_box;
 
 	/**
-	 * Fields in a group.
+	 * Fields in a collection.
 	 *
 	 * @access protected
 	 *
@@ -34,13 +34,13 @@ class CMB_Meta_Box {
 	/**
 	 * CMB_Meta_Box constructor.
 	 *
-	 * @param array $meta_box Meta box group.
+	 * @param array $meta_box Meta box collection.
 	 */
 	function __construct( $meta_box ) {
 
 		$this->_meta_box = $meta_box;
 
-		// If group ID is missing, assign the title sanitized to the ID.
+		// If collection ID is missing, assign the title sanitized to the ID.
 		if ( empty( $this->_meta_box['id'] ) )
 			$this->_meta_box['id'] = sanitize_title( $this->_meta_box['title'] );
 
@@ -58,9 +58,9 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Initialize metabox group.
+	 * Initialize metabox box fields.
 	 *
-	 * @action cmb_init_fields
+	 * @uses cmb_init_fields
 	 *
 	 * @param int $post_id Optional. Post ID.
 	 */
@@ -96,7 +96,7 @@ class CMB_Meta_Box {
 	 *
 	 * @global int $post
 	 *
-	 * @action dbx_post_advanced
+	 * @uses dbx_post_advanced
 	 *
 	 * @return bool false if post ID fails or is on wrong screen.
 	 */
@@ -124,7 +124,7 @@ class CMB_Meta_Box {
 	/**
 	 * Load JS scripts in the admin area for plugin use.
 	 *
-	 * @action admin_enqueue_scripts
+	 * @uses admin_enqueue_scripts
 	 */
 	function enqueue_scripts() {
 
@@ -144,7 +144,7 @@ class CMB_Meta_Box {
 	/**
 	 * Load stylesheets in admin area for plugin use.
 	 *
-	 * @action admin_enqueue_styles
+	 * @uses admin_enqueue_styles
 	 */
 	function enqueue_styles() {
 
@@ -161,12 +161,12 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Add a metabox group.
+	 * Add a metabox collection.
 	 *
-	 * Parses a field group for display attributes and runs the WP core functionality
+	 * Parses a field collection for display attributes and runs the WP core functionality
 	 * to register the metabox.
 	 *
-	 * @action admin_menu
+	 * @uses admin_menu
 	 */
 	function add() {
 
@@ -191,8 +191,8 @@ class CMB_Meta_Box {
 	/**
 	 * Handle 'Show On' and 'Hide On' Filters.
 	 *
-	 * Runs checks to see if there are specific compatibilites or incompatibilities for displaying
-	 * a CMB field group.
+	 * Runs checks to see if there are specific compatibilities or incompatibilities for displaying
+	 * a CMB field collection.
 	 */
 	function is_metabox_displayed() {
 		$display = true;
@@ -204,9 +204,9 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Display CMB group for particular post ID.
+	 * Display CMB collection for particular post ID.
 	 *
-	 * Only works for field groups that have the 'show_on' attribute of 'id'.
+	 * Only works for field collections that have the 'show_on' attribute of 'id'.
 	 *
 	 * @param bool $display Current display status.
 	 * @return bool (Potentially) modified display status
@@ -232,9 +232,9 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Hide CMB group for particular post ID.
+	 * Hide CMB collection for particular post ID.
 	 *
-	 * Only works for field groups that have the 'hide_on' attribute of 'id'.
+	 * Only works for field collections that have the 'hide_on' attribute of 'id'.
 	 *
 	 * @param bool $display Current display status.
 	 * @return bool (Potentially) modified display status
@@ -259,9 +259,9 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Display CMB group on pages that have a particular page template assigned.
+	 * Display CMB collection on pages that have a particular page template assigned.
 	 *
-	 * Only works for field groups that have the 'show_on' attribute of 'page-template'.
+	 * Only works for field collections that have the 'show_on' attribute of 'page-template'.
 	 *
 	 * @param bool $display Current display status.
 	 * @return bool (Potentially) modified display status
@@ -289,9 +289,9 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Hide CMB group on pages that have a particular page template assigned.
+	 * Hide CMB collection on pages that have a particular page template assigned.
 	 *
-	 * Only works for field groups that have the 'hide_on' attribute of 'page-template'.
+	 * Only works for field collections that have the 'hide_on' attribute of 'page-template'.
 	 *
 	 * @param bool $display Current display status.
 	 * @return bool (Potentially) modified display status
@@ -320,7 +320,7 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Print out field group description for group.
+	 * Print out field collection description.
 	 */
 	function description() {
 
@@ -335,7 +335,7 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Display fields for a group.
+	 * Display fields for a collection.
 	 */
 	function show() {
 
@@ -352,7 +352,7 @@ class CMB_Meta_Box {
 	 *
 	 * This is a static method so other fields can use it that rely on sub fields.
 	 *
-	 * @param array $fields Fields in a group.
+	 * @param array $fields Fields in a collection.
 	 */
 	static function layout_fields( array $fields ) { ?>
 
@@ -444,7 +444,7 @@ class CMB_Meta_Box {
 	/**
 	 * Save data from metabox.
 	 *
-	 * @action cmb_save_fields
+	 * @uses cmb_save_fields
 	 *
 	 * @param int $post_id Optional. Post ID.
 	 * @return int Post ID if nonce is not verified.
@@ -488,7 +488,7 @@ class CMB_Meta_Box {
 	/**
 	 * Trigger a save the on save_post hook.
 	 *
-	 * @action save_post, edit_attachment
+	 * @uses save_post, edit_attachment
 	 *
 	 * @param int $post_id Post ID.
 	 * @return int Post ID if field is autosaving.
@@ -504,7 +504,7 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Get a post ID for use when populating a metabox group.
+	 * Get a post ID for use when populating a metabox bo.
 	 *
 	 * @return int|null Post ID or null if missing GET variable.
 	 */
