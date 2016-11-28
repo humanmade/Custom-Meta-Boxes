@@ -1,17 +1,46 @@
 <?php
+/**
+ * Base functionality for HM CMB plugin.
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
+ */
 
 /**
- * Create meta boxes
+ * Create Meta Boxes.
+ *
+ * @since 1.0.0
  */
 class CMB_Meta_Box {
 
+	/**
+	 * Meta box group data.
+	 *
+	 * @access protected
+	 *
+	 * @var array
+	 */
 	protected $_meta_box;
+
+	/**
+	 * Fields in a group.
+	 *
+	 * @access protected
+	 *
+	 * @var array
+	 */
 	private $fields = array();
 
+	/**
+	 * CMB_Meta_Box constructor.
+	 *
+	 * @param array $meta_box Meta box group.
+	 */
 	function __construct( $meta_box ) {
 
 		$this->_meta_box = $meta_box;
 
+		// If group ID is missing, assign the title sanitized to the ID.
 		if ( empty( $this->_meta_box['id'] ) )
 			$this->_meta_box['id'] = sanitize_title( $this->_meta_box['title'] );
 
@@ -28,6 +57,13 @@ class CMB_Meta_Box {
 
 	}
 
+	/**
+	 * Initialize metabox group.
+	 *
+	 * @action cmb_init_fields
+	 *
+	 * @param int $post_id Optional. Post ID.
+	 */
 	public function init_fields( $post_id = 0 ) {
 
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
@@ -41,7 +77,7 @@ class CMB_Meta_Box {
 
 			$class = _cmb_field_class_for_type( $field['type'] );
 
-			// If we are on a post edit screen - get metadata value of the field for this post
+			// If we are on a post edit screen - get metadata value of the field for this post.
 			if ( $post_id ) {
 				$single = ( ! isset( $field['repeatable'] ) || false === $field['repeatable'] );
 				$values = (array) get_post_meta( $post_id, $field['id'], $single );
@@ -55,11 +91,20 @@ class CMB_Meta_Box {
 
 	}
 
+	/**
+	 * Initialize fields during the metabox loading process.
+	 *
+	 * @global int $post
+	 *
+	 * @action dbx_post_advanced
+	 *
+	 * @return bool false if post ID fails or is on wrong screen.
+	 */
 	public function init_fields_for_post() {
 
 		global $post, $temp_ID;
 
-		// Get the current ID
+		// Get the current ID.
 		if( isset( $_GET['post'] ) )
 			$post_id = $_GET['post'];
 
@@ -76,6 +121,11 @@ class CMB_Meta_Box {
 
 	}
 
+	/**
+	 * Load JS scripts in the admin area for plugin use.
+	 *
+	 * @action admin_enqueue_scripts
+	 */
 	function enqueue_scripts() {
 
 		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
@@ -91,6 +141,11 @@ class CMB_Meta_Box {
 
 	}
 
+	/**
+	 * Load stylesheets in admin area for plugin use.
+	 *
+	 * @action admin_enqueue_styles
+	 */
 	function enqueue_styles() {
 
 		$suffix = CMB_DEV ? '' : '.min';
@@ -105,7 +160,14 @@ class CMB_Meta_Box {
 
 	}
 
-	// Add metabox
+	/**
+	 * Add a metabox group.
+	 *
+	 * Parses a field group for display attributes and runs the WP core functionality
+	 * to register the metabox.
+	 *
+	 * @action admin_menu
+	 */
 	function add() {
 
 		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
@@ -127,7 +189,10 @@ class CMB_Meta_Box {
 	}
 
 	/**
-	 * Handle 'Show On' and 'Hide On' Filters
+	 * Handle 'Show On' and 'Hide On' Filters.
+	 *
+	 * Runs checks to see if there are specific compatibilites or incompatibilities for displaying
+	 * a CMB field group.
 	 */
 	function is_metabox_displayed() {
 		$display = true;
@@ -138,94 +203,125 @@ class CMB_Meta_Box {
 		return $display;
 	}
 
-	// Add CMB for ID
+	/**
+	 * Display CMB group for particular post ID.
+	 *
+	 * Only works for field groups that have the 'show_on' attribute of 'id'.
+	 *
+	 * @param bool $display Current display status.
+	 * @return bool (Potentially) modified display status
+	 */
 	function add_for_id( $display ) {
 
 		if ( ! isset( $this->_meta_box['show_on']['id'] ) ) {
 			return $display;
 		}
 
-		// Don't show CMB if we can't identify ID of a post
+		// Don't show CMB if we can't identify ID of a post.
 		$post_id = $this->get_post_id();
 
 		if ( ! isset( $post_id ) ) {
 			return false;
 		}
 
-		// If value isn't an array, turn it into one
+		// If value isn't an array, turn it into one.
 		$this->_meta_box['show_on']['id'] = ! is_array( $this->_meta_box['show_on']['id'] ) ? array( $this->_meta_box['show_on']['id'] ) : $this->_meta_box['show_on']['id'];
 
 		return in_array( $post_id, $this->_meta_box['show_on']['id'] );
 
 	}
 
-	// Hide CMB for ID
+	/**
+	 * Hide CMB group for particular post ID.
+	 *
+	 * Only works for field groups that have the 'hide_on' attribute of 'id'.
+	 *
+	 * @param bool $display Current display status.
+	 * @return bool (Potentially) modified display status
+	 */
 	function hide_for_id( $display ) {
 
 		if ( ! isset( $this->_meta_box['hide_on']['id'] ) ) {
 			return $display;
 		}
 
-		// Return if we can't identify ID of a post
+		// Return if we can't identify ID of a post.
 		$post_id = $this->get_post_id();
 		if ( ! isset( $post_id ) ) {
 			return $display;
 		}
 
-		// If value isn't an array, turn it into one
+		// If value isn't an array, turn it into one.
 		$this->_meta_box['hide_on']['id'] = ! is_array( $this->_meta_box['hide_on']['id'] ) ? array( $this->_meta_box['hide_on']['id'] ) : $this->_meta_box['hide_on']['id'];
 
 		return ! in_array( $post_id, $this->_meta_box['hide_on']['id'] );
 
 	}
 
-	// Add CMB for Page Template
+	/**
+	 * Display CMB group on pages that have a particular page template assigned.
+	 *
+	 * Only works for field groups that have the 'show_on' attribute of 'page-template'.
+	 *
+	 * @param bool $display Current display status.
+	 * @return bool (Potentially) modified display status
+	 */
 	function add_for_page_template( $display ) {
 
 		if ( ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
 			return $display;
 		}
 
-		// Return false if we can't identify ID of a post
+		// Return false if we can't identify ID of a post.
 		$post_id = $this->get_post_id();
 		if ( ! isset( $post_id ) ) {
 			return false;
 		}
 
-		// Get current template
+		// Get current template.
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
-		// If value isn't an array, turn it into one
+		// If value isn't an array, turn it into one.
 		$this->_meta_box['show_on']['page-template'] = ! is_array( $this->_meta_box['show_on']['page-template'] ) ? array( $this->_meta_box['show_on']['page-template'] ) : $this->_meta_box['show_on']['page-template'];
 
 		return in_array( $current_template, $this->_meta_box['show_on']['page-template'] );
 
 	}
 
-	// Hide CMB for Page Template
+	/**
+	 * Hide CMB group on pages that have a particular page template assigned.
+	 *
+	 * Only works for field groups that have the 'hide_on' attribute of 'page-template'.
+	 *
+	 * @param bool $display Current display status.
+	 * @return bool (Potentially) modified display status
+	 */
 	function hide_for_page_template( $display ) {
 
 		if ( ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
 			return $display;
 		}
 
-		// Return $display if we can't identify ID of a post and hence its current template
+		// Return $display if we can't identify ID of a post and hence its current template.
 		$post_id = $this->get_post_id();
 
 		if ( ! isset( $post_id ) ) {
 			return $display;
 		}
 
-		// Get current template
+		// Get current template.
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
-		// If value isn't an array, turn it into one
+		// If value isn't an array, turn it into one.
 		$this->_meta_box['hide_on']['page-template'] = ! is_array( $this->_meta_box['hide_on']['page-template'] ) ? array( $this->_meta_box['hide_on']['page-template'] ) : $this->_meta_box['hide_on']['page-template'];
 
 		return ! in_array( $current_template, $this->_meta_box['hide_on']['page-template'] );
 
 	}
 
+	/**
+	 * Print out field group description for group.
+	 */
 	function description() {
 
 		if ( ! empty( $this->_meta_box['desc'] ) ) { ?>
@@ -238,7 +334,9 @@ class CMB_Meta_Box {
 
 	}
 
-	// display fields
+	/**
+	 * Display fields for a group.
+	 */
 	function show() {
 
 		$this->description(); ?>
@@ -252,9 +350,9 @@ class CMB_Meta_Box {
 	/**
 	 * Layout an array of fields, depending on their 'cols' property.
 	 *
-	 * This is a static method so other fields can use it that rely on sub fields
+	 * This is a static method so other fields can use it that rely on sub fields.
 	 *
-	 * @param  CMB_Field[]  $fields
+	 * @param array $fields Fields in a group.
 	 */
 	static function layout_fields( array $fields ) { ?>
 
@@ -280,7 +378,7 @@ class CMB_Meta_Box {
 				if ( ! empty( $field->args['sortable'] ) )
 					$classes[] = 'cmb-sortable';
 
-				// Assign extra class for has label or has no label
+				// Assign extra class for has label or has no label.
 				if ( ! empty( $field->title ) ) {
 					$label_designation = 'cmb-has-label';
 				} else {
@@ -322,6 +420,12 @@ class CMB_Meta_Box {
 
 	<?php }
 
+	/**
+	 * Remove unwanted hidden field values recursively.
+	 *
+	 * @param array $values Field value(s).
+	 * @return array mixed Cleaned value(s)
+	 */
 	function strip_repeatable( $values ) {
 
 		foreach ( $values as $key => $value ) {
@@ -337,16 +441,23 @@ class CMB_Meta_Box {
 		return $values;
 	}
 
-	// Save data from metabox
+	/**
+	 * Save data from metabox.
+	 *
+	 * @action cmb_save_fields
+	 *
+	 * @param int $post_id Optional. Post ID.
+	 * @return int Post ID if nonce is not verified.
+	 */
 	function save( $post_id = 0 ) {
 
-		// Verify nonce
+		// Verify nonce.
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
 			return $post_id;
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
-			// Verify this meta box was shown on the page
+			// Verify this meta box was shown on the page.
 			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
 				continue;
 
@@ -367,17 +478,24 @@ class CMB_Meta_Box {
 
 		}
 
-		// If we are not on a post, need to refresh the field objects to reflect new values, as we do not get a redirect
+		// If we are not on a post, need to refresh the field objects to reflect new values, as we do not get a redirect.
 		if ( ! $post_id ) {
 			$this->fields = array();
 			$this->init_fields();
 		}
 	}
 
-	// Save the on save_post hook
+	/**
+	 * Trigger a save the on save_post hook.
+	 *
+	 * @action save_post, edit_attachment
+	 *
+	 * @param int $post_id Post ID.
+	 * @return int Post ID if field is autosaving.
+	 */
 	function save_for_post( $post_id ) {
 
-		// check autosave
+		// Check if we're doing an autosave. Skip if so.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			return $post_id;
 
@@ -385,6 +503,11 @@ class CMB_Meta_Box {
 
 	}
 
+	/**
+	 * Get a post ID for use when populating a metabox group.
+	 *
+	 * @return int|null Post ID or null if missing GET variable.
+	 */
 	function get_post_id() {
 
 		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;

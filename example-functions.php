@@ -1,13 +1,22 @@
 <?php
 /**
+ * Example functions to reference for developers.
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
+ */
+
+/**
  * Define the metabox and field configurations.
  *
- * @param  array $meta_boxes
+ * @param  array $meta_boxes Existing metaboxes.
  * @return array
  */
 function cmb_sample_metaboxes( array $meta_boxes ) {
 
-	// Example of all available fields
+	/**
+	 * Example of all available fields.
+	 */
 
 	$fields = array(
 
@@ -56,7 +65,9 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		'fields' => $fields
 	);
 
-	// Examples of Groups and Columns
+	/**
+	 * Examples of Groups and Columns.
+	 */
 
 	$groups_and_cols = array(
 		array( 'id' => 'gac-1',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
@@ -77,8 +88,11 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		'fields' => $groups_and_cols
 	);
 
-	// Example of repeatable group. Using all fields.
-	// For this example, copy fields from $fields, update I
+	/**
+	 * Example of repeatable group. Using all fields.
+	 * For this example, copy fields from $fields, update ID.
+	 */
+
 	$group_fields = $fields;
 	foreach ( $group_fields as &$field ) {
 		$field['id'] = str_replace( 'field', 'gfield', $field['id'] );

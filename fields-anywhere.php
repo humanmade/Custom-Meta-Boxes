@@ -1,15 +1,19 @@
-<?php 
-
+<?php
 /**
  * Create CMB Meta boxes anywhere you like (other than the post edit screen).
  *
  * This is functional, but a little hacky.
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
  */
 
 /**
- * Draw the meta boxes in places other than the post edit screen
- * 
- * @return null
+ * Draw the meta boxes in places other than the post edit screen.
+ *
+ * @param string|object $screen Screen identifier.
+ * @param string        $context Optional. box context.
+ * @param mixed         $object gets passed to the box callback function as first parameter.
  */
 function cmb_draw_meta_boxes( $pages, $context = 'normal', $object = null ) {
 
@@ -22,11 +26,9 @@ function cmb_draw_meta_boxes( $pages, $context = 'normal', $object = null ) {
 /**
  * Meta-Box template function
  *
- * @since 2.5.0
- *
- * @param string|object $screen Screen identifier
- * @param string $context box context
- * @param mixed $object gets passed to the box callback function as first parameter
+ * @param string|object $screen Screen identifier.
+ * @param string        $context box context.
+ * @param mixed         $object gets passed to the box callback function as first parameter.
  * @return int number of meta_boxes
  */
 function cmb_do_meta_boxes( $screen, $context, $object ) {
@@ -48,8 +50,8 @@ function cmb_do_meta_boxes( $screen, $context, $object ) {
 	$i = 0;
 
 	do {
-		// Grab the ones the user has manually sorted. Pull them out of their previous context/priority and into the one the user chose
-
+		// Grab the ones the user has manually sorted. Pull them out of their previous context/priority
+		// and into the one the user chose.
 		if ( ! $already_sorted && $sorted = get_user_option( "meta-box-order_$page" ) )
 			foreach ( $sorted as $box_context => $ids )
 				foreach ( explode(',', $ids ) as $id )
