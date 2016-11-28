@@ -35,8 +35,8 @@ class DateFieldsAssetsTestCase extends WP_UnitTestCase {
 		$this->assertContains( '/js/field.datetime.js', $scripts_output );
 		$this->assertContains( '/js/cmb.js', $scripts_output );
 		if ( version_compare( $wp_version, '4.1', '>=' ) ) {
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/core.js', $scripts_output );
-			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/datepicker.js', $scripts_output );
+			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/core.min.js', $scripts_output );
+			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/datepicker.min.js', $scripts_output );
 		} else {
 			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/jquery.ui.core.min.js', $scripts_output );
 			$this->assertContains( site_url() . '/wp-includes/js/jquery/ui/jquery.ui.datepicker.min.js', $scripts_output );

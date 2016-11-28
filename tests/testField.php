@@ -138,7 +138,7 @@ class FieldTestCase extends WP_UnitTestCase {
 		}
 
 		// Test empty output
-		$this->expectOutputRegex( '/(value=\"1\")/s' );
+		$this->expectOutputRegex( '/(type=\"text\".*?id=\"foo-cmb-field-0\".*?value=\"1\")/s' );
 
 		// Trigger output.
 		$field->html();
@@ -155,7 +155,7 @@ class FieldTestCase extends WP_UnitTestCase {
 
 		$field->save( $this->post->ID, $field_value );
 
-		$this->expectOutputRegex( '/(value=\"one\")/s' );
+		$this->expectOutputRegex( '/(type=\"text\".*?id=\"foo-cmb-field-0\".*?value=\"one\")/s' );
 
 		// Trigger output.
 		$field->html();
