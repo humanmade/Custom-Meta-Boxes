@@ -22,7 +22,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 		array( 'id' => 'field-1',  'name' => 'Text input field', 'type' => 'text' ),
 		array( 'id' => 'field-2', 'name' => 'Read-only text input field', 'type' => 'text', 'readonly' => true, 'default' => 'READ ONLY' ),
- 		array( 'id' => 'field-3', 'name' => 'Repeatable text input field', 'type' => 'text', 'desc' => 'Add up to 5 fields.', 'repeatable' => true, 'repeatable_max' => 5, 'sortable' => true ),
+		array( 'id' => 'field-3', 'name' => 'Repeatable text input field', 'type' => 'text', 'desc' => 'Add up to 5 fields.', 'repeatable' => true, 'repeatable_max' => 5, 'sortable' => true ),
 
 		array( 'id' => 'field-4',  'name' => 'Small text input field', 'type' => 'text_small' ),
 		array( 'id' => 'field-5',  'name' => 'URL field', 'type' => 'url' ),
@@ -44,7 +44,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		array( 'id' => 'field-15b', 'name' => 'Select taxonomy field', 'type' => 'taxonomy_select',  'taxonomy' => 'category',  'multiple' => true ),
 		array( 'id' => 'field-16', 'name' => 'Post select field', 'type' => 'post_select', 'use_ajax' => false, 'query' => array( 'cat' => 1 ) ),
 		array( 'id' => 'field-17', 'name' => 'Post select field (AJAX)', 'type' => 'post_select', 'use_ajax' => true ),
-		array( 'id' => 'field-17b', 'name' => 'Post select field (AJAX)', 'type' => 'post_select', 'use_ajax' => true, 'query' => array( 'posts_per_page' => 8 ), 'multiple' => true  ),
+		array( 'id' => 'field-17b', 'name' => 'Post select field (AJAX)', 'type' => 'post_select', 'use_ajax' => true, 'query' => array( 'posts_per_page' => 8 ), 'multiple' => true ),
 
 		array( 'id' => 'field-18', 'name' => 'Date input field', 'type' => 'date' ),
 		array( 'id' => 'field-19', 'name' => 'Time input field', 'type' => 'time' ),
@@ -62,7 +62,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	$meta_boxes[] = array(
 		'title' => 'CMB Test - all fields',
 		'pages' => 'post',
-		'fields' => $fields
+		'fields' => $fields,
 	);
 
 	/**
@@ -73,19 +73,31 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		array( 'id' => 'gac-1',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
 		array( 'id' => 'gac-2',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
 		array( 'id' => 'gac-3',  'name' => 'Text input field', 'type' => 'text', 'cols' => 4 ),
-		array( 'id' => 'gac-4', 'name' => 'Group (4 columns)', 'type' => 'group', 'cols' => 4, 'fields' => array(
-			array( 'id' => 'gac-4-f-1',  'name' => 'Textarea field', 'type' => 'textarea' )
-		) ),
-		array( 'id' => 'gac-5', 'name' => 'Group (8 columns)', 'type' => 'group', 'cols' => 8, 'fields' => array(
-			array( 'id' => 'gac-4-f-1',  'name' => 'Text input field', 'type' => 'text' ),
-			array( 'id' => 'gac-4-f-2',  'name' => 'Text input field', 'type' => 'text' ),
-		) ),
+		array(
+			'id'     => 'gac-4',
+			'name'   => 'Group (4 columns)',
+			'type'   => 'group',
+			'cols'   => 4,
+			'fields' => array(
+				array( 'id' => 'gac-4-f-1',  'name' => 'Textarea field', 'type' => 'textarea' ),
+			),
+		),
+		array(
+			'id'     => 'gac-5',
+			'name'   => 'Group (8 columns)',
+			'type'   => 'group',
+			'cols'   => 8,
+			'fields' => array(
+				array( 'id' => 'gac-4-f-1',  'name' => 'Text input field', 'type' => 'text' ),
+				array( 'id' => 'gac-4-f-2',  'name' => 'Text input field', 'type' => 'text' ),
+			),
+		),
 	);
 
 	$meta_boxes[] = array(
 		'title' => 'Groups and Columns',
 		'pages' => 'post',
-		'fields' => $groups_and_cols
+		'fields' => $groups_and_cols,
 	);
 
 	/**
@@ -109,9 +121,9 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'repeatable' => true,
 				'sortable' => true,
 				'fields' => $group_fields,
-				'desc' => 'This is the group description.'
-			)
-		)
+				'desc' => 'This is the group description.',
+			),
+		),
 	);
 
 	return $meta_boxes;

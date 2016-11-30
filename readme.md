@@ -16,6 +16,8 @@
 	</tr>
 </table>
 
+#### [Get the latest stable release](https://github.com/humanmade/Custom-Meta-Boxes/releases/latest)
+
 It includes several field types including WYSIWYG, media upload and dates ([see wiki for a full list](https://github.com/humanmade/Custom-Meta-Boxes/wiki)). It also supports repeatable and grouped fields.
 
 This project is aimed at developers and is easily extended and customized. It takes a highly modular, Object Orientated approach, with each field as an extension of the CMB_Field abstract class.

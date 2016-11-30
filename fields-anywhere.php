@@ -19,7 +19,7 @@ function cmb_draw_meta_boxes( $pages, $context = 'normal', $object = null ) {
 
 	cmb_do_meta_boxes( $pages, $context, $object );
 
-	wp_enqueue_script('post');
+	wp_enqueue_script( 'post' );
 
 }
 
@@ -37,11 +37,11 @@ function cmb_do_meta_boxes( $screen, $context, $object ) {
 
 	static $already_sorted = false;
 
-	if ( empty( $screen ) )
+	if ( empty( $screen ) ) {
 		$screen = get_current_screen();
-
-	elseif ( is_string( $screen ) )
+	} elseif ( is_string( $screen ) ) {
 		$screen = convert_to_screen( $screen );
+	}
 
 	$page = $screen->id;
 
@@ -52,29 +52,35 @@ function cmb_do_meta_boxes( $screen, $context, $object ) {
 	do {
 		// Grab the ones the user has manually sorted. Pull them out of their previous context/priority
 		// and into the one the user chose.
-		if ( ! $already_sorted && $sorted = get_user_option( "meta-box-order_$page" ) )
-			foreach ( $sorted as $box_context => $ids )
-				foreach ( explode(',', $ids ) as $id )
-					if ( $id && 'dashboard_browser_nag' !== $id )
+		if ( ! $already_sorted && $sorted = get_user_option( "meta-box-order_$page" ) ) {
+			foreach ( $sorted as $box_context => $ids ) {
+				foreach ( explode( ',', $ids ) as $id ) {
+					if ( $id && 'dashboard_browser_nag' !== $id ) {
 						add_meta_box( $id, null, null, $screen, $box_context, 'sorted' );
+					}
+				}
+			}
+		}
 
 		$already_sorted = true;
 
-		if ( ! isset( $wp_meta_boxes ) || ! isset( $wp_meta_boxes[$page] ) || ! isset( $wp_meta_boxes[$page][$context] ) )
+		if ( ! isset( $wp_meta_boxes ) || ! isset( $wp_meta_boxes[ $page ] ) || ! isset( $wp_meta_boxes[ $page ][ $context ] ) ) {
 			break;
+		}
 
 		foreach ( array( 'high', 'sorted', 'core', 'default', 'low' ) as $priority ) {
 
-			if ( isset( $wp_meta_boxes[$page][$context][$priority] ) ) {
+			if ( isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
 
-				foreach ( (array) $wp_meta_boxes[$page][$context][$priority] as $box ) {
+				foreach ( (array) $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
 
-					if ( false == $box || ! $box['title'] )
+					if ( false == $box || ! $box['title'] ) {
 						continue;
+					}
 
 					$i++;
 
-					$hidden_class = in_array($box['id'], $hidden) ? ' hide-if-js' : ''; ?>
+					$hidden_class = in_array( $box['id'], $hidden ) ? ' hide-if-js' : ''; ?>
 
 					<div id="<?php esc_attr_e( $box['id'] ); ?>" class="<?php esc_attr_e( postbox_classes( $box['id'], $page ) . $hidden_class ); ?>">
 
@@ -82,12 +88,11 @@ function cmb_do_meta_boxes( $screen, $context, $object ) {
 
 					</div>
 
-				<?php }
-
+					<?php
+				}
 			}
-
 		}
-	} while( 0 );
+	} while( 0 ) ;
 
 	return $i;
 
