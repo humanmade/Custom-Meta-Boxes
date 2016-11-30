@@ -2,8 +2,8 @@ var cmbSelectInit = function() {
 
 	jQuery( '.cmb_select' ).each( function() {
 
-		var el = jQuery(this);
- 		var fieldID = el.attr( 'data-field-id'); // JS Friendly ID
+		var el = jQuery( this );
+ 		var fieldID = el.attr( 'data-field-id' ); // JS Friendly ID
 
  		// If fieldID is set
  		// If fieldID options exist
