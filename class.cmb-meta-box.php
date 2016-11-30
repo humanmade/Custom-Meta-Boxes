@@ -12,8 +12,9 @@ class CMB_Meta_Box {
 
 		$this->_meta_box = $meta_box;
 
-		if ( empty( $this->_meta_box['id'] ) )
+		if ( empty( $this->_meta_box['id'] ) ) {
 			$this->_meta_box['id'] = sanitize_title( $this->_meta_box['title'] );
+		}
 
 		add_action( 'dbx_post_advanced', array( &$this, 'init_fields_for_post' ) );
 		add_action( 'cmb_init_fields', array( &$this, 'init_fields' ) );
@@ -31,7 +32,6 @@ class CMB_Meta_Box {
 	public function init_fields( $post_id = 0 ) {
 
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
-
 			$values = array();
 
 			$args = $field;
@@ -50,27 +50,31 @@ class CMB_Meta_Box {
 			if ( class_exists( $class ) ) {
 				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $args );
 			}
-
 		}
 
 	}
 
 	public function init_fields_for_post() {
 
-		global $post, $temp_ID;
+		global $post;
+		$post_id = null;
 
 		// Get the current ID
-		if( isset( $_GET['post'] ) )
-			$post_id = $_GET['post'];
-
-		elseif( isset( $_POST['post_ID'] ) )
-			$post_id = $_POST['post_ID'];
-
-		elseif ( ! empty( $post->ID ) )
+		if ( isset( $_GET['post'] ) ) {
+			$post_id = wp_unslash( $_GET['post'] );
+		} elseif ( isset( $_POST['post_ID'] ) ) {
+			$post_id = wp_unslash( $_POST['post_ID'] );
+		} elseif ( ! empty( $post->ID ) ) {
 			$post_id = $post->ID;
+		}
 
-		if ( is_page() || ! isset( $post_id ) )
+		if ( is_page() || ! isset( $post_id ) ) {
 			return false;
+		}
+
+		if ( ! is_numeric( $post_id ) || $post_id != floor( $post_id ) ) {
+			return false;
+		}
 
 		$this->init_fields( (int) $post_id );
 
@@ -83,11 +87,12 @@ class CMB_Meta_Box {
 		wp_localize_script( 'cmb-scripts', 'CMBData', array(
 			'strings' => array(
 				'confirmDeleteField' => esc_html__( 'Are you sure you want to delete this field?', 'cmb' ),
-			)
+			),
 		) );
 
-		foreach ( $this->fields as $field )
+		foreach ( $this->fields as $field ) {
 			$field->enqueue_scripts();
+		}
 
 	}
 
@@ -95,21 +100,23 @@ class CMB_Meta_Box {
 
 		$suffix = CMB_DEV ? '' : '.min';
 
-		if ( version_compare( get_bloginfo( 'version' ), '3.8', '>=' ) )
+		if ( version_compare( get_bloginfo( 'version' ), '3.8', '>=' ) ) {
 			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . "css/dist/cmb$suffix.css" );
-		else
+		} else {
 			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'css/legacy.css' );
+		}
 
-		foreach ( $this->fields as $field )
+		foreach ( $this->fields as $field ) {
 			$field->enqueue_styles();
+		}
 
 	}
 
 	// Add metabox
 	function add() {
 
-		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
-		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'low' : $this->_meta_box['priority'];
+		$this->_meta_box['context'] = empty( $this->_meta_box['context'] ) ? 'normal' : $this->_meta_box['context'];
+		$this->_meta_box['priority'] = empty( $this->_meta_box['priority'] ) ? 'low' : $this->_meta_box['priority'];
 
 		// Backwards compatablilty.
 		if ( isset( $this->_meta_box['show_on']['key'] ) ) {
@@ -120,7 +127,7 @@ class CMB_Meta_Box {
 
 		foreach ( (array) $this->_meta_box['pages'] as $page ) {
 			if ( $this->is_metabox_displayed() ) {
-				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority'] ) ;
+				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array( &$this, 'show' ), $page, $this->_meta_box['context'], $this->_meta_box['priority'] );
 			}
 		}
 
@@ -243,7 +250,7 @@ class CMB_Meta_Box {
 
 		$this->description(); ?>
 
-		<input type="hidden" name="wp_meta_box_nonce" value="<?php esc_attr_e( wp_create_nonce( basename(__FILE__) ) ); ?>" />
+		<input type="hidden" name="wp_meta_box_nonce" value="<?php esc_attr_e( wp_create_nonce( basename( __FILE__ ) ) ); ?>" />
 
 		<?php self::layout_fields( $this->fields );
 
@@ -256,15 +263,15 @@ class CMB_Meta_Box {
 	 *
 	 * @param  CMB_Field[]  $fields
 	 */
-	static function layout_fields( array $fields ) { ?>
-
+	static function layout_fields( array $fields ) {
+		?>
 		<div class="cmb_metabox">
 
 			<?php $current_colspan = 0;
 
 			foreach ( $fields as $field ) :
 
-				if ( $current_colspan == 0 ) : ?>
+				if ( 0 == $current_colspan ) : ?>
 
 					<div class="cmb-row">
 
@@ -272,13 +279,15 @@ class CMB_Meta_Box {
 
 				$current_colspan += $field->args['cols'];
 
-				$classes = array( 'field', get_class($field) );
+				$classes = array( 'field', get_class( $field ) );
 
-				if ( ! empty( $field->args['repeatable'] ) )
+				if ( ! empty( $field->args['repeatable'] ) ) {
 					$classes[] = 'repeatable';
+				}
 
-				if ( ! empty( $field->args['sortable'] ) )
+				if ( ! empty( $field->args['sortable'] ) ) {
 					$classes[] = 'cmb-sortable';
+				}
 
 				// Assign extra class for has label or has no label
 				if ( ! empty( $field->title ) ) {
@@ -289,13 +298,13 @@ class CMB_Meta_Box {
 
 				$attrs = array(
 					sprintf( 'id="%s"', sanitize_html_class( $field->id ) ),
-					sprintf( 'class="%s"', esc_attr( implode(' ', array_map( 'sanitize_html_class', $classes ) ) ) )
+					sprintf( 'class="%s"', esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) ) ),
 				);
 
 				// Field Repeatable Max.
-				if ( isset( $field->args['repeatable_max']  ) )
+				if ( isset( $field->args['repeatable_max'] ) ) {
 					$attrs[] = sprintf( 'data-rep-max="%s"', intval( $field->args['repeatable_max'] ) );
-
+				}
 				?>
 
 				<div class="cmb-cell-<?php echo intval( $field->args['cols'] ); ?> <?php echo esc_attr( $label_designation ); ?>">
@@ -308,7 +317,7 @@ class CMB_Meta_Box {
 
 				</div>
 
-				<?php if ( $current_colspan == 12 || $field === end( $fields ) ) :
+				<?php if ( 12 == $current_colspan || $field === end( $fields ) ) :
 
 					$current_colspan = 0; ?>
 
@@ -325,13 +334,11 @@ class CMB_Meta_Box {
 	function strip_repeatable( $values ) {
 
 		foreach ( $values as $key => $value ) {
-
-			if ( false !== strpos( $key, 'cmb-group-x' ) || false !==  strpos( $key, 'cmb-field-x' ) )
-				unset( $values[$key] );
-
-			elseif ( is_array( $value ) )
-				$values[$key] = $this->strip_repeatable( $value );
-
+			if ( false !== strpos( $key, 'cmb-group-x' ) || false !== strpos( $key, 'cmb-field-x' ) ) {
+				unset( $values[ $key ] );
+			} elseif ( is_array( $value ) ) {
+				$values[ $key ] = $this->strip_repeatable( $value );
+			}
 		}
 
 		return $values;
@@ -341,19 +348,22 @@ class CMB_Meta_Box {
 	function save( $post_id = 0 ) {
 
 		// Verify nonce
-		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
+		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) ) {
 			return $post_id;
+		}
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
 			// Verify this meta box was shown on the page
-			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
+			if ( ! isset( $_POST[ '_cmb_present_' . $field['id'] ] ) ) {
 				continue;
+			}
 
-			if ( isset( $_POST[ $field['id'] ] ) )
+			if ( isset( $_POST[ $field['id'] ] ) ) {
 				$value = (array) $_POST[ $field['id'] ];
-			else
+			} else {
 				$value = array();
+			}
 
 			$value = $this->strip_repeatable( $value );
 
@@ -378,8 +388,9 @@ class CMB_Meta_Box {
 	function save_for_post( $post_id ) {
 
 		// check autosave
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return $post_id;
+		}
 
 		$this->save( $post_id );
 
@@ -387,13 +398,13 @@ class CMB_Meta_Box {
 
 	function get_post_id() {
 
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
+		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : null;
 
 		if ( ! $post_id && isset( $_POST['post_id'] ) ) {
-			$post_id = $_POST['post_id'];
+			$post_id = absint( $_POST['post_id'] );
 		}
 
-		return $post_id;
+		return (int) $post_id;
 
 	}
 }

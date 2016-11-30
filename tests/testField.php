@@ -13,7 +13,7 @@ class FieldTestCase extends WP_UnitTestCase {
 			'post_status' => 'publish',
 			'post_content' => rand_str(),
 			'post_title' => rand_str(),
-			'post_type' => 'post'
+			'post_type' => 'post',
 		);
 
 		$id = wp_insert_post( $args );
@@ -55,8 +55,9 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field        = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
 		$field_value  = array( 'one' );
 
-		if ( ! $this->post )
+		if ( ! $this->post ) {
 			$this->markTestSkipped( 'Post not found' );
+		}
 
 		$field->save( $this->post->ID, $field_value );
 
@@ -70,8 +71,9 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field        = new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ), array( 'repeatable' => true ) );
 		$repeat_value = array( 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'zero' );
 
-		if ( ! $this->post )
+		if ( ! $this->post ) {
 			$this->markTestSkipped( 'Post not found' );
+		}
 
 		$field->save( $this->post->ID, $repeat_value );
 
