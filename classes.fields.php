@@ -1,4 +1,10 @@
 <?php
+/**
+ * All HM CMB field classes and definitions.
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
+ */
 
 /**
  * Abstract class for all fields.
@@ -8,9 +14,28 @@
  */
 abstract class CMB_Field {
 
+	/**
+	 * Current field value.
+	 *
+	 * @var mixed
+	 */
 	public $value;
+
+	/**
+	 * Current field placement index.
+	 *
+	 * @var int
+	 */
 	public $field_index = 0;
 
+	/**
+	 * CMB_Field constructor.
+	 *
+	 * @param string $name Field name/ID.
+	 * @param string $title Title to display in field.
+	 * @param array  $values Values to populate field(s) with.
+	 * @param array  $args Optional. Field definitions/arguments.
+	 */
 	public function __construct( $name, $title, array $values, $args = array() ) {
 
 		$this->id 		= $name;
@@ -32,7 +57,7 @@ abstract class CMB_Field {
 			$this->args['options'] = $re_format;
 		}
 
-		// If the field has a custom value populator callback
+		// If the field has a custom value populator callback.
 		if ( ! empty( $args['values_callback'] ) ) {
 			$this->values = call_user_func( $args['values_callback'], get_the_id() );
 		} else {
@@ -99,8 +124,7 @@ abstract class CMB_Field {
 	 * If multiple inputs are required for a single field,
 	 * use the append parameter to add unique identifier.
 	 *
-	 * @param  string $append
-	 * @return null
+	 * @param  string $append Optional. ID to place.
 	 */
 	public function id_attr( $append = null ) {
 
@@ -111,13 +135,11 @@ abstract class CMB_Field {
 	/**
 	 * Output the for attribute for the field.
 	 *
-	 *
-	 *
 	 * If multiple inputs are required for a single field,
 	 * use the append parameter to add unique identifier.
 	 *
-	 * @param  string $append
-	 * @return null
+	 * @param  string $append Optional. ID to place.
+	 * @return string Modified id attribute contents
 	 */
 	public function get_the_id_attr( $append = null ) {
 
@@ -141,13 +163,14 @@ abstract class CMB_Field {
 	}
 
 	/**
-	 * Return the field input ID attribute value.
+	 * Output the field input ID attribute value.
 	 *
 	 * If multiple inputs are required for a single field,
 	 * use the append parameter to add unique identifier.
 	 *
-	 * @param  string $append
-	 * @return string id attribute value.
+	 * @see get_the_id_attr
+	 *
+	 * @param string $append Optional. for value to place.
 	 */
 	public function for_attr( $append = null ) {
 
@@ -155,12 +178,25 @@ abstract class CMB_Field {
 
 	}
 
+	/**
+	 * Output HTML name attribute for a field.
+	 *
+	 * @see get_the_name_attr
+	 *
+	 * @param string $append Optional. Name to place.
+	 */
 	public function name_attr( $append = null ) {
 
 		printf( 'name="%s"', esc_attr( $this->get_the_name_attr( $append ) ) );
 
 	}
 
+	/**
+	 * Get the name attribute contents for a field.
+	 *
+	 * @param null $append Optional. Name to place.
+	 * @return string Name attribute contents.
+	 */
 	public function get_the_name_attr( $append = null ) {
 
 		$name = str_replace( '[]', '', $this->name );
@@ -180,6 +216,11 @@ abstract class CMB_Field {
 
 	}
 
+	/**
+	 * Output class attribute for a field.
+	 *
+	 * @param string $classes Optional. Classes to assign to the field.
+	 */
 	public function class_attr( $classes = '' ) {
 
 		if ( $classes = implode( ' ', array_map( 'sanitize_html_class', array_filter( array_unique( explode( ' ', $classes . ' ' . $this->args['class'] ) ) ) ) ) ) { ?>
@@ -194,13 +235,20 @@ abstract class CMB_Field {
 	 * Get JS Safe ID.
 	 *
 	 * For use as a unique field identifier in javascript.
+	 *
+	 * @return string JS-escaped ID string.
 	 */
 	public function get_js_id() {
 
-		return str_replace( array( '-', '[', ']', '--' ),'_', $this->get_the_id_attr() ); // JS friendly ID
+		return str_replace( array( '-', '[', ']', '--' ),'_', $this->get_the_id_attr() );
 
 	}
 
+	/**
+	 * Print one or more HTML5 attributes for a field.
+	 *
+	 * @param array $attrs Optional. Attributes to define in the field.
+	 */
 	public function boolean_attr( $attrs = array() ) {
 
 		if ( $this->args['readonly'] ) {
@@ -222,14 +270,14 @@ abstract class CMB_Field {
 	/**
 	 * Check if this field has a data delegate set
 	 *
-	 * @return boolean
+	 * @return boolean Set or turned off.
 	 */
 	public function has_data_delegate() {
 		return (bool) $this->args['data_delegate'];
 	}
 
 	/**
-	 * Get the array of data from the data delegate
+	 * Get the array of data from the data delegate.
 	 *
 	 * @return array mixed
 	 */
@@ -243,14 +291,29 @@ abstract class CMB_Field {
 
 	}
 
+	/**
+	 * Get the existing or default value for a field.
+	 *
+	 * @return mixed
+	 */
 	public function get_value() {
 		return ( $this->value || '0' === $this->value  ) ? $this->value : $this->args['default'];
 	}
 
+	/**
+	 * Get multiple values for a field.
+	 *
+	 * @return array
+	 */
 	public function &get_values() {
 		return $this->values;
 	}
 
+	/**
+	 * Define multiple values for a field and completely remove the singular value variable.
+	 *
+	 * @param array $values Field values.
+	 */
 	public function set_values( array $values ) {
 
 		$this->values = $values;
@@ -259,13 +322,28 @@ abstract class CMB_Field {
 
 	}
 
+	/**
+	 * Parse and validate an array of values.
+	 *
+	 * Meant to be extended.
+	 */
 	public function parse_save_values() {}
 
+	/**
+	 * Parse and validate a single value.
+	 *
+	 * Meant to be extended.
+	 */
 	public function parse_save_value() {}
 
 	/**
+	 * Save values for the field.
+	 *
 	 * @todo this surely only works for posts
 	 * @todo why do values need to be passed in, they can already be passed in on construct
+	 *
+	 * @param int   $post_id Post ID.
+	 * @param array $values Values to save.
 	 */
 	public function save( $post_id, $values ) {
 
@@ -277,7 +355,7 @@ abstract class CMB_Field {
 		$this->values = $values;
 		$this->parse_save_values();
 
-		// Allow override from args
+		// Allow override from args.
 		if ( ! empty( $this->args['save_callback'] ) ) {
 
 			call_user_func( $this->args['save_callback'], $this->values, $post_id );
@@ -286,7 +364,7 @@ abstract class CMB_Field {
 
 		}
 
-		// If we are not on a post edit screen
+		// If we are not on a post edit screen.
 		if ( ! $post_id ) {
 			return;
 		}
@@ -304,6 +382,9 @@ abstract class CMB_Field {
 		}
 	}
 
+	/**
+	 * Print title for field.
+	 */
 	public function title() {
 
 		if ( $this->title ) : ?>
@@ -318,6 +399,9 @@ abstract class CMB_Field {
 
 	}
 
+	/**
+	 * Print description for field.
+	 */
 	public function description() {
 
 		if ( ! empty( $this->args['desc'] ) ) : ?>
@@ -330,17 +414,22 @@ abstract class CMB_Field {
 
 	}
 
+	/**
+	 * Print out a field.
+	 */
 	public function display() {
 
-		// If there are no values and it's not repeateble, we want to do one with empty string
+		// If there are no values and it's not repeateble, we want to do one with empty string.
 		if ( ! $this->get_values() && ! $this->args['repeatable'] ) {
 			$values = array( '' );
 		} else {
 			$values = $this->get_values();
 		}
 
+		// Print title if necessary.
 		$this->title();
 
+		// Print description if necessary.
 		$this->description();
 
 		$i = 0;
@@ -371,10 +460,11 @@ abstract class CMB_Field {
 
 		}
 
-		// Insert a hidden one if it's repeatable
+		// Insert a hidden one if it's repeatable.
 		if ( $this->args['repeatable'] ) {
 
-			$this->field_index = 'x'; // x used to distinguish hidden fields.
+			// X used to distinguish hidden fields.
+			$this->field_index = 'x';
 			$this->value = ''; ?>
 
 			<div class="field-item hidden" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
@@ -401,10 +491,15 @@ abstract class CMB_Field {
 /**
  * Standard text field.
  *
+ * @since 1.0.0
+ *
  * @extends CMB_Field
  */
 class CMB_Text_Field extends CMB_Field {
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		?>
 
@@ -414,8 +509,18 @@ class CMB_Text_Field extends CMB_Field {
 	}
 }
 
+/**
+ * Small text field.
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Text_Field
+ */
 class CMB_Text_Small_Field extends CMB_Text_Field {
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 
 		$this->args['class'] .= ' cmb_text_small';
@@ -426,16 +531,20 @@ class CMB_Text_Small_Field extends CMB_Text_Field {
 }
 
 /**
- * Field for image upload / file updoad.
+ * Field for image upload / file upload.
  *
  * @todo ability to set image size (preview image) from caller
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_File_Field extends CMB_Field {
 
 	/**
-	 * Return the default args for the File field.
+	 * Get default arguments for field including custom parameters.
 	 *
-	 * @return array $args
+	 * @return array Default arguments for field.
 	 */
 	public function get_default_args() {
 		return array_merge(
@@ -451,6 +560,11 @@ class CMB_File_Field extends CMB_Field {
 		);
 	}
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	function enqueue_scripts() {
 
 		global $post_ID;
@@ -463,6 +577,9 @@ class CMB_File_Field extends CMB_Field {
 
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 
 		if ( $this->get_value() ) {
@@ -517,12 +634,19 @@ class CMB_File_Field extends CMB_Field {
 	}
 }
 
+/**
+ * Field for image upload.
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_File_Field
+ */
 class CMB_Image_Field extends CMB_File_Field {
 
 	/**
-	 * Return the default args for the Image field.
+	 * Get default arguments for field including custom parameters.
 	 *
-	 * @return array $args
+	 * @return array Default arguments for field.
 	 */
 	public function get_default_args() {
 		return array_merge(
@@ -537,16 +661,19 @@ class CMB_Image_Field extends CMB_File_Field {
 		);
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 
 		if ( $this->get_value() ) {
 			$image = wp_get_attachment_image_src( $this->get_value(), $this->args['size'], true );
 		}
 
-		// Convert size arg to array of width, height, crop
+		// Convert size arg to array of width, height, crop.
 		$size = $this->parse_image_size( $this->args['size'] );
 
-		// Inline styles
+		// Inline styles.
 		$styles              = sprintf( 'width: %1$dpx; height: %2$dpx; line-height: %2$dpx', intval( $size['width'] ), intval( $size['height'] ) );
 		$placeholder_styles  = sprintf( 'width: %dpx; height: %dpx;', intval( $size['width'] ) - 8, intval( $size['height'] ) - 8 );
 
@@ -595,12 +722,12 @@ class CMB_Image_Field extends CMB_File_Field {
 	/**
 	 * Parse the size argument to get pixel width, pixel height and crop information.
 	 *
-	 * @param  string $size
+	 * @param string $size Size of image requested.
 	 * @return array width, height, crop
 	 */
 	private function parse_image_size( $size ) {
 
-		// Handle string for built-in image sizes
+		// Handle string for built-in image sizes.
 		if ( is_string( $size ) && in_array( $size, array( 'thumbnail', 'medium', 'large' ) ) ) {
 			return array(
 				'width'  => get_option( $size . '_size_w' ),
@@ -609,7 +736,7 @@ class CMB_Image_Field extends CMB_File_Field {
 			);
 		}
 
-		// Handle string for additional image sizes
+		// Handle string for additional image sizes.
 		global $_wp_additional_image_sizes;
 		if ( is_string( $size ) && isset( $_wp_additional_image_sizes[ $size ] ) ) {
 			return array(
@@ -654,17 +781,26 @@ class CMB_Image_Field extends CMB_File_Field {
 		$image = wp_get_attachment_image_src( $id, $size );
 		echo esc_url( reset( $image ) );
 
-		die(); // this is required to return a proper result
+		// This is required to return a proper result.
+		die();
 	}
 }
 add_action( 'wp_ajax_cmb_request_image', array( 'CMB_Image_Field', 'request_image_ajax_callback' ) );
 
 /**
- * Standard text meta box for a URL.
+ * Number meta box.
  *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Number_Field extends CMB_Field {
 
+	/**
+	 * Get default arguments for field including custom parameters.
+	 *
+	 * @return array Default arguments for field.
+	 */
 	public function get_default_args() {
 		return array_merge(
 			parent::get_default_args(),
@@ -674,6 +810,9 @@ class CMB_Number_Field extends CMB_Field {
 		);
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		?>
 
@@ -686,9 +825,15 @@ class CMB_Number_Field extends CMB_Field {
 /**
  * Standard text meta box for a URL.
  *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_URL_Field extends CMB_Field {
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		?>
 
@@ -699,17 +844,28 @@ class CMB_URL_Field extends CMB_Field {
 }
 
 /**
- * Date picker box.
+ * Date picker meta box field.
  *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Date_Field extends CMB_Field {
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	public function enqueue_scripts() {
 		parent::enqueue_scripts();
 		wp_enqueue_style( 'cmb-jquery-ui', trailingslashit( CMB_URL ) . 'css/vendor/jquery-ui/jquery-ui.css', '1.10.3' );
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		// If the user has set a cols arg of less than 6 columns, allow the intput
 		// to go full-width.
@@ -722,8 +878,20 @@ class CMB_Date_Field extends CMB_Field {
 	}
 }
 
+/**
+ * Time picker meta box field.
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
+ */
 class CMB_Time_Field extends CMB_Field {
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -734,6 +902,9 @@ class CMB_Time_Field extends CMB_Field {
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		?>
 
@@ -746,9 +917,17 @@ class CMB_Time_Field extends CMB_Field {
 /**
  * Date picker for date only (not time) box.
  *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Date_Timestamp_Field extends CMB_Field {
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -760,6 +939,9 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
 
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		?>
 
@@ -768,6 +950,9 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
 		<?php
 	}
 
+	/**
+	 * Convert values into UNIX time values and sort.
+	 */
 	public function parse_save_values() {
 
 		foreach ( $this->values as &$value ) {
@@ -782,9 +967,17 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
 /**
  * Date picker for date and time (seperate fields) box.
  *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Datetime_Timestamp_Field extends CMB_Field {
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -795,6 +988,9 @@ class CMB_Datetime_Timestamp_Field extends CMB_Field {
 		wp_enqueue_script( 'cmb-datetime', trailingslashit( CMB_URL ) . 'js/field.datetime.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-scripts' ) );
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		?>
 
@@ -804,6 +1000,9 @@ class CMB_Datetime_Timestamp_Field extends CMB_Field {
 		<?php
 	}
 
+	/**
+	 * Convert values into UNIX time values and sort.
+	 */
 	public function parse_save_values() {
 
 		// Convert all [date] and [time] values to a unix timestamp.
@@ -829,9 +1028,16 @@ class CMB_Datetime_Timestamp_Field extends CMB_Field {
  *
  * Args:
  *  - int "rows" - number of rows in the <textarea>
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Textarea_Field extends CMB_Field {
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		?>
 
@@ -846,9 +1052,16 @@ class CMB_Textarea_Field extends CMB_Field {
  *
  * Args:
  *  - int "rows" - number of rows in the <textarea>
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Textarea_Field
  */
 class CMB_Textarea_Field_Code extends CMB_Textarea_Field {
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 
 		$this->args['class'] .= ' code';
@@ -861,9 +1074,17 @@ class CMB_Textarea_Field_Code extends CMB_Textarea_Field {
 /**
  *  Colour picker
  *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Color_Picker extends CMB_Field {
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -872,6 +1093,9 @@ class CMB_Color_Picker extends CMB_Field {
 		wp_enqueue_style( 'wp-color-picker' );
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		?>
 
@@ -886,13 +1110,17 @@ class CMB_Color_Picker extends CMB_Field {
  *
  * Args:
  *  - bool "inline" - display the radio buttons inline
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Radio_Field extends CMB_Field {
 
 	/**
-	 * Return the default args for the Radio input field.
+	 * Get default arguments for field including custom parameters.
 	 *
-	 * @return array $args
+	 * @return array Default arguments for field.
 	 */
 	public function get_default_args() {
 		return array_merge(
@@ -903,6 +1131,9 @@ class CMB_Radio_Field extends CMB_Field {
 		);
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 
 		if ( $this->has_data_delegate() ) {
@@ -925,11 +1156,20 @@ class CMB_Radio_Field extends CMB_Field {
 /**
  * Standard checkbox field.
  *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Checkbox extends CMB_Field {
 
+	/**
+	 * Print out field HTML - in this case intentionally empty.
+	 */
 	public function title() {}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 		?>
 
@@ -944,9 +1184,15 @@ class CMB_Checkbox extends CMB_Field {
 /**
  * Standard title used as a splitter.
  *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Title extends CMB_Field {
 
+	/**
+	 * Print out field HTML - in this case we only want a title.
+	 */
 	public function title() {
 		?>
 
@@ -960,19 +1206,25 @@ class CMB_Title extends CMB_Field {
 
 	}
 
+	/**
+	 * Placeholder for abstracted method.
+	 */
 	public function html() {}
 }
 
 /**
- * wysiwyg field.
+ * WYSIWYG field.
  *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_wysiwyg extends CMB_Field {
 
 	/**
-	 * Return the default args for the WYSIWYG field.
+	 * Get default arguments for field including custom parameters.
 	 *
-	 * @return array $args
+	 * @return array Default arguments for field.
 	 */
 	public function get_default_args() {
 		return array_merge(
@@ -983,6 +1235,11 @@ class CMB_wysiwyg extends CMB_Field {
 		);
 	}
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -990,6 +1247,9 @@ class CMB_wysiwyg extends CMB_Field {
 		wp_enqueue_script( 'cmb-wysiwyg', trailingslashit( CMB_URL ) . 'js/field-wysiwyg.js', array( 'jquery', 'cmb-scripts' ) );
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 
 		$id   = $this->get_the_id_attr();
@@ -1060,9 +1320,16 @@ class CMB_wysiwyg extends CMB_Field {
  *     'options'     => array Array of options to show in the select, optionally use data_delegate instead
  *     'allow_none'   => bool|string Allow no option to be selected (will place a "None" at the top of the select)
  *     'multiple'     => bool whether multiple can be selected
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Select extends CMB_Field {
 
+	/**
+	 * CMB_Select constructor.
+	 */
 	public function __construct() {
 
 		$args = func_get_args();
@@ -1072,9 +1339,9 @@ class CMB_Select extends CMB_Field {
 	}
 
 	/**
-	 * Return the default args for the Select field.
+	 * Get default arguments for field including custom parameters.
 	 *
-	 * @return array $args
+	 * @return array Default arguments for field.
 	 */
 	public function get_default_args() {
 		return array_merge(
@@ -1088,6 +1355,9 @@ class CMB_Select extends CMB_Field {
 		);
 	}
 
+	/**
+	 * Ensure values are saved as an array if multiple is set.
+	 */
 	public function parse_save_values() {
 
 		if ( isset( $this->parent ) && isset( $this->args['multiple'] ) && $this->args['multiple'] ) {
@@ -1096,6 +1366,11 @@ class CMB_Select extends CMB_Field {
 
 	}
 
+	/**
+	 * Get options for field.
+	 *
+	 * @return mixed
+	 */
 	public function get_options() {
 
 		if ( $this->has_data_delegate() ) {
@@ -1105,6 +1380,11 @@ class CMB_Select extends CMB_Field {
 		return $this->args['options'];
 	}
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -1113,6 +1393,11 @@ class CMB_Select extends CMB_Field {
 		wp_enqueue_script( 'field-select', trailingslashit( CMB_URL ) . 'js/field.select.js', array( 'jquery', 'select2', 'cmb-scripts' ) );
 	}
 
+	/**
+	 * Enqueue all styles required by the field.
+	 *
+	 * @uses wp_enqueue_style()
+	 */
 	public function enqueue_styles() {
 
 		parent::enqueue_styles();
@@ -1120,6 +1405,9 @@ class CMB_Select extends CMB_Field {
 		wp_enqueue_style( 'select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/select2.css' );
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 
 		if ( $this->has_data_delegate() ) {
@@ -1132,6 +1420,9 @@ class CMB_Select extends CMB_Field {
 
 	}
 
+	/**
+	 * Compile field HTML.
+	 */
 	public function output_field() {
 
 		$val = (array) $this->get_value();
@@ -1166,6 +1457,9 @@ class CMB_Select extends CMB_Field {
 		<?php
 	}
 
+	/**
+	 * Output inline scripts to support field.
+	 */
 	public function output_script() {
 
 		$options = wp_parse_args( $this->args['select2_options'], array(
@@ -1195,12 +1489,19 @@ class CMB_Select extends CMB_Field {
 	}
 }
 
+/**
+ * Taxonomy-specific select field.
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Select
+ */
 class CMB_Taxonomy extends CMB_Select {
 
 	/**
-	 * Return the default args for the Taxonomy select field.
+	 * Get default arguments for field including custom parameters.
 	 *
-	 * @return array $args
+	 * @return array Default arguments for field.
 	 */
 	public function get_default_args() {
 		return array_merge(
@@ -1212,7 +1513,9 @@ class CMB_Taxonomy extends CMB_Select {
 		);
 	}
 
-
+	/**
+	 * CMB_Taxonomy constructor.
+	 */
 	public function __construct() {
 
 		$args = func_get_args();
@@ -1223,6 +1526,11 @@ class CMB_Taxonomy extends CMB_Select {
 
 	}
 
+	/**
+	 * Retrieve custom field data.
+	 *
+	 * @return array Terms for field data.
+	 */
 	public function get_delegate_data() {
 
 		$terms = $this->get_terms();
@@ -1241,6 +1549,13 @@ class CMB_Taxonomy extends CMB_Select {
 
 	}
 
+	/**
+	 * Get terms for select field.
+	 *
+	 * @todo::cache this or find a cached method
+	 *
+	 * @return array|int|WP_Error
+	 */
 	private function get_terms() {
 
 		return get_terms( $this->args['taxonomy'], array( 'hide_empty' => $this->args['hide_empty'] ) );
@@ -1254,11 +1569,18 @@ class CMB_Taxonomy extends CMB_Select {
  * @supports "data_delegate"
  * @args
  *     'options'     => array Array of options to show in the select, optionally use data_delegate instead
- *     'allow_none'   => bool Allow no option to be selected (will palce a "None" at the top of the select)
+ *     'allow_none'   => bool Allow no option to be selected (will place a "None" at the top of the select)
  *     'multiple'     => bool whether multiple can be selected
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Select
  */
 class CMB_Post_Select extends CMB_Select {
 
+	/**
+	 * CMB_Post_Select constructor.
+	 */
 	public function __construct() {
 
 		$args = func_get_args();
@@ -1274,9 +1596,9 @@ class CMB_Post_Select extends CMB_Select {
 	}
 
 	/**
-	 * Return the default args for the Post select field.
+	 * Get default arguments for field including custom parameters.
 	 *
-	 * @return array $args
+	 * @return array Default arguments for field.
 	 */
 	public function get_default_args() {
 		return array_merge(
@@ -1289,6 +1611,13 @@ class CMB_Post_Select extends CMB_Select {
 		);
 	}
 
+	/**
+	 * Get posts and verify for use in select field.
+	 *
+	 * @todo:: validate this data before returning.
+	 *
+	 * @return array Array of posts for field.
+	 */
 	public function get_delegate_data() {
 
 		$data = array();
@@ -1301,6 +1630,11 @@ class CMB_Post_Select extends CMB_Select {
 
 	}
 
+	/**
+	 * Get posts for use in select field.
+	 *
+	 * @return array
+	 */
 	private function get_posts() {
 
 		$this->args['query']['fields'] = 'ids';
@@ -1310,6 +1644,9 @@ class CMB_Post_Select extends CMB_Select {
 
 	}
 
+	/**
+	 * Format the field values for Select2 to read.
+	 */
 	public function parse_save_value() {
 
 		// AJAX multi select2 data is submitted as a string of comma separated post IDs.
@@ -1320,6 +1657,9 @@ class CMB_Post_Select extends CMB_Select {
 
 	}
 
+	/**
+	 * Assemble and output of field HTML.
+	 */
 	public function output_field() {
 
 		// If AJAX, must use input type not standard select.
@@ -1347,6 +1687,9 @@ class CMB_Post_Select extends CMB_Select {
 
 	}
 
+	/**
+	 * Output inline scripts to support field.
+	 */
 	public function output_script() {
 
 		parent::output_script();
@@ -1431,7 +1774,11 @@ class CMB_Post_Select extends CMB_Select {
 	}
 }
 
-// TODO this should be in inside the class
+/**
+ * AJAX callback for select fields.
+ *
+ * @todo:: this should be in inside the class.
+ */
 function cmb_ajax_post_select() {
 
 	$post_id = ! empty( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : false;
@@ -1461,20 +1808,34 @@ function cmb_ajax_post_select() {
 add_action( 'wp_ajax_cmb_post_select', 'cmb_ajax_post_select' );
 
 /**
- * Field to group child fieids
+ * Field to group child fields
  * pass $args[fields] array for child fields
  * pass $args['repeatable'] for cloing all child fields (set)
  *
  * @todo remove global $post reference, somehow
+ *
+ * @since 1.0.0
+ *
+ * @extends CMB_Field
  */
 class CMB_Group_Field extends CMB_Field {
 
 	static $added_js;
+
+	/**
+	 * Fields arguments and information.
+	 *
+	 * @var array
+	 */
 	private $fields = array();
 
+	/**
+	 * CMB_Group_Field constructor.
+	 */
 	function __construct() {
 
-		$args = func_get_args(); // you can't just put func_get_args() into a function as a parameter
+		// You can't just put func_get_args() into a function as a parameter.
+		$args = func_get_args();
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
 		if ( ! empty( $this->args['fields'] ) ) {
@@ -1489,9 +1850,9 @@ class CMB_Group_Field extends CMB_Field {
 	}
 
 	/**
-	 * Return the default args for the Group field.
+	 * Get default arguments for field including custom parameters.
 	 *
-	 * @return array $args
+	 * @return array Default arguments for field.
 	 */
 	public function get_default_args() {
 		return array_merge(
@@ -1504,6 +1865,11 @@ class CMB_Group_Field extends CMB_Field {
 		);
 	}
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -1516,6 +1882,11 @@ class CMB_Group_Field extends CMB_Field {
 
 	}
 
+	/**
+	 * Enqueue all styles required by the field.
+	 *
+	 * @uses wp_enqueue_style()
+	 */
 	public function enqueue_styles() {
 
 		parent::enqueue_styles();
@@ -1528,6 +1899,9 @@ class CMB_Group_Field extends CMB_Field {
 
 	}
 
+	/**
+	 * Display output for group.
+	 */
 	public function display() {
 
 		global $post;
@@ -1565,7 +1939,7 @@ class CMB_Group_Field extends CMB_Field {
 
 		if ( $this->args['repeatable'] ) {
 
-			$this->field_index = 'x'; // x used to distinguish hidden fields.
+			$this->field_index = 'x'; // X used to distinguish hidden fields.
 			$this->value = '';
 
 			?>
@@ -1582,6 +1956,9 @@ class CMB_Group_Field extends CMB_Field {
 
 	}
 
+	/**
+	 * Print out group field HTML.
+	 */
 	public function html() {
 
 		$fields = &$this->get_fields();
@@ -1615,6 +1992,9 @@ class CMB_Group_Field extends CMB_Field {
 
 	<?php }
 
+	/**
+	 * Parse values individually based on what kind of field they are.
+	 */
 	public function parse_save_values() {
 
 		$fields = &$this->get_fields();
@@ -1635,7 +2015,7 @@ class CMB_Group_Field extends CMB_Field {
 				$field_value = $field->get_values();
 
 				// if the field is a repeatable field, store the whole array of them, if it's not repeatble,
-				// just store the first (and only) one directly
+				// just store the first (and only) one directly.
 				if ( ! $field->args['repeatable'] ) {
 					$field_value = reset( $field_value );
 				}
@@ -1644,15 +2024,30 @@ class CMB_Group_Field extends CMB_Field {
 
 	}
 
+	/**
+	 * Add assigned fields to group data.
+	 *
+	 * @param CMB_Field $field Field object.
+	 */
 	public function add_field( CMB_Field $field ) {
 		$field->parent = $this;
 		$this->fields[ $field->id ] = $field;
 	}
 
+	/**
+	 * Assemble all defined fields for group.
+	 *
+	 * @return array
+	 */
 	public function &get_fields() {
 		return $this->fields;
 	}
 
+	/**
+	 * Set values for each field in the group.
+	 *
+	 * @param array $values Existing or default values for all fields.
+	 */
 	public function set_values( array $values ) {
 
 		$fields       = &$this->get_fields();
@@ -1679,14 +2074,18 @@ class CMB_Group_Field extends CMB_Field {
  * It enables the google places API and doesn't store the place
  * name. It only stores latitude and longitude of the selected area.
  *
- * Note
+ * Note - you need a Google API key for field to work correctly.
+ *
+ * @since 1.0.2
+ *
+ * @extends CMB_Field
  */
 class CMB_Gmap_Field extends CMB_Field {
 
 	/**
-	 * Return the default args for the Map field.
+	 * Get default arguments for field including custom parameters.
 	 *
-	 * @return array $args
+	 * @return array Default arguments for field.
 	 */
 	public function get_default_args() {
 		return array_merge(
@@ -1704,6 +2103,11 @@ class CMB_Gmap_Field extends CMB_Field {
 		);
 	}
 
+	/**
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
+	 */
 	public function enqueue_scripts() {
 
 		parent::enqueue_scripts();
@@ -1733,9 +2137,12 @@ class CMB_Gmap_Field extends CMB_Field {
 
 	}
 
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 
-		// Ensure all args used are set
+		// Ensure all args used are set.
 		$value = wp_parse_args(
 			$this->get_value(),
 			array(
