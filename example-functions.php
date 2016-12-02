@@ -57,6 +57,8 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 		array( 'id' => 'field-24', 'name' => 'Title Field', 'type' => 'title' ),
 
+		array( 'id' => 'field-25', 'name' => 'Hidden Field', 'type' => 'hidden', 'default' => 'my valuuuuuuue' ),
+
 	);
 
 	$meta_boxes[] = array(

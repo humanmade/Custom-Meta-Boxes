@@ -39,6 +39,7 @@ if ( ! defined( 'CMB_URL' ) ) {
  */
 include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb-meta-box.php' );
+include_once( CMB_PATH . 'fields/class-cmb-hidden-field.php' );
 
 /**
  * Make it possible to add fields in locations other than post edit screen. Optional.
@@ -114,6 +115,7 @@ function _cmb_available_fields() {
 		'group'				=> 'CMB_Group_Field',
 		'gmap'				=> 'CMB_Gmap_Field',
 		'number'			=> 'CMB_Number_Field',
+		'hidden'			=> 'CMB_Hidden_Field',
 	) );
 
 }
