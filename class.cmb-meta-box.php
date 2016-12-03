@@ -1,154 +1,185 @@
 <?php
+/**
+ * Base functionality for HM CMB plugin.
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
+ */
 
 /**
- * Create meta boxes
+ * Create Meta Boxes.
+ *
+ * @since 1.0.0
  */
 class CMB_Meta_Box {
 
+	/**
+	 * Meta box set collection data.
+	 *
+	 * @access protected
+	 *
+	 * @var array
+	 */
 	protected $_meta_box;
+
+	/**
+	 * Fields in a collection.
+	 *
+	 * @access protected
+	 *
+	 * @var array
+	 */
 	private $fields = array();
 
+	/**
+	 * CMB_Meta_Box constructor.
+	 *
+	 * @param array $meta_box Meta box collection.
+	 */
 	function __construct( $meta_box ) {
 
 		$this->_meta_box = $meta_box;
 
-		if ( empty( $this->_meta_box['id'] ) )
+		// If collection ID is missing, assign the title sanitized to the ID.
+		if ( empty( $this->_meta_box['id'] ) ) {
 			$this->_meta_box['id'] = sanitize_title( $this->_meta_box['title'] );
-
-		$upload = false;
-
-		foreach ( $meta_box['fields'] as $field ) {
-			if ( $field['type'] == 'file' || $field['type'] == 'file_list' ) {
-				$upload = true;
-				break;
-			}
 		}
 
 		add_action( 'dbx_post_advanced', array( &$this, 'init_fields_for_post' ) );
 		add_action( 'cmb_init_fields', array( &$this, 'init_fields' ) );
 
-		global $pagenow;
-
-		if ( $upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) )
-			add_action( 'admin_head', array( &$this, 'add_post_enctype' ) );
-
 		add_action( 'admin_menu', array( &$this, 'add' ) );
 		add_action( 'save_post', array( &$this, 'save_for_post' ) );
+		add_action( 'edit_attachment', array( &$this, 'save_for_post' ) );
 		add_action( 'cmb_save_fields', array( &$this, 'save' ) );
 
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_styles' ) );
 
-		add_filter( 'cmb_show_on', array( &$this, 'add_for_id' ), 10, 2 );
-		add_filter( 'cmb_show_on', array( &$this, 'add_for_page_template' ), 10, 2 );
-
 	}
 
+	/**
+	 * Initialize metabox box fields.
+	 *
+	 * @uses cmb_init_fields
+	 *
+	 * @param int $post_id Optional. Post ID.
+	 */
 	public function init_fields( $post_id = 0 ) {
 
 		foreach ( $this->_meta_box['fields'] as $key => $field ) {
-
 			$values = array();
 
-			// Set up blank or default values for empty ones
-			//
-			$defaults = array(
-				'name' => '',
-				'desc' => '',
-				'std'  => '',
-				'cols' => 12
-			);
+			$args = $field;
+			unset( $args['id'] );
+			unset( $args['type'] );
+			unset( $args['name'] );
 
-			$field = wp_parse_args( $field, $defaults );
-
-			if ( 'file' == $field['type'] && ! isset( $field['allow'] ) )
-				$field['allow'] = array( 'url', 'attachment' );
-
-			if ( 'file' == $field['type'] && ! isset( $field['save_id'] ) )
-				$field['save_id']  = false;
-
-			$field['name_attr'] = $field['id'];
 			$class = _cmb_field_class_for_type( $field['type'] );
 
-			if ( ! empty( $this->_meta_box['repeatable'] ) )
-				$field['repeatable'] = true;
-
-
-			// Else if we are on a post edit screen
-			elseif ( $post_id )
-				$values = (array) get_post_meta( $post_id, $field['id'], false );
-
-			if ( class_exists( $class ) ) {
-				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $field );
+			// If we are on a post edit screen - get metadata value of the field for this post.
+			if ( $post_id ) {
+				$single = ( ! isset( $field['repeatable'] ) || false === $field['repeatable'] );
+				$values = (array) get_post_meta( $post_id, $field['id'], $single );
 			}
 
+			if ( class_exists( $class ) ) {
+				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $args );
+			}
 		}
 
 	}
 
+	/**
+	 * Initialize fields during the metabox loading process.
+	 *
+	 * @global int $post
+	 *
+	 * @uses dbx_post_advanced
+	 *
+	 * @return bool false if post ID fails or is on wrong screen.
+	 */
 	public function init_fields_for_post() {
 
-		global $post, $temp_ID;
+		global $post;
+		$post_id = null;
 
-		// Get the current ID
-		if( isset( $_GET['post'] ) )
-			$post_id = $_GET['post'];
-
-		elseif( isset( $_POST['post_ID'] ) )
-			$post_id = $_POST['post_ID'];
-
-		elseif ( ! empty( $post->ID ) )
+		// Get the current ID.
+		if ( isset( $_GET['post'] ) ) {
+			$post_id = wp_unslash( $_GET['post'] );
+		} elseif ( isset( $_POST['post_ID'] ) ) {
+			$post_id = wp_unslash( $_POST['post_ID'] );
+		} elseif ( ! empty( $post->ID ) ) {
 			$post_id = $post->ID;
+		}
 
-		if ( is_page() || ! isset( $post_id ) )
+		if ( is_page() || ! isset( $post_id ) ) {
 			return false;
+		}
+
+		if ( ! is_numeric( $post_id ) || $post_id != floor( $post_id ) ) {
+			return false;
+		}
 
 		$this->init_fields( (int) $post_id );
 
 	}
 
+	/**
+	 * Load JS scripts in the admin area for plugin use.
+	 *
+	 * @uses admin_enqueue_scripts
+	 */
 	function enqueue_scripts() {
 
 		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
 
-		foreach ( $this->fields as $field )
+		wp_localize_script( 'cmb-scripts', 'CMBData', array(
+			'strings' => array(
+				'confirmDeleteField' => esc_html__( 'Are you sure you want to delete this field?', 'cmb' ),
+			),
+		) );
+
+		foreach ( $this->fields as $field ) {
 			$field->enqueue_scripts();
+		}
 
 	}
 
+	/**
+	 * Load stylesheets in admin area for plugin use.
+	 *
+	 * @uses admin_enqueue_styles
+	 */
 	function enqueue_styles() {
 
 		$suffix = CMB_DEV ? '' : '.min';
 
-		if ( version_compare( get_bloginfo( 'version' ), '3.8', '>=' ) )
+		if ( version_compare( get_bloginfo( 'version' ), '3.8', '>=' ) ) {
 			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . "css/dist/cmb$suffix.css" );
-		else
+		} else {
 			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'css/legacy.css' );
+		}
 
-		foreach ( $this->fields as $field )
+		foreach ( $this->fields as $field ) {
 			$field->enqueue_styles();
+		}
 
 	}
 
-	function add_post_enctype() { ?>
-
-		<script type="text/javascript">
-
-		jQuery(document).ready(function(){
-			jQuery("#post").attr("enctype", "multipart/form-data");
-			jQuery("#post").attr("encoding", "multipart/form-data");
-		} );
-
-		</script>
-
-	<?php }
-
-	// Add metabox
+	/**
+	 * Add a metabox collection.
+	 *
+	 * Parses a field collection for display attributes and runs the WP core functionality
+	 * to register the metabox.
+	 *
+	 * @uses admin_menu
+	 */
 	function add() {
 
-		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
-		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'low' : $this->_meta_box['priority'];
-		
+		$this->_meta_box['context'] = empty( $this->_meta_box['context'] ) ? 'normal' : $this->_meta_box['context'];
+		$this->_meta_box['priority'] = empty( $this->_meta_box['priority'] ) ? 'low' : $this->_meta_box['priority'];
+
 		// Backwards compatablilty.
 		if ( isset( $this->_meta_box['show_on']['key'] ) ) {
 			$this->_meta_box['show_on'][ $this->_meta_box['show_on']['key'] ] = $this->_meta_box['show_on']['value'];
@@ -156,63 +187,168 @@ class CMB_Meta_Box {
 			unset( $this->_meta_box['show_on']['value'] );
 		}
 
-		foreach ( (array) $this->_meta_box['pages'] as $page )
-			if ( apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
-				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority'] ) ;
+		foreach ( (array) $this->_meta_box['pages'] as $page ) {
+			if ( $this->is_metabox_displayed() ) {
+				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array( &$this, 'show' ), $page, $this->_meta_box['context'], $this->_meta_box['priority'] );
+			}
+		}
 
 	}
 
 	/**
-	 * Show On Filters
-	 * Use the 'cmb_show_on' filter to further refine the conditions under which a metabox is displayed.
-	 * Below you can limit it by ID and page template
+	 * Handle 'Show On' and 'Hide On' Filters.
+	 *
+	 * Runs checks to see if there are specific compatibilities or incompatibilities for displaying
+	 * a CMB field collection.
 	 */
+	function is_metabox_displayed() {
+		$display = true;
+		$display = $this->add_for_id( $display );
+		$display = $this->hide_for_id( $display );
+		$display = $this->add_for_page_template( $display );
+		$display = $this->hide_for_page_template( $display );
+		return $display;
+	}
 
-	// Add for ID
-	function add_for_id( $display, $meta_box ) {
+	/**
+	 * Display CMB collection for particular post ID.
+	 *
+	 * Only works for field collections that have the 'show_on' attribute of 'id'.
+	 *
+	 * @param bool $display Current display status.
+	 * @return bool (Potentially) modified display status
+	 */
+	function add_for_id( $display ) {
 
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
-
-		if ( ! $post_id ) 
-			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
-
-		if ( ! $post_id || ! isset( $meta_box['show_on']['id'] ) )
+		if ( ! isset( $this->_meta_box['show_on']['id'] ) ) {
 			return $display;
+		}
 
-		
+		// Don't show CMB if we can't identify ID of a post.
+		$post_id = $this->get_post_id();
 
-		// If value isn't an array, turn it into one
-		$meta_box['show_on']['id'] = ! is_array( $meta_box['show_on']['id'] ) ? array( $meta_box['show_on']['id'] ) : $meta_box['show_on']['id'];
-		
-		return in_array( $post_id, $meta_box['show_on']['id'] );
+		if ( ! isset( $post_id ) ) {
+			return false;
+		}
+
+		// If value isn't an array, turn it into one.
+		$this->_meta_box['show_on']['id'] = ! is_array( $this->_meta_box['show_on']['id'] ) ? array( $this->_meta_box['show_on']['id'] ) : $this->_meta_box['show_on']['id'];
+
+		return in_array( $post_id, $this->_meta_box['show_on']['id'] );
 
 	}
 
-	// Add for Page Template
-	function add_for_page_template( $display, $meta_box ) {
-		
-		$post_id = isset( $_GET['post'] ) ? $_GET['post'] : null;
+	/**
+	 * Hide CMB collection for particular post ID.
+	 *
+	 * Only works for field collections that have the 'hide_on' attribute of 'id'.
+	 *
+	 * @param bool $display Current display status.
+	 * @return bool (Potentially) modified display status
+	 */
+	function hide_for_id( $display ) {
 
-		if ( ! $post_id ) 
-			$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : null;
-
-		if ( ! $post_id || ! isset( $meta_box['show_on']['page-template'] ) )
+		if ( ! isset( $this->_meta_box['hide_on']['id'] ) ) {
 			return $display;
+		}
 
-		// Get current template
+		// Return if we can't identify ID of a post.
+		$post_id = $this->get_post_id();
+		if ( ! isset( $post_id ) ) {
+			return $display;
+		}
+
+		// If value isn't an array, turn it into one.
+		$this->_meta_box['hide_on']['id'] = ! is_array( $this->_meta_box['hide_on']['id'] ) ? array( $this->_meta_box['hide_on']['id'] ) : $this->_meta_box['hide_on']['id'];
+
+		return ! in_array( $post_id, $this->_meta_box['hide_on']['id'] );
+
+	}
+
+	/**
+	 * Display CMB collection on pages that have a particular page template assigned.
+	 *
+	 * Only works for field collections that have the 'show_on' attribute of 'page-template'.
+	 *
+	 * @param bool $display Current display status.
+	 * @return bool (Potentially) modified display status
+	 */
+	function add_for_page_template( $display ) {
+
+		if ( ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
+			return $display;
+		}
+
+		// Return false if we can't identify ID of a post.
+		$post_id = $this->get_post_id();
+		if ( ! isset( $post_id ) ) {
+			return false;
+		}
+
+		// Get current template.
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
-		// If value isn't an array, turn it into one
-		$meta_box['show_on']['page-template'] = !is_array( $meta_box['show_on']['page-template'] ) ? array( $meta_box['show_on']['page-template'] ) : $meta_box['show_on']['page-template'];
-		
-		return in_array( $current_template, $meta_box['show_on']['page-template'] );
+		// If value isn't an array, turn it into one.
+		$this->_meta_box['show_on']['page-template'] = ! is_array( $this->_meta_box['show_on']['page-template'] ) ? array( $this->_meta_box['show_on']['page-template'] ) : $this->_meta_box['show_on']['page-template'];
+
+		return in_array( $current_template, $this->_meta_box['show_on']['page-template'] );
 
 	}
 
-	// Show fields
-	function show() { ?>
+	/**
+	 * Hide CMB collection on pages that have a particular page template assigned.
+	 *
+	 * Only works for field collections that have the 'hide_on' attribute of 'page-template'.
+	 *
+	 * @param bool $display Current display status.
+	 * @return bool (Potentially) modified display status
+	 */
+	function hide_for_page_template( $display ) {
 
-		<input type="hidden" name="wp_meta_box_nonce" value="<?php esc_attr_e( wp_create_nonce( basename(__FILE__) ) ); ?>" />
+		if ( ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
+			return $display;
+		}
+
+		// Return $display if we can't identify ID of a post and hence its current template.
+		$post_id = $this->get_post_id();
+
+		if ( ! isset( $post_id ) ) {
+			return $display;
+		}
+
+		// Get current template.
+		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
+
+		// If value isn't an array, turn it into one.
+		$this->_meta_box['hide_on']['page-template'] = ! is_array( $this->_meta_box['hide_on']['page-template'] ) ? array( $this->_meta_box['hide_on']['page-template'] ) : $this->_meta_box['hide_on']['page-template'];
+
+		return ! in_array( $current_template, $this->_meta_box['hide_on']['page-template'] );
+
+	}
+
+	/**
+	 * Print out field collection description.
+	 */
+	function description() {
+
+		if ( ! empty( $this->_meta_box['desc'] ) ) { ?>
+
+			<div class="cmb_metabox_description">
+				<?php echo wp_kses_post( $this->_meta_box['desc'] ); ?>
+			</div>
+
+		<?php }
+
+	}
+
+	/**
+	 * Display fields for a collection.
+	 */
+	function show() {
+
+		$this->description(); ?>
+
+		<input type="hidden" name="wp_meta_box_nonce" value="<?php esc_attr_e( wp_create_nonce( basename( __FILE__ ) ) ); ?>" />
 
 		<?php self::layout_fields( $this->fields );
 
@@ -221,19 +357,19 @@ class CMB_Meta_Box {
 	/**
 	 * Layout an array of fields, depending on their 'cols' property.
 	 *
-	 * This is a static method so other fields can use it that rely on sub fields
+	 * This is a static method so other fields can use it that rely on sub fields.
 	 *
-	 * @param  CMB_Field[]  $fields
+	 * @param array $fields Fields in a collection.
 	 */
-	static function layout_fields( array $fields ) { ?>
-
+	static function layout_fields( array $fields ) {
+		?>
 		<div class="cmb_metabox">
 
 			<?php $current_colspan = 0;
 
 			foreach ( $fields as $field ) :
 
-				if ( $current_colspan == 0 ) : ?>
+				if ( 0 == $current_colspan ) : ?>
 
 					<div class="cmb-row">
 
@@ -241,27 +377,36 @@ class CMB_Meta_Box {
 
 				$current_colspan += $field->args['cols'];
 
-				$classes = array( 'field', get_class($field) );
+				$classes = array( 'field', get_class( $field ) );
 
-				if ( ! empty( $field->args['repeatable'] ) )
+				if ( ! empty( $field->args['repeatable'] ) ) {
 					$classes[] = 'repeatable';
+				}
 
-				if ( ! empty( $field->args['sortable'] ) )
+				if ( ! empty( $field->args['sortable'] ) ) {
 					$classes[] = 'cmb-sortable';
+				}
+
+				// Assign extra class for has label or has no label.
+				if ( ! empty( $field->title ) ) {
+					$label_designation = 'cmb-has-label';
+				} else {
+					$label_designation = 'cmb-no-label';
+				}
 
 				$attrs = array(
 					sprintf( 'id="%s"', sanitize_html_class( $field->id ) ),
-					sprintf( 'class="%s"', esc_attr( implode(' ', array_map( 'sanitize_html_class', $classes ) ) ) )
+					sprintf( 'class="%s"', esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) ) ),
 				);
 
 				// Field Repeatable Max.
-				if ( isset( $field->args['repeatable_max']  ) )
+				if ( isset( $field->args['repeatable_max'] ) ) {
 					$attrs[] = sprintf( 'data-rep-max="%s"', intval( $field->args['repeatable_max'] ) );
-
+				}
 				?>
 
-				<div class="cmb-cell-<?php echo intval( $field->args['cols'] ); ?>">
-					
+				<div class="cmb-cell-<?php echo intval( $field->args['cols'] ); ?> <?php echo esc_attr( $label_designation ); ?>">
+
 						<div <?php echo implode( ' ', $attrs ); ?>>
 							<?php $field->display(); ?>
 						</div>
@@ -270,7 +415,7 @@ class CMB_Meta_Box {
 
 				</div>
 
-				<?php if ( $current_colspan == 12 || $field === end( $fields ) ) :
+				<?php if ( 12 == $current_colspan || $field === end( $fields ) ) :
 
 					$current_colspan = 0; ?>
 
@@ -279,73 +424,110 @@ class CMB_Meta_Box {
 				<?php endif; ?>
 
 			<?php endforeach; ?>
-			
+
 		</div>
 
 	<?php }
 
+	/**
+	 * Remove unwanted hidden field values recursively.
+	 *
+	 * @param array $values Field value(s).
+	 * @return array mixed Cleaned value(s)
+	 */
 	function strip_repeatable( $values ) {
 
 		foreach ( $values as $key => $value ) {
-
-			if ( false !== strpos( $key, 'cmb-group-x' ) || false !==  strpos( $key, 'cmb-field-x' ) )
-				unset( $values[$key] ); 
-
-			elseif ( is_array( $value ) )
-				$values[$key] = $this->strip_repeatable( $value );
-
+			if ( false !== strpos( $key, 'cmb-group-x' ) || false !== strpos( $key, 'cmb-field-x' ) ) {
+				unset( $values[ $key ] );
+			} elseif ( is_array( $value ) ) {
+				$values[ $key ] = $this->strip_repeatable( $value );
+			}
 		}
 
 		return $values;
 	}
 
-	// Save data from metabox
-	function save( $post_id = 0 )  {
+	/**
+	 * Save data from metabox.
+	 *
+	 * @uses cmb_save_fields
+	 *
+	 * @param int $post_id Optional. Post ID.
+	 * @return int Post ID if nonce is not verified.
+	 */
+	function save( $post_id = 0 ) {
 
-		// verify nonce
-		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) )
+		// Verify nonce.
+		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename( __FILE__ ) ) ) {
 			return $post_id;
+		}
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
-			// verify this meta box was shown on the page
-			if ( ! isset( $_POST['_cmb_present_' . $field['id'] ] ) )
+			// Verify this meta box was shown on the page.
+			if ( ! isset( $_POST[ '_cmb_present_' . $field['id'] ] ) ) {
 				continue;
+			}
 
-			if ( isset( $_POST[$field['id']] ) )
-				$value = (array) $_POST[$field['id']];
-			else
+			if ( isset( $_POST[ $field['id'] ] ) ) {
+				$value = (array) $_POST[ $field['id'] ];
+			} else {
 				$value = array();
+			}
 
 			$value = $this->strip_repeatable( $value );
 
 			if ( ! $class = _cmb_field_class_for_type( $field['type'] ) ) {
-				do_action('cmb_save_' . $field['type'], $field, $value);
+				do_action( 'cmb_save_' . $field['type'], $field, $value );
 			}
 
-			if ( !empty(  $this->_meta_box['repeatable'] ) )
-				$field['repeatable'] = true;
-
 			$field_obj = new $class( $field['id'], $field['name'], $value, $field );
+
 			$field_obj->save( $post_id, $value );
 
 		}
 
-		// If we are not on a post, need to refresh the field objects to reflect new values, as we do not get a redirect
+		// If we are not on a post, need to refresh the field objects to reflect new values, as we do not get a redirect.
 		if ( ! $post_id ) {
 			$this->fields = array();
 			$this->init_fields();
 		}
 	}
 
-	// Save the on save_post hook
+	/**
+	 * Trigger a save the on save_post hook.
+	 *
+	 * @uses save_post, edit_attachment
+	 *
+	 * @param int $post_id Post ID.
+	 * @return int Post ID if field is autosaving.
+	 */
 	function save_for_post( $post_id ) {
 
-		// check autosave
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+		// Check if we're doing an autosave. Skip if so.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return $post_id;
+		}
 
 		$this->save( $post_id );
+
+	}
+
+	/**
+	 * Get a post ID for use when populating a metabox bo.
+	 *
+	 * @return int|null Post ID or null if missing GET variable.
+	 */
+	function get_post_id() {
+
+		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : null;
+
+		if ( ! $post_id && isset( $_POST['post_id'] ) ) {
+			$post_id = absint( $_POST['post_id'] );
+		}
+
+		return (int) $post_id;
 
 	}
 }

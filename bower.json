@@ -1,0 +1,21 @@
+{
+  "name": "custom-meta-boxes",
+  "version": "1.0.2",
+  "homepage": "http://hmn.md/tools/",
+  "authors": [
+    "Human Made Limited"
+  ],
+  "description": "Lets you easily create metaboxes with custom fields that will blow your mind.",
+  "main": "custom-meta-boxes.php",
+  "license": "GPLv2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "select2": "~3.5.1"
+  }
+}

@@ -44,3 +44,12 @@
 .cmb_metabox .field-title label {
 	vertical-align: baseline;
 }
+.cmb_metabox .select2-search-choice-close {
+	-webkit-transition: none;
+	        transition: none;
+	top: 3px;
+}
+
+.cmb_metabox [disabled] {
+	background: #F7F7F7;
+}

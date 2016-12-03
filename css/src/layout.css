@@ -1,23 +1,23 @@
 /** CMB Layout **/
 
-.cmb_metabox .field { 
+.cmb_metabox .field {
 	overflow: hidden;
 	padding: 16px 0;
 	border-bottom: 1px solid #DFDFDF;
 }
 
-.cmb-row:last-child > [class*="cmb-cell-"]  > .field { 
-	border-bottom: 0; 
+.cmb-row:last-child > [class*="cmb-cell-"]  > .field {
+	border-bottom: 0;
 }
 
 /* Neaten up the margins when metaboxes are within the standard postbox. */
 .postbox > .inside > .cmb_metabox {
-	margin: -10px 0; 
+	margin: -10px 0;
 }
 
-.cmb_metabox .cmb-row { 
-	overflow: hidden; 
-	margin: 0 -5px; 
+.cmb_metabox .cmb-row {
+	overflow: hidden;
+	margin: 0 -5px;
 	zoom: 1;
 }
 
@@ -25,13 +25,13 @@
 .cmb_metabox .cmb-row:after {
 	content: "";
 	display: table;
-} 
+}
 .cmb_metabox .cmb-row:after {
 	clear: both;
 }
 
-.cmb_metabox [class*="cmb-cell-"] { 
-	float: left; 
+.cmb_metabox [class*="cmb-cell-"] {
+	float: left;
 	padding: 0 5px;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -53,5 +53,11 @@
 @media all and ( max-width: 850px ) {
 
 	.cmb_metabox [class*="cmb-cell-"] { width: 100%; }
+
+}
+
+@media all and ( min-width: 850px ) {
+
+	.cmb_metabox [class*="cmb-cell-"].cmb-has-label + .cmb-no-label { padding-top: 32px }
 
 }
