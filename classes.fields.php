@@ -1846,7 +1846,6 @@ class CMB_Group_Field extends CMB_Field {
 				if ( $class && class_exists( $class ) ) {
 					$this->add_field( new $class( $f['id'], $f['name'], array(), $f ) );
 				}
-
 			}
 		}
 
