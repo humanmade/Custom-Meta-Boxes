@@ -444,11 +444,7 @@ abstract class CMB_Field {
 
 			<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
-			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
-					<span class="cmb-delete-field-icon">&times;</span>
-				</button>
-			<?php endif; ?>
+			<?php $this->delete_button_markup(); ?>
 
 			<?php $this->html(); ?>
 
@@ -462,29 +458,43 @@ abstract class CMB_Field {
 
 		// Insert a hidden one if it's repeatable.
 		if ( $this->args['repeatable'] ) {
+			$this->repeatable_button_markup();
+		}
+	}
 
-			// X used to distinguish hidden fields.
-			$this->field_index = 'x';
-			$this->value = ''; ?>
+	/**
+	 * Markup to make a field repeatable and enable a user to add or delete another row.
+	 */
+	protected function repeatable_button_markup() {
+		// X used to distinguish hidden fields.
+		$this->field_index = 'x';
+		$this->value = ''; ?>
 
-			<div class="field-item hidden" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+		<div class="field-item hidden" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
-			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
-					<span class="cmb-delete-field-icon">&times;</span>
-					<?php echo esc_html( $this->args['string-delete-field'] ); ?>
-				</button>
-			<?php endif; ?>
+			<?php $this->delete_button_markup(); ?>
 
 			<?php $this->html(); ?>
 
-			</div>
+		</div>
 
-			<button class="button repeat-field"><?php echo esc_html( $this->args['string-repeat-field'] ); ?></button>
+		<button class="button repeat-field"><?php echo esc_html( $this->args['string-repeat-field'] ); ?></button>
 
+		<?php
+	}
+
+	/**
+	 * Markup to print a "remove" button for a repeatable field.
+	 */
+	protected function delete_button_markup() {
+		if ( $this->args['repeatable'] ) :
+			?>
+			<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
+				<span class="cmb-delete-field-icon">&times;</span>
+				<?php echo esc_html( $this->args['string-delete-field'] ); ?>
+			</button>
 			<?php
-		}
-
+		endif;
 	}
 }
 

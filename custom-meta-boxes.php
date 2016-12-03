@@ -39,6 +39,7 @@ if ( ! defined( 'CMB_URL' ) ) {
  */
 include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb-meta-box.php' );
+include_once( CMB_PATH . 'fields/class-cmb-checkbox-multi.php' );
 
 /**
  * Make it possible to add fields in locations other than post edit screen. Optional.

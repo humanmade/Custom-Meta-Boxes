@@ -15,6 +15,61 @@
  */
 class CMB_Checkbox_Multi extends CMB_Field {
 
+	/**
+	 * Print out a field.
+	 */
+	public function display() {
+
+		// Print title if necessary.
+		$this->title();
+
+		// Print description if necessary.
+		$this->description();
+
+		if ( $this->args['repeatable'] ) {
+
+			$values = ( $this->get_values() ) ? $this->get_values() : array();
+
+			$i = 0;
+
+			foreach ( $values as $key => $value ) {
+
+				$this->field_index = $i;
+				$this->value       = $value;
+				?>
+
+				<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+
+					<?php $this->delete_button_markup(); ?>
+					<?php $this->html(); ?>
+
+				</div>
+
+				<?php
+
+				$i++;
+			}
+
+			// Insert a hidden one if it's repeatable.
+			$this->repeatable_button_markup();
+		} else {
+
+			$this->value = $this->get_values();
+			?>
+
+			<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+
+				<?php $this->html(); ?>
+
+			</div>
+
+			<?php
+		}
+	}
+
+	/**
+	 * Print out field HTML.
+	 */
 	public function html() {
 
 		if ( $this->has_data_delegate() ) {
@@ -47,5 +102,4 @@ class CMB_Checkbox_Multi extends CMB_Field {
 		<?php endforeach;
 
 	}
-
 }
