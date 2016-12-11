@@ -1857,10 +1857,13 @@ class CMB_Group_Field extends CMB_Field {
 	public function get_default_args() {
 		return array_merge(
 			parent::get_default_args(),
-			array(
-				'fields'              => array(),
-				'string-repeat-field' => __( 'Add New Group', 'cmb' ),
-				'string-delete-field' => __( 'Remove Group', 'cmb' ),
+			apply_filters(
+			'cmb_group_field_default_args',
+				array(
+					'fields'              => array(),
+					'string-repeat-field' => __( 'Add New Group', 'cmb' ),
+					'string-delete-field' => __( 'Remove Group', 'cmb' ),
+				)
 			)
 		);
 	}
