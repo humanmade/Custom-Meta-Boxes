@@ -79,7 +79,6 @@ class CMB_Checkbox_Multi extends CMB_Field {
 		foreach ( $this->args['options'] as $i => $label ) :
 
 			$value = $this->get_value();
-
 			?>
 
 			<div class="cmb-checkbox-wrap">
@@ -99,7 +98,7 @@ class CMB_Checkbox_Multi extends CMB_Field {
 
 			</div>
 
-		<?php endforeach;
-
+		<?php
+		endforeach;
 	}
 }

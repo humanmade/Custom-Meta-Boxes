@@ -163,4 +163,19 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field->html();
 	}
 
+	function testEmptyRepeatableButton() {
+
+	}
+
+	function testDisplayedRepeatableButton() {
+
+	}
+
+	function testEmptyDeleteButton() {
+
+	}
+
+	function testDisplayedDeleteButton() {
+
+	}
 }

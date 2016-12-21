@@ -440,7 +440,8 @@ abstract class CMB_Field {
 		foreach ( $values as $key => $value ) {
 
 			$this->field_index = $i;
-			$this->value = $value; ?>
+			$this->value       = $value;
+			?>
 
 			<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
@@ -450,7 +451,7 @@ abstract class CMB_Field {
 
 			</div>
 
-		<?php
+			<?php
 
 			$i++;
 
@@ -463,12 +464,13 @@ abstract class CMB_Field {
 	}
 
 	/**
-	 * Markup to make a field repeatable and enable a user to add or delete another row.
+	 * Markup to print an "add" button and for a repeatable field.
 	 */
 	protected function repeatable_button_markup() {
 		// X used to distinguish hidden fields.
 		$this->field_index = 'x';
-		$this->value = ''; ?>
+		$this->value       = '';
+		?>
 
 		<div class="field-item hidden" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
