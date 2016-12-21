@@ -29,7 +29,7 @@ class CMB_Meta_Box {
 	 *
 	 * @var array
 	 */
-	private $fields = array();
+	public $fields = array();
 
 	/**
 	 * CMB_Meta_Box constructor.
