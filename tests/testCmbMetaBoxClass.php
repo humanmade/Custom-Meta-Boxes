@@ -14,14 +14,14 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 	 *
 	 * @var array
 	 */
-	private $simple_fields = [];
+	private $simple_fields = array();
 
 	/**
 	 * Holds a group fieldset.
 	 *
 	 * @var array
 	 */
-	private $group_fields = [];
+	private $group_fields = array();
 
 	/**
 	 * Initialization.
@@ -29,8 +29,15 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 
+		// Factory was originally a variable, not a method. Checking for running tests bc-like.
+		if ( is_callable( [ $this, 'factory' ] ) ) {
+			$factory = $this->factory();
+		} else {
+			$factory = $this->factory;
+		}
+
 		// Create a test post.
-		$this->post_id = self::factory()->post->create(
+		$this->post_id = $factory->post->create(
 			array(
 				'post_author'  => get_current_user_id(),
 				'post_title'   => 'My test post',
