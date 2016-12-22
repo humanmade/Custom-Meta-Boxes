@@ -30,7 +30,7 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 		parent::setUp();
 
 		// Factory was originally a variable, not a method. Checking for running tests bc-like.
-		if ( is_callable( [ $this, 'factory' ] ) ) {
+		if ( is_callable( array( $this, 'factory' ) ) ) {
 			$factory = $this->factory();
 		} else {
 			$factory = $this->factory;
@@ -103,8 +103,6 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 		// Check that a non-repeatable field only returns one value.
 		// The new instance of the field is 1.
 		$this->assertEquals( array( 1 ), $field->values );
-
-		unset( $boxes );
 	}
 
 	function test_values_from_init_repeatable() {
@@ -119,9 +117,6 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 		// Check that a non-repeatable field only returns one value.
 		// The new instance of the field is 1.
 		$this->assertEquals( array( 1, 2, 3, 4, 5 ), $field->values );
-
-		unset( $boxes );
-
 	}
 
 	function test_values_from_init_group_non_repeatable() {
@@ -136,9 +131,6 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 		// Check that a non-repeatable field only returns one value.
 		// The new instance of the field is 1.
 		$this->assertEquals( array( array( 'text' => 'one', 'text2' => 'four' ) ), $field->values );
-
-		unset( $boxes );
-
 	}
 
 	function test_values_from_init_group_repeatable() {
@@ -165,9 +157,6 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 			),
 			$field->values
 		);
-
-		unset( $boxes );
-
 	}
 
 	/**
