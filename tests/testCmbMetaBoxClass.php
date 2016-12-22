@@ -10,14 +10,14 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 	private $post_id = 0;
 
 	/**
-	 * Holds a simlpe fieldset.
+	 * Holds a simple fieldset.
 	 *
 	 * @var array
 	 */
 	private $simple_fields = [];
 
 	/**
-	 * Holds a simlpe fieldset.
+	 * Holds a group fieldset.
 	 *
 	 * @var array
 	 */
