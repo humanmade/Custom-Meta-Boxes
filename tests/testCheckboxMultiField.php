@@ -43,13 +43,13 @@ class CheckboxMultiFieldTestCase extends WP_UnitTestCase {
 	}
 
 	function testEmptyFieldOutput() {
-		$field        = new CMB_Checkbox_Multi( 'foo', 'Foo', array( 'value' ) );
+		$field        = new CMB_Checkbox_Multi( 'foo', 'Foo', array( 'value' => 'value' ), array( 'options' => array( 'value' => 'value' ) ) );
 
 		if ( ! $this->post ) {
 			$this->markTestSkipped( 'Post not found' );
 		}
 
-		$this->expectOutputRegex( '/(type=\"hidden\".*?id=\"foo-cmb-field-0\".*?value=\"value\")/s' );
+		$this->expectOutputRegex( '/(type=\"checkbox\".*?id=\"foo-cmb-field-0-item-value\".*?checked=\"checked\")/s' );
 
 		// Trigger output.
 		$field->html();

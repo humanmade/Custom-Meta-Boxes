@@ -163,19 +163,30 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field->html();
 	}
 
-	function testEmptyRepeatableButton() {
+	function testDisplayedRepeatableButtonDiv() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ), array( 'repeatable' => true ) );
 
+		// Set expectation for an empty output.
+		$this->expectOutputRegex( '/\<div class=\"field-item hidden\" .*?\>/' );
+
+		hmcmb_invoke_method( $field, 'repeatable_button_markup' );
 	}
 
-	function testDisplayedRepeatableButton() {
+	function testDisplayedRepeatableButtonButton() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ), array( 'repeatable' => true ) );
 
-	}
+		// Set expectation for an empty output.
+		$this->expectOutputRegex( '/\<button class=\"button repeat-field\"\>Add New<\/button\>/' );
 
-	function testEmptyDeleteButton() {
-
+		hmcmb_invoke_method( $field, 'repeatable_button_markup' );
 	}
 
 	function testDisplayedDeleteButton() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ), array( 'repeatable' => true ) );
 
+		// Set expectation for an empty output.
+		$this->expectOutputRegex( '/\<button class=\"cmb-delete-field\" title=\"Remove\">/' );
+
+		hmcmb_invoke_method( $field, 'delete_button_markup' );
 	}
 }

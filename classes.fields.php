@@ -445,7 +445,9 @@ abstract class CMB_Field {
 
 			<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
-			<?php $this->delete_button_markup(); ?>
+			<?php if ( $this->args['repeatable'] ) {
+				$this->delete_button_markup();
+			} ?>
 
 			<?php $this->html(); ?>
 
@@ -489,14 +491,12 @@ abstract class CMB_Field {
 	 * Markup to print a "remove" button for a repeatable field.
 	 */
 	protected function delete_button_markup() {
-		if ( $this->args['repeatable'] ) :
-			?>
-			<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
-				<span class="cmb-delete-field-icon">&times;</span>
-				<?php echo esc_html( $this->args['string-delete-field'] ); ?>
-			</button>
-			<?php
-		endif;
+		?>
+		<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
+			<span class="cmb-delete-field-icon">&times;</span>
+			<?php echo esc_html( $this->args['string-delete-field'] ); ?>
+		</button>
+		<?php
 	}
 }
 

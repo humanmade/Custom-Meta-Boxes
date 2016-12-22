@@ -40,7 +40,9 @@ class CMB_Checkbox_Multi extends CMB_Field {
 
 				<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
-					<?php $this->delete_button_markup(); ?>
+					<?php if ( $this->args['repeatable'] ) {
+						$this->delete_button_markup();
+					} ?>
 					<?php $this->html(); ?>
 
 				</div>
@@ -76,6 +78,11 @@ class CMB_Checkbox_Multi extends CMB_Field {
 			$this->args['options'] = $this->get_delegate_data();
 		}
 
+		// Whoops, someone forgot to add some options. We can't do anything without options.
+		if ( empty( $this->args['options'] ) ) {
+			return;
+		}
+
 		foreach ( $this->args['options'] as $i => $label ) :
 
 			$value = $this->get_value();
@@ -83,8 +90,7 @@ class CMB_Checkbox_Multi extends CMB_Field {
 
 			<div class="cmb-checkbox-wrap">
 
-				<input
-					type="checkbox"
+				<input type="checkbox"
 					<?php $this->id_attr( 'item-' . $i ); ?>
 					<?php $this->boolean_attr(); ?>
 					<?php $this->class_attr(); ?>
