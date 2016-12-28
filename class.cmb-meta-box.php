@@ -29,7 +29,7 @@ class CMB_Meta_Box {
 	 *
 	 * @var array
 	 */
-	private $fields = array();
+	public $fields = array();
 
 	/**
 	 * CMB_Meta_Box constructor.
@@ -75,12 +75,17 @@ class CMB_Meta_Box {
 			unset( $args['type'] );
 			unset( $args['name'] );
 
-			$class = _cmb_field_class_for_type( $field['type'] );
+			$class  = _cmb_field_class_for_type( $field['type'] );
+			$single = ( ! isset( $field['repeatable'] ) || false === $field['repeatable'] );
 
 			// If we are on a post edit screen - get metadata value of the field for this post.
 			if ( $post_id ) {
-				$single = ( ! isset( $field['repeatable'] ) || false === $field['repeatable'] );
 				$values = (array) get_post_meta( $post_id, $field['id'], $single );
+			}
+
+			// Handle repeatable values for group fields.
+			if ( 'group' === $field['type'] && $single ) {
+				$values = array( $values );
 			}
 
 			if ( class_exists( $class ) ) {
