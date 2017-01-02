@@ -2,27 +2,29 @@ CMB.addCallbackForDeletedField( 'CMB_wysiwyg', function( el ) {
 
 	// Destroy WYSIWYG editors instances.
 	el.find( '.cmb-wysiwyg textarea' ).each( function() {
-		var instance = tinyMCE.get( jQuery(this).attr('id') );
-		if ( typeof( instance ) !== 'undefined' )
+		var instance = tinyMCE.get( jQuery( this ).attr( 'id' ) );
+		if ( instance !== null && typeof( instance ) !== 'undefined' ) {
 			instance.remove();
+		}
 	} );
 
 } );
 
 CMB.addCallbackForClonedField( 'CMB_wysiwyg', function( newT ) {
 
-	newT.find( '.cmb-wysiwyg' ).each( function (i) {
+	newT.find( '.cmb-wysiwyg' ).each( function ( i ) {
 
 		var el, id, name, ed, dom, i, fieldId, nameRegex, idRegex;
 
-		el      = jQuery(this);
+		el      = jQuery( this );
 		id      = el.attr( 'data-id' );
 		name    = el.attr( 'data-name' );
-		ed      = tinyMCE.get(id);
-		fieldId = el.attr('data-field-id'); //Field identifier, not including field/group index.,
+		ed      = tinyMCE.get( id );
+		fieldId = el.attr( 'data-field-id' ); //Field identifier, not including field/group index.,
 
-		if ( ed )
+		if ( ed ) {
 			return;
+		}
 
 		nameRegex = new RegExp( 'cmb-placeholder-name-' + fieldId, 'g' );
 		idRegex   = new RegExp( 'cmb-placeholder-id-' + fieldId, 'g' );
@@ -34,36 +36,42 @@ CMB.addCallbackForClonedField( 'CMB_wysiwyg', function( newT ) {
 		// If no settings for this field. Clone from placeholder.
 		if ( typeof( tinyMCEPreInit.mceInit[ id ] ) === 'undefined' ) {
 			var newSettings = jQuery.extend( {}, tinyMCEPreInit.mceInit[ 'cmb-placeholder-id-' + fieldId ] );
-			for ( var prop in newSettings )
-				if ( 'string' === typeof( newSettings[prop] ) )
-					newSettings[prop] = newSettings[prop].replace( idRegex, id ).replace( nameRegex, name );
+			for ( var prop in newSettings ) {
+				if ( 'string' === typeof( newSettings[ prop ] ) ) {
+					newSettings[ prop ] = newSettings[ prop ].replace( idRegex, id ).replace( nameRegex, name );
+				}
+			}
 			tinyMCEPreInit.mceInit[ id ] = newSettings;
 		}
 
 		// If no Quicktag settings for this field. Clone from placeholder.
 		if ( typeof( tinyMCEPreInit.qtInit[ id ] ) === 'undefined' ) {
 			var newQTS = jQuery.extend( {}, tinyMCEPreInit.qtInit[ 'cmb-placeholder-id-' + fieldId ] );
-			for ( var prop in newQTS )
-				if ( 'string' === typeof( newQTS[prop] ) )
-					newQTS[prop] = newQTS[prop].replace( idRegex, id ).replace( nameRegex, name );
+			for ( var prop in newQTS ) {
+				if ( 'string' === typeof( newQTS[ prop ] ) ) {
+					newQTS[ prop ] = newQTS[ prop ].replace( idRegex, id ).replace( nameRegex, name );
+				}
+			}
 			tinyMCEPreInit.qtInit[ id ] = newQTS;
 		}
 
-		var mode = el.find('.wp-editor-wrap').hasClass('tmce-active') ? 'tmce' : 'html';
+		var mode = el.find( '.wp-editor-wrap' ).hasClass( 'tmce-active' ) ? 'tmce' : 'html';
 
 		// If current mode is visual, create the tinyMCE.
 		if ( 'tmce' === mode ) {
 			if ( tinyMCE.majorVersion === '4' ) {
 				var ed = tinymce.init( tinyMCEPreInit.mceInit[id] );
 			} else if ( tinyMCE.majorVersion === '3' ) {
-			var ed = new tinymce.Editor( id, tinyMCEPreInit.mceInit[id] );
+				var ed = new tinymce.Editor( id, tinyMCEPreInit.mceInit[id] );
+			}
 			ed.render();
-		}
 		}
 
 		// Init Quicktags.
 		QTags.instances[0] = undefined;
-		try { quicktags( tinyMCEPreInit.qtInit[id] ); } catch(e){}
+		try {
+			quicktags( tinyMCEPreInit.qtInit[ id ] );
+		} catch ( e ) {}
 
 	} );
 
@@ -73,14 +81,13 @@ CMB.addCallbackForClonedField( 'CMB_wysiwyg', function( newT ) {
 CMB.addCallbackForSortStart( 'CMB_wysiwyg', function( el ) {
 
 	el.find( '.wp-editor-area' ).each(function(){
-		var id = jQuery(this).attr('id');
+		var id = jQuery( this ).attr( 'id' );
 
 		if ( tinyMCE.majorVersion === '4' ) {
-			tinyMCE.execCommand('mceRemoveEditor', false, id);
+			tinyMCE.execCommand( 'mceRemoveEditor', false, id );
 		} else if ( tinyMCE.majorVersion === '3' ) {
-		tinyMCE.execCommand('mceRemoveControl', false, id);
+			tinyMCE.execCommand( 'mceRemoveControl', false, id );
 		}
-
 
 	});
 
@@ -90,14 +97,14 @@ CMB.addCallbackForSortEnd( 'CMB_wysiwyg', function( el ) {
 
 	el.find( '.wp-editor-area' ).each(function(){
 
-		var id   = jQuery(this).attr('id'),
-		    mode = jQuery(this).closest('.wp-editor-wrap').hasClass('tmce-active') ? 'tmce' : 'html';
+		var id   = jQuery( this ).attr( 'id' ),
+		    mode = jQuery( this ).closest( '.wp-editor-wrap' ).hasClass( 'tmce-active' ) ? 'tmce' : 'html';
 
 		if ( 'tmce' === mode ) {
 			if ( tinyMCE.majorVersion === '4' ) {
-				tinyMCE.execCommand('mceAddEditor', false, id);
+				tinyMCE.execCommand( 'mceAddEditor', false, id );
 			} else if ( tinyMCE.majorVersion === '3' ) {
-			tinyMCE.execCommand('mceAddControl', false, id);
+				tinyMCE.execCommand( 'mceAddControl', false, id );
 			}
 		}
 

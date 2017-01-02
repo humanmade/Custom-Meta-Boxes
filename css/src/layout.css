@@ -2,7 +2,7 @@
 
 .cmb_metabox .field {
 	overflow: hidden;
-	padding: 15px 0 20px;
+	padding: 16px 0;
 }
 
 /* Neaten up the margins when metaboxes are within the standard postbox. */
@@ -16,6 +16,12 @@
 	position: relative;
 	margin: 0 -10px;
 	zoom: 1;
+}
+
+.cmb_metabox .cmb-row:before,
+.cmb_metabox .cmb-row:after {
+	content: "";
+	display: table;
 }
 
 .cmb_metabox .cmb-row:after {
@@ -60,5 +66,11 @@
 @media all and ( max-width: 850px ) {
 
 	.cmb_metabox [class*="cmb-cell-"] { width: 100%; }
+
+}
+
+@media all and ( min-width: 850px ) {
+
+	.cmb_metabox [class*="cmb-cell-"].cmb-has-label + .cmb-no-label { padding-top: 32px }
 
 }
