@@ -85,7 +85,7 @@ class CMB_Checkbox_Multi extends CMB_Field {
 
 		foreach ( $this->args['options'] as $i => $label ) :
 
-			$value = $this->get_value();
+			$value = $this->get_values();
 			?>
 
 			<div class="cmb-checkbox-wrap">
@@ -106,5 +106,24 @@ class CMB_Checkbox_Multi extends CMB_Field {
 
 		<?php
 		endforeach;
+	}
+
+	/**
+	 * Get multiple values for the checkbox-multi field.
+	 *
+	 * @return array
+	 */
+	public function &get_values() {
+		if ( ! empty( current( $this->values ) ) || empty( $this->args['default'] ) ) {
+			return $this->values;
+		}
+
+		$new_values = array();
+
+		foreach( $this->args['default'] as $item ) {
+			$new_values[ 'item-' . $item ] = 'on';
+		}
+
+		return $new_values;
 	}
 }
