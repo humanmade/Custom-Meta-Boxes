@@ -89,7 +89,11 @@ class CMB_Meta_Box {
 			}
 
 			if ( class_exists( $class ) ) {
-				$this->fields[] = new $class( $field['id'], $field['name'], (array) $values, $args );
+				$field = new $class( $field['id'], $field['name'], (array) $values, $args );
+				if ( $field->is_displayed() ) {
+					$this->fields[] = $field;
+				}
+				unset( $field );
 			}
 		}
 
@@ -212,6 +216,7 @@ class CMB_Meta_Box {
 		$display = $this->hide_for_id( $display );
 		$display = $this->add_for_page_template( $display );
 		$display = $this->hide_for_page_template( $display );
+		$display = $this->check_capabilities( $display );
 		return $display;
 	}
 
@@ -328,6 +333,24 @@ class CMB_Meta_Box {
 		$this->_meta_box['hide_on']['page-template'] = ! is_array( $this->_meta_box['hide_on']['page-template'] ) ? array( $this->_meta_box['hide_on']['page-template'] ) : $this->_meta_box['hide_on']['page-template'];
 
 		return ! in_array( $current_template, $this->_meta_box['hide_on']['page-template'] );
+
+	}
+
+	/**
+	 * Check capabilities of current user before displaying a CMB block.
+	 *
+	 * Only works for field collections that have the 'capability' attribute set.
+	 *
+	 * @param bool $display Current display status.
+	 * @return bool (Potentially) modified display status
+	 */
+	function check_capabilities( $display ) {
+
+		if ( ! isset( $this->_meta_box['capability'] ) ) {
+			return $display;
+		}
+
+		return current_user_can( sanitize_text_field( $this->_meta_box['capability'] ) );
 
 	}
 

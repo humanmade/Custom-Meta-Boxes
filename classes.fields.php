@@ -91,6 +91,7 @@ abstract class CMB_Field {
 				'class'               => '',
 				'data_delegate'       => null,
 				'save_callback'       => null,
+				'capability'          => 'edit_posts',
 				'string-repeat-field' => __( 'Add New', 'cmb' ),
 				'string-delete-field' => __( 'Remove', 'cmb' ),
 			),
@@ -380,6 +381,13 @@ abstract class CMB_Field {
 				add_post_meta( $post_id, $this->id, $this->value );
 			}
 		}
+	}
+
+	/**
+	 * Check whether the current field should or should not be displayed.
+	 */
+	public function is_displayed() {
+		return current_user_can( $this->args['capability'] );
 	}
 
 	/**
