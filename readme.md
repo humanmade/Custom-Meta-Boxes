@@ -57,7 +57,7 @@ See [CONTRIBUTING.md](https://github.com/humanmade/Custom-Meta-Boxes/blob/master
 ## Changelog ##
 
 **1.1**
-* Added `capapability` option to individual fields and groups
+* Added `capability` option to individual fields and groups
 
 **1.0.3**
 * Fix repeatable fields bugs (props @barryceelen )

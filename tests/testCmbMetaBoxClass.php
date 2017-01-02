@@ -84,7 +84,7 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 		);
 
 		// Assign an admin user as we now check that you have proper permissions before passing a field.
-		wp_set_current_user( $this->factory->user->create( [ 'role' => 'administrator' ] ) );
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
 
 	}
 

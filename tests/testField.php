@@ -23,8 +23,8 @@ class FieldTestCase extends WP_UnitTestCase {
 		$this->post = get_post( $id );
 
 		// Setup some users to test our display logic.
-		$this->users['admin'] = $this->factory->user->create( [ 'role' => 'administrator' ] );
-		$this->users['author'] = $this->factory->user->create( [ 'role' => 'author' ] );
+		$this->users['admin'] = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		$this->users['author'] = $this->factory->user->create( array( 'role' => 'author' ) );
 
 	}
 
