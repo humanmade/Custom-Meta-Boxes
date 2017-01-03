@@ -29,7 +29,21 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 		array( 'id' => 'field-6',  'name' => 'Radio input field', 'type' => 'radio', 'options' => array( 'Option 1', 'Option 2' ) ),
 		array( 'id' => 'field-7a',  'name' => 'Checkbox field', 'type' => 'checkbox' ),
-		array( 'id' => 'field-7b',  'name' => 'Checkbox-Multi field', 'type' => 'checkbox_multi', 'options' => array( 'Option with a really long label', 'Option 1', 'Option 2', 'Option 3', 'Option 4' ) ),
+
+		// Checkbox Multi Field.
+		array(
+			'id' => 'field-7b',
+			'name' => 'Checkbox-Multi field',
+			'type' => 'checkbox_multi',
+			'default' => [ 'option1' ],
+			'options' => array(
+				'option0' => 'Option with a really long label',
+				'option1' => 'Option 1',
+				'option2' => 'Option 2',
+				'option3' => 'Option 3',
+				'option4' => 'Option 4',
+			)
+		),
 
 		array( 'id' => 'field-8',  'name' => 'WYSIWYG field', 'type' => 'wysiwyg', 'options' => array( 'editor_height' => '100' ), 'repeatable' => true, 'sortable' => true ),
 

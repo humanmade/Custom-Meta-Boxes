@@ -498,6 +498,29 @@ abstract class CMB_Field {
 		</button>
 		<?php
 	}
+
+	/**
+	 * Determine whether we're creating a new object or on an existing object.
+	 *
+	 * This is used so that the plugin has some awareness of whether we're dealing with an
+	 * existing or new object. This is important for things like knowing whether or not to
+	 * load default values when populating a field view.
+	 *
+	 * @return bool|null True if is new, false if existing, and null if not in the admin.
+	 */
+	protected function is_new_object() {
+		if ( ! $screen = get_current_screen() || ! $screen->in_admin ) {
+			return null;
+		}
+
+		$id = $GLOBALS['hook_suffix'];
+		$id = ( '.php' == substr( $id, -4 ) ) ? substr( $id, 0, -4 ) : $id;
+		if ( 'post-new' === $id || 'link-add' === $id || 'media-new' === $id || 'user-new' === $id ) {
+			return true;
+		}
+
+		return false;
+	}
 }
 
 /**

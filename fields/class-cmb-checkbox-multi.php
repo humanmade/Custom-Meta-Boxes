@@ -94,8 +94,8 @@ class CMB_Checkbox_Multi extends CMB_Field {
 					<?php $this->id_attr( 'item-' . $i ); ?>
 					<?php $this->boolean_attr(); ?>
 					<?php $this->class_attr(); ?>
-					<?php $this->name_attr( '[item-' . $i . ']' ); ?>
-					<?php checked( isset( $value[ 'item-' . $i ] ) ); ?>
+					<?php $this->name_attr( '[' . $i . ']' ); ?>
+					<?php checked( isset( $value[ $i ] ) ); ?>
 				/>
 
 				<label <?php $this->for_attr( 'item-' . $i ); ?>>
@@ -114,16 +114,12 @@ class CMB_Checkbox_Multi extends CMB_Field {
 	 * @return array
 	 */
 	public function &get_values() {
-		if ( ! empty( current( $this->values ) ) || empty( $this->args['default'] ) ) {
+
+		// We always want to fetch the existing (possibly empty) values if it's an existing object.
+		if ( ! $this->is_new_object() ) {
 			return $this->values;
 		}
 
-		$new_values = array();
-
-		foreach( $this->args['default'] as $item ) {
-			$new_values[ 'item-' . $item ] = 'on';
-		}
-
-		return $new_values;
+		return array_flip( $this->args['default'] );
 	}
 }
