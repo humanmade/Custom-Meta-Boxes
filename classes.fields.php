@@ -419,11 +419,11 @@ abstract class CMB_Field {
 	 */
 	public function display() {
 
-		// If there are no values and it's not repeateble, we want to do one with empty string.
+		// If there are no values, we need to start with an empty string since we're foreaching through.
 		if ( ! $this->get_values() && ! $this->args['repeatable'] ) {
 			$values = array( '' );
 		} else {
-			$values = $this->get_values();
+			$values = ( empty( $this->get_values() ) ) ? array( '' ) : $this->get_values();
 		}
 
 		// Print title if necessary.
@@ -1914,6 +1914,8 @@ class CMB_Group_Field extends CMB_Field {
 
 		if ( ! $this->args['repeatable'] && empty( $values ) ) {
 			$values = array( null );
+		} else {
+			$values = ( empty( $this->get_values() ) ) ? array( '' ) : $this->get_values();
 		}
 
 		if ( $values ) {
