@@ -423,7 +423,8 @@ abstract class CMB_Field {
 		if ( ! $this->get_values() && ! $this->args['repeatable'] ) {
 			$values = array( '' );
 		} else {
-			$values = ( empty( $this->get_values() ) ) ? array( '' ) : $this->get_values();
+			$values = $this->get_values(); // Make PHP5.4 >= happy.
+			$values = ( empty( $values ) ) ? array( '' ) : $values;
 		}
 
 		// Print title if necessary.
