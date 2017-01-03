@@ -105,7 +105,7 @@ abstract class CMB_Field {
 	 */
 	public function enqueue_scripts() {
 
-		if ( isset( $this->args['sortable'] ) && $this->args['sortable'] ) {
+		if ( isset( $this->args['sortable'] ) && $this->args['sortable'] && $this->args['repeatable'] ) {
 			wp_enqueue_script( 'jquery-ui-sortable' );
 		}
 

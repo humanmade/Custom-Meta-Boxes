@@ -388,7 +388,7 @@ class CMB_Meta_Box {
 					$classes[] = 'repeatable';
 				}
 
-				if ( ! empty( $field->args['sortable'] ) ) {
+				if ( ! empty( $field->args['sortable'] ) && ! empty( $field->args['repeatable'] ) ) {
 					$classes[] = 'cmb-sortable';
 				}
 
