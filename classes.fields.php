@@ -509,7 +509,8 @@ abstract class CMB_Field {
 	 * @return bool|null True if is new, false if existing, and null if not in the admin.
 	 */
 	protected function is_new_object() {
-		if ( ! $screen = get_current_screen() || ! $screen->in_admin ) {
+		$screen = get_current_screen();
+		if ( null === $screen || ! $screen->in_admin ) {
 			return null;
 		}
 

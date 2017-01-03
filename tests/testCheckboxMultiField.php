@@ -49,13 +49,24 @@ class CheckboxMultiFieldTestCase extends WP_UnitTestCase {
 			$this->markTestSkipped( 'Post not found' );
 		}
 
-		$this->expectOutputRegex( '/(type=\"checkbox\".*?id=\"foo-cmb-field-0-item-value\".*?checked=\"checked\")/s' );
+		$this->expectOutputRegex( '/(type=\"checkbox\".*?id=\"foo-cmb-field-0-item-value\".*?checked=\'checked\')/s' );
 
 		// Trigger output.
 		$field->html();
 	}
 
 	function testSavedFieldOutput() {
+		$field        = new CMB_Checkbox_Multi( 'foo', 'Foo', array( 'value' => 'value' ), array( 'options' => array( 'value' => 'value', 'value2' => 'value2' ) ) );
 
+		if ( ! $this->post ) {
+			$this->markTestSkipped( 'Post not found' );
+		}
+
+		$field->save( $this->post->ID, array( 'value2' => 'on' ) );
+
+		$this->expectOutputRegex( '/(type=\"checkbox\".*?id=\"foo-cmb-field-0-item-value2\".*?checked=\'checked\')/s' );
+
+		// Trigger output.
+		$field->html();
 	}
 }
