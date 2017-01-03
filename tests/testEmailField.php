@@ -1,4 +1,10 @@
 <?php
+/**
+ * Tests for the email field type.
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
+ */
 
 class EmailFieldTestCase extends WP_UnitTestCase {
 
