@@ -23,7 +23,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		 * Basic Text Field.
 		 */
 		array(
-			'id'   => 'field-1',
+			'id'   => 'field-text',
 			'name' => 'Text input field',
 			'type' => 'text',
 		),
@@ -85,145 +85,34 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		 * Small Text Field.
 		 */
 		array(
-			'id'   => 'field-3',
+			'id'   => 'field-small-text',
 			'name' => 'Small text input field',
 			'type' => 'text_small',
-		),
-
-		/*
-		 * URL Field.
-		 */
-		array(
-			'id'   => 'field-4',
-			'name' => 'URL field',
-			'type' => 'url',
-		),
-
-		/*
-		 * Radio Input Field.
-		 */
-		array(
-			'id'      => 'field-5',
-			'name'    => 'Radio input field',
-			'type'    => 'radio',
-			'options' => array( // Options for individual radio inputs.
-				'Option 1',
-				'Option 2',
-			),
 		),
 
 		/*
 		 * Single Checkbox Field.
 		 */
 		array(
-			'id'    => 'field-6',
+			'id'    => 'field-checkbox',
 			'name' => 'Checkbox field',
 			'type' => 'checkbox',
 		),
 
 		/*
-		 * WYSIWYG (What You See is What You Get) TinyMCE Field.
+		 * Colorpicker Field.
 		 */
 		array(
-			'id'         => 'field-7',
-			'name'       => 'WYSIWYG field',
-			'type'       => 'wysiwyg',
-			'options'    => array( // Options to pass into TinyMCE instance.
-				'editor_height' => '100',
-			),
-		),
-
-		/*
-		 * Textarea Field.
-		 */
-		array(
-			'id'   => 'field-8',
-			'name' => 'Textarea field',
-			'type' => 'textarea',
-		),
-
-		/*
-		 * Textarea Code Field.
-		 */
-		array(
-			'id'   => 'field-9',
-			'name' => 'Code textarea field',
-			'type' => 'textarea_code',
-		),
-
-		/*
-		 * File Upload Field.
-		 */
-		array(
-			'id'           => 'field-10',
-			'name'         => 'File field',
-			'type'         => 'file',
-			'library-type' => array( // Optional. Type of media allowed [ 'audio', 'video', 'text', 'application' ].
-				'video',
-			),
-		),
-
-		/*
-		 * Image Upload Field.
-		 */
-		array(
-			'id'         => 'field-11',
-			'name'       => 'Image upload field',
-			'type'       => 'image',
-			'repeatable' => true,
-			'size'       => 'thumbnail', // Optional. Registered media size to display.
-			'show_size'  => true,        // Optional. Whether to show the image dimensions underneath image itself.
-		),
-
-		/*
-		 * Select Field.
-		 */
-		array(
-			'id'              => 'field-12',
-			'name'            => 'Select field',
-			'type'            => 'select',
-			'options'         => array(
-				'option-1' => 'Option 1',
-				'option-2' => 'Option 2',
-				'option-3' => 'Option 3',
-			),
-			'allow_none'      => true,    // Optional. Allow a user to not select any options.
-			'multiple'        => true,    // Optional. Allow multi-select.
-			'select2_options' => array(), // Optional. Array of options to pass to Select2.
-		),
-
-		/*
-		 * Select for Taxonomies Field.
-		 */
-		array(
-			'id'         => 'field-13',
-			'name'       => 'Select taxonomy field',
-			'type'       => 'taxonomy_select',
-			'taxonomy'   => 'category', // Required. Name of taxonomy to pull options from.
-			'hide_empty' => false,      // Optional. Whether to hide empty terms or not.
-			'multiple'   => true,       // Optional. Allow multi-select.
-
-		),
-
-		/*
-		 * Select for Posts Field.
-		 */
-		array(
-			'id'       => 'field-14',
-			'name'     => 'Post select field',
-			'type'     => 'post_select',
-			'use_ajax' => false,  // Optional. Use AJAX for instant results or load on pageload.
-			'multiple' => true,   // Optional. Allow multi-select.
-			'query'    => array(  // Optional. WP_Query options to pass through.
-				'cat' => 1,
-			),
+			'id'   => 'field-colorpicker',
+			'name' => 'Color',
+			'type' => 'colorpicker',
 		),
 
 		/*
 		 * Basic Date Field.
 		 */
 		array(
-			'id'   => 'field-18',
+			'id'   => 'field-date',
 			'name' => 'Date input field',
 			'type' => 'date',
 		),
@@ -232,7 +121,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		 * Basic Time Field.
 		 */
 		array(
-			'id'    => 'field-19',
+			'id'    => 'field-time',
 			'name' => 'Time input field',
 			'type' => 'time',
 		),
@@ -241,7 +130,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		 * Date UNIX Field.
 		 */
 		array(
-			'id'   => 'field-20',
+			'id'   => 'field-date-unix',
 			'name' => 'Date (unix) input field',
 			'type' => 'date_unix',
 		),
@@ -250,25 +139,16 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		 * Date & Time UNIX Field.
 		 */
 		array(
-			'id'   => 'field-21',
+			'id'   => 'field-datetime-unix',
 			'name' => 'Date & Time (unix) input field',
 			'type' => 'datetime_unix',
-		),
-
-		/*
-		 * Colorpicker Field.
-		 */
-		array(
-			'id'   => 'field-22',
-			'name' => 'Color',
-			'type' => 'colorpicker',
 		),
 
 		/*
 		 * Google Map Field.
 		 */
 		array(
-			'id'                          => 'field-23',
+			'id'                          => 'field-gmap',
 			'name'                        => 'Location',
 			'type'                        => 'gmap',
 
@@ -298,12 +178,132 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		),
 
 		/*
+		 * Radio Input Field.
+		 */
+		array(
+			'id'      => 'field-radio',
+			'name'    => 'Radio input field',
+			'type'    => 'radio',
+			'options' => array( // Options for individual radio inputs.
+				'Option 1',
+				'Option 2',
+			),
+		),
+
+		/*
+		 * File Upload Field.
+		 */
+		array(
+			'id'           => 'field-file',
+			'name'         => 'File field',
+			'type'         => 'file',
+			'library-type' => array( // Optional. Type of media allowed [ 'audio', 'video', 'text', 'application' ].
+				'video',
+			),
+		),
+
+		/*
+		 * File Image Upload Field.
+		 */
+		array(
+			'id'         => 'field-image',
+			'name'       => 'Image upload field',
+			'type'       => 'image',
+			'repeatable' => true,
+			'size'       => 'thumbnail', // Optional. Registered media size to display.
+			'show_size'  => true,        // Optional. Whether to show the image dimensions underneath image itself.
+		),
+
+		/*
+		 * Select Field.
+		 */
+		array(
+			'id'              => 'field-select',
+			'name'            => 'Select field',
+			'type'            => 'select',
+			'options'         => array(
+				'option-1' => 'Option 1',
+				'option-2' => 'Option 2',
+				'option-3' => 'Option 3',
+			),
+			'allow_none'      => true,    // Optional. Allow a user to not select any options.
+			'multiple'        => true,    // Optional. Allow multi-select.
+			'select2_options' => array(), // Optional. Array of options to pass to Select2.
+		),
+
+		/*
+		 * Select for Taxonomies Field.
+		 */
+		array(
+			'id'         => 'field-select-for-taxonomies',
+			'name'       => 'Select taxonomy field',
+			'type'       => 'taxonomy_select',
+			'taxonomy'   => 'category', // Required. Name of taxonomy to pull options from.
+			'hide_empty' => false,      // Optional. Whether to hide empty terms or not.
+			'multiple'   => true,       // Optional. Allow multi-select.
+
+		),
+
+		/*
+		 * Select for Posts Field.
+		 */
+		array(
+			'id'       => 'field-select-for-posts',
+			'name'     => 'Post select field',
+			'type'     => 'post_select',
+			'use_ajax' => false,  // Optional. Use AJAX for instant results or load on pageload.
+			'multiple' => true,   // Optional. Allow multi-select.
+			'query'    => array(  // Optional. WP_Query options to pass through.
+				'cat' => 1,
+			),
+		),
+
+		/*
 		 * Plain Title Field.
 		 */
 		array(
-			'id'   => 'field-24',
+			'id'   => 'field-title',
 			'name' => 'Title Field',
 			'type' => 'title',
+		),
+
+		/*
+		 * Textarea Field.
+		 */
+		array(
+			'id'   => 'field-textarea',
+			'name' => 'Textarea field',
+			'type' => 'textarea',
+		),
+
+		/*
+		 * Textarea Code Field.
+		 */
+		array(
+			'id'   => 'field-textarea-code',
+			'name' => 'Code textarea field',
+			'type' => 'textarea_code',
+		),
+
+		/*
+		 * WYSIWYG (What You See is What You Get) TinyMCE Field.
+		 */
+		array(
+			'id'         => 'field-wysiwyg',
+			'name'       => 'WYSIWYG field',
+			'type'       => 'wysiwyg',
+			'options'    => array( // Options to pass into TinyMCE instance.
+				'editor_height' => '100',
+			),
+		),
+
+		/*
+		 * URL Field.
+		 */
+		array(
+			'id'   => 'field-url',
+			'name' => 'URL field',
+			'type' => 'url',
 		),
 
 	);
@@ -323,21 +323,21 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	$groups_and_cols = array(
 
 		array(
-			'id' => 'gac-1',
+			'id'   => 'gac-1',
 			'name' => 'Text input field',
 			'type' => 'text',
 			'cols' => 4,
 		),
 
 		array(
-			'id' => 'gac-2',
+			'id'   => 'gac-2',
 			'name' => 'Text input field',
 			'type' => 'text',
 			'cols' => 4,
 		),
 
 		array(
-			'id' => 'gac-3',
+			'id'   => 'gac-3',
 			'name' => 'Text input field',
 			'type' => 'text',
 			'cols' => 4,
