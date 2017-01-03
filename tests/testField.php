@@ -4,7 +4,7 @@ class FieldTestCase extends WP_UnitTestCase {
 
 	private $post;
 
-	private $users = [];
+	private $users = array();
 
 	function setUp() {
 
