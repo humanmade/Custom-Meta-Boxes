@@ -19,7 +19,20 @@ matrix:
     - php: hhvm
   fast_finish: true
   exclude:
-  # Only test latest version of WP with HHVM
+    # We really only need to verify that each PHP/WP combination works generally, not that multisite works between them
+    - php: 5.3
+      env: WP_VERSION=3.8 WP_MULTISITE=1
+    - php: 5.3
+      env: WP_VERSION=latest WP_MULTISITE=1
+    - php: 5.4
+      env: WP_VERSION=3.8 WP_MULTISITE=1
+    - php: 5.4
+      env: WP_VERSION=latest WP_MULTISITE=1
+    - php: 5.5
+      env: WP_VERSION=3.8 WP_MULTISITE=1
+    - php: 5.5
+      env: WP_VERSION=latest WP_MULTISITE=1
+    # Only test latest version of WP with HHVM
     - php: hhvm
       env: WP_VERSION=3.8 WP_MULTISITE=0
     - php: hhvm
