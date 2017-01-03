@@ -162,5 +162,4 @@ class FieldTestCase extends WP_UnitTestCase {
 		// Trigger output.
 		$field->html();
 	}
-
 }
