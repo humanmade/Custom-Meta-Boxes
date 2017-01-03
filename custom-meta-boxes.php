@@ -39,6 +39,7 @@ if ( ! defined( 'CMB_URL' ) ) {
  */
 include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb-meta-box.php' );
+include_once( CMB_PATH . 'fields/class-cmb-email-field.php' );
 
 /**
  * Make it possible to add fields in locations other than post edit screen. Optional.
@@ -94,6 +95,7 @@ function _cmb_available_fields() {
 		'text'				=> 'CMB_Text_Field',
 		'text_small' 		=> 'CMB_Text_Small_Field',
 		'text_url'			=> 'CMB_URL_Field',
+		'email'             => 'CMB_Email_Field',
 		'url'				=> 'CMB_URL_Field',
 		'radio'				=> 'CMB_Radio_Field',
 		'checkbox'			=> 'CMB_Checkbox',
