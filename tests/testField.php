@@ -144,7 +144,6 @@ class FieldTestCase extends WP_UnitTestCase {
 
 		// Trigger output.
 		$field->html();
-
 	}
 
 	function testSavedFieldOutput() {
@@ -163,4 +162,37 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field->html();
 	}
 
+	/**
+	 * A single empty field should  display upon load.
+	 */
+	function testEmptyFieldDisplay() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
+
+		if ( ! $this->post ) {
+			$this->markTestSkipped( 'Post not found' );
+		}
+
+		// Test empty output
+		$this->expectOutputRegex( '/(div class\=\"field-title\"\>.*?type=\"text\".*?id=\"foo-cmb-field-0\".*?value=\"1\")/s' );
+
+		// Trigger output.
+		$field->display();
+	}
+
+	/**
+	 * A single empty field should still display on repeatable fields upon load.
+	 */
+	function testEmptyFieldDisplayRepeatable() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array(), array( 'repeatable' => true ) );
+
+		if ( ! $this->post ) {
+			$this->markTestSkipped( 'Post not found' );
+		}
+
+		// Test empty output
+		$this->expectOutputRegex( '/(div class\=\"field-title\"\>.*?type=\"text\".*?id=\"foo-cmb-field-0\".*?value=\"\")/s' );
+
+		// Trigger output.
+		$field->display();
+	}
 }
