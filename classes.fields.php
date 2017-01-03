@@ -1916,7 +1916,8 @@ class CMB_Group_Field extends CMB_Field {
 		if ( ! $this->args['repeatable'] && empty( $values ) ) {
 			$values = array( null );
 		} else {
-			$values = ( empty( $this->get_values() ) ) ? array( '' ) : $this->get_values();
+			$values = $this->get_values(); // Make PHP5.4 >= happy.
+			$values = ( empty( $values ) ) ? array( '' ) : $values;
 		}
 
 		if ( $values ) {
