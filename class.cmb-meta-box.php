@@ -56,6 +56,11 @@ class CMB_Meta_Box {
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_styles' ) );
 
+		// Default filters for whether to show a metabox block or not.
+		add_filter( 'cmb_is_metabox_displayed', array( $this, 'add_for_id' ), 2, 2 );
+		add_filter( 'cmb_is_metabox_displayed', array( $this, 'hide_for_id' ), 3, 2 );
+		add_filter( 'cmb_is_metabox_displayed', array( $this, 'add_for_page_template' ), 4, 2 );
+		add_filter( 'cmb_is_metabox_displayed', array( $this, 'hide_for_page_template' ), 5, 2 );
 	}
 
 	/**
@@ -207,12 +212,14 @@ class CMB_Meta_Box {
 	 * a CMB field collection.
 	 */
 	function is_metabox_displayed() {
-		$display = true;
-		$display = $this->add_for_id( $display );
-		$display = $this->hide_for_id( $display );
-		$display = $this->add_for_page_template( $display );
-		$display = $this->hide_for_page_template( $display );
-		return $display;
+
+		/**
+		 * Filter whether a metabox should be displayed or not.
+		 *
+		 * @param bool $is_displayed Current status of display
+		 * @param array $metabox Metabox information
+		 */
+		return apply_filters( 'cmb_is_metabox_displayed', true, $this->_meta_box );
 	}
 
 	/**
@@ -220,12 +227,17 @@ class CMB_Meta_Box {
 	 *
 	 * Only works for field collections that have the 'show_on' attribute of 'id'.
 	 *
-	 * @param bool $display Current display status.
+	 * @param bool  $display Current display status.
+	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function add_for_id( $display ) {
+	function add_for_id( $display, $field = [] ) {
 
-		if ( ! isset( $this->_meta_box['show_on']['id'] ) ) {
+		if ( empty( $field ) ) {
+			$field = $this->_meta_box;
+		}
+
+		if ( ! isset( $field['show_on']['id'] ) ) {
 			return $display;
 		}
 
@@ -237,9 +249,9 @@ class CMB_Meta_Box {
 		}
 
 		// If value isn't an array, turn it into one.
-		$this->_meta_box['show_on']['id'] = ! is_array( $this->_meta_box['show_on']['id'] ) ? array( $this->_meta_box['show_on']['id'] ) : $this->_meta_box['show_on']['id'];
+		$field['show_on']['id'] = ! is_array( $field['show_on']['id'] ) ? array( $field['show_on']['id'] ) : $field['show_on']['id'];
 
-		return in_array( $post_id, $this->_meta_box['show_on']['id'] );
+		return in_array( $post_id, $field['show_on']['id'] );
 
 	}
 
@@ -248,12 +260,17 @@ class CMB_Meta_Box {
 	 *
 	 * Only works for field collections that have the 'hide_on' attribute of 'id'.
 	 *
-	 * @param bool $display Current display status.
+	 * @param bool  $display Current display status.
+	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function hide_for_id( $display ) {
+	function hide_for_id( $display, $field = [] ) {
 
-		if ( ! isset( $this->_meta_box['hide_on']['id'] ) ) {
+		if ( empty( $field ) ) {
+			$field = $this->_meta_box;
+		}
+
+		if ( ! isset( $field['hide_on']['id'] ) ) {
 			return $display;
 		}
 
@@ -264,9 +281,9 @@ class CMB_Meta_Box {
 		}
 
 		// If value isn't an array, turn it into one.
-		$this->_meta_box['hide_on']['id'] = ! is_array( $this->_meta_box['hide_on']['id'] ) ? array( $this->_meta_box['hide_on']['id'] ) : $this->_meta_box['hide_on']['id'];
+		$field['hide_on']['id'] = ! is_array( $field['hide_on']['id'] ) ? array( $field['hide_on']['id'] ) : $field['hide_on']['id'];
 
-		return ! in_array( $post_id, $this->_meta_box['hide_on']['id'] );
+		return ! in_array( $post_id, $field['hide_on']['id'] );
 
 	}
 
@@ -275,12 +292,17 @@ class CMB_Meta_Box {
 	 *
 	 * Only works for field collections that have the 'show_on' attribute of 'page-template'.
 	 *
-	 * @param bool $display Current display status.
+	 * @param bool  $display Current display status.
+	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function add_for_page_template( $display ) {
+	function add_for_page_template( $display, $field = [] ) {
 
-		if ( ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
+		if ( empty( $field ) ) {
+			$field = $this->_meta_box;
+		}
+
+		if ( ! isset( $field['show_on']['page-template'] ) ) {
 			return $display;
 		}
 
@@ -294,9 +316,9 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one.
-		$this->_meta_box['show_on']['page-template'] = ! is_array( $this->_meta_box['show_on']['page-template'] ) ? array( $this->_meta_box['show_on']['page-template'] ) : $this->_meta_box['show_on']['page-template'];
+		$field['show_on']['page-template'] = ! is_array( $field['show_on']['page-template'] ) ? array( $field['show_on']['page-template'] ) : $field['show_on']['page-template'];
 
-		return in_array( $current_template, $this->_meta_box['show_on']['page-template'] );
+		return in_array( $current_template, $field['show_on']['page-template'] );
 
 	}
 
@@ -305,12 +327,17 @@ class CMB_Meta_Box {
 	 *
 	 * Only works for field collections that have the 'hide_on' attribute of 'page-template'.
 	 *
-	 * @param bool $display Current display status.
+	 * @param bool  $display Current display status.
+	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function hide_for_page_template( $display ) {
+	function hide_for_page_template( $display, $field = [] ) {
 
-		if ( ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
+		if ( empty( $field ) ) {
+			$field = $this->_meta_box;
+		}
+
+		if ( ! isset( $field['hide_on']['page-template'] ) ) {
 			return $display;
 		}
 
@@ -325,9 +352,9 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one.
-		$this->_meta_box['hide_on']['page-template'] = ! is_array( $this->_meta_box['hide_on']['page-template'] ) ? array( $this->_meta_box['hide_on']['page-template'] ) : $this->_meta_box['hide_on']['page-template'];
+		$field['hide_on']['page-template'] = ! is_array( $field['hide_on']['page-template'] ) ? array( $field['hide_on']['page-template'] ) : $field['hide_on']['page-template'];
 
-		return ! in_array( $current_template, $this->_meta_box['hide_on']['page-template'] );
+		return ! in_array( $current_template, $field['hide_on']['page-template'] );
 
 	}
 
