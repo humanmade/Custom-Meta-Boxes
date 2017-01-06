@@ -681,7 +681,7 @@ class CMB_Image_Field extends CMB_File_Field {
 
 		?>
 
-		<div class="cmb-file-wrap" style="<?php echo esc_attr( $styles ); ?>" data-type="<?php echo esc_attr( $data_type ); ?>">
+		<div class="cmb-file-wrap" style="<?php echo esc_attr( $styles ); ?>" data-type="<?php echo esc_attr( $data_type ); ?>" data-max-width="<?php echo absint( $size['width'] ); ?>">
 
 			<div class="cmb-file-wrap-placeholder" style="<?php echo esc_attr( $placeholder_styles ); ?>">
 

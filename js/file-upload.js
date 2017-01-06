@@ -99,8 +99,7 @@ jQuery( document ).ready( function() {
 
 			var el        = jQuery( this ),
 				container = el.closest( '.postbox' ),
-				width     = container.width() - 12 - 10 - 10,
-				ratio     = el.height() / el.width();
+				width     = container.width() - 12 - 10 - 10 - 2;
 
 			if ( el.attr( 'data-original-width' ) ) {
 				el.width( el.attr( 'data-original-width' ) );
@@ -114,18 +113,31 @@ jQuery( document ).ready( function() {
 				el.attr( 'data-original-height', el.height() );
 			}
 
-			if ( el.width() > width ) {
-				el.width( width );
-				el.find( '.cmb-file-wrap-placeholder' ).width( width - 8 );
-				el.height( width * ratio );
-				el.css( 'line-height', ( width * ratio ) + 'px' );
-				el.find( '.cmb-file-wrap-placeholder' ).height( ( width * ratio ) - 8 );
+			var ratio = el.height() / el.width();
+
+			if ( el.width() > width || ( width > el.width() && width <= el.data( 'max-width' ) ) ) {
+				resizeFileBox( el, width, ratio );
 			}
 
 		} );
+
+		function resizeFileBox( element, width, ratio ) {
+			element.width( width );
+			element.find( '.cmb-file-wrap-placeholder' ).width( width - 8 );
+			element.height( width * ratio );
+			element.css( 'line-height', ( width * ratio ) + 'px' );
+			element.find( '.cmb-file-wrap-placeholder' ).height( ( width * ratio ) - 8 );
+		}
 	};
 
 	recalculateFileFieldSize();
-	jQuery( window ).resize( recalculateFileFieldSize );
+
+	var debounce = CMB.debounce( function() {
+		recalculateFileFieldSize();
+	}, 100 );
+
+	// Recheck the width every time that the window is re-sized, debounced.
+	window.addEventListener( 'resize', debounce );
+
 
 } );
