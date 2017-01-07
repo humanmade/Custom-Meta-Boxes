@@ -16,6 +16,8 @@
 	</tr>
 </table>
 
+#### [Get the latest stable release](https://github.com/humanmade/Custom-Meta-Boxes/releases/latest)
+
 It includes several field types including WYSIWYG, media upload and dates ([see wiki for a full list](https://github.com/humanmade/Custom-Meta-Boxes/wiki)). It also supports repeatable and grouped fields.
 
 This project is aimed at developers and is easily extended and customized. It takes a highly modular, Object Orientated approach, with each field as an extension of the CMB_Field abstract class.
@@ -53,6 +55,13 @@ It began as a fork of [Custom Meta Boxes](https://github.com/jaredatch/Custom-Me
 See [CONTRIBUTING.md](https://github.com/humanmade/Custom-Meta-Boxes/blob/master/CONTRIBUTING.md)
 
 ## Changelog ##
+
+**1.0.3**
+* Fix repeatable fields bugs (props @barryceelen )
+* Fix gmaps field bug where key doesn't pass in correctly (props: @shadyvb )
+* PHPUnit tests for repeatable fields
+* Fix all minor WordPress VIP PHPCS errors/warnings
+* Write and complete inline documentation/doc blocks
 
 **1.0.2**
 * Add google maps field
