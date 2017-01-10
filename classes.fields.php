@@ -1657,42 +1657,9 @@ class CMB_Post_Select extends CMB_Select {
 
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * Assemble and output of field HTML.
-	 */
-	public function output_field() {
-
-		// If AJAX, must use input type not standard select.
-		if ( $this->args['use_ajax'] ) :
-
-			?>
-
-			<input
-				<?php $this->id_attr(); ?>
-				<?php printf( 'value="%s" ', esc_attr( implode( ',' , (array) $this->value ) ) ); ?>
-				<?php printf( 'name="%s"', esc_attr( $this->get_the_name_attr() ) ); ?>
-				<?php printf( 'data-field-id="%s" ', esc_attr( $this->get_js_id() ) ); ?>
-				<?php $this->boolean_attr(); ?>
-				class="cmb_select"
-				style="width: 100%"
-			/>
-
-			<?php
-
-		else :
-
-			parent::output_field();
-
-		endif;
-
-	}
-
 	/**
 	 * Output inline scripts to support field.
 	 */
->>>>>>> develop
 	public function output_script() {
 
 		parent::output_script();
