@@ -28,8 +28,8 @@ class GroupFieldTestCase extends WP_UnitTestCase {
 		$group->values = $values = array(
 			'group' => array(
 				'foo' => array( 1, 2 ),
-				'bar' => array( 3, 4 )
-			)
+				'bar' => array( 3, 4 ),
+			),
 		);
 
 		$this->assertEquals( $group->get_values(), $values );
@@ -48,15 +48,15 @@ class GroupFieldTestCase extends WP_UnitTestCase {
 		$group->set_values( array(
 			'group' => array(
 				'foo' => array( 1 ),
-				'bar' => array( 2, 3 )
+				'bar' => array( 2, 3 ),
 			),
 		) );
 
 		$expected = array(
 			'group' => array(
 				'foo' => 1,
-				'bar' => array( 2, 3 )
-			)
+				'bar' => array( 2, 3 ),
+			),
 		);
 
 		$group->parse_save_values();
@@ -99,8 +99,6 @@ class GroupFieldTestCase extends WP_UnitTestCase {
 		$this->assertEquals( $id_attr, 'group[cmb-group-12][foo][cmb-field-0]' );
 		$group->field_index = 0; // Unset
 
-
-
 	}
 
 	function testFieldIdAttrValue() {
@@ -138,5 +136,4 @@ class GroupFieldTestCase extends WP_UnitTestCase {
 		$group->field_index = 0; // Unset
 
 	}
-
 }

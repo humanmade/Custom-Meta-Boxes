@@ -5,16 +5,16 @@
 
 	var CMBGmapsInit = function( fieldEl ) {
 
-		var mapCanvas = $( '.map', fieldEl ).get(0);
+		var mapCanvas = $( '.map', fieldEl ).get( 0 );
 
 		if ( 'undefined' === typeof google ) {
 			$( '<div>' + CMBGmaps.strings.googleMapsApiNotLoaded + '</div>' )
-				.css({ 'padding': '1em', 'textAlign': 'center', 'width': '100%' })
+				.css( { 'padding': '1em', 'textAlign': 'center', 'width': '100%' } )
 				.appendTo( mapCanvas );
 			return;
 		}
 
-		var searchInput = $( '.map-search', fieldEl ).get(0);
+		var searchInput = $( '.map-search', fieldEl ).get( 0 );
 		var latitude    = $( '.latitude', fieldEl );
 		var longitude   = $( '.longitude', fieldEl );
 		var elevation   = $( '.elevation', fieldEl );
@@ -69,21 +69,21 @@
 		});
 
 		// Search
-		var autocomplete = new google.maps.places.Autocomplete(searchInput);
-		autocomplete.bindTo('bounds', map);
+		var autocomplete = new google.maps.places.Autocomplete( searchInput );
+		autocomplete.bindTo( 'bounds', map );
 
 		google.maps.event.addListener(autocomplete, 'place_changed', function() {
 			var place = autocomplete.getPlace();
-			if (place.geometry.viewport) {
-				map.fitBounds(place.geometry.viewport);
+			if ( place.geometry.viewport ) {
+				map.fitBounds( place.geometry.viewport );
 			}
 
 			setPosition( place.geometry.location, 17 );
 
 		});
 
-		$(searchInput).keypress(function(e) {
-			if (e.keyCode === 13) {
+		$( searchInput ).keypress(function(e) {
+			if ( e.keyCode === 13 ) {
 				e.preventDefault();
 			}
 		});
@@ -101,6 +101,5 @@
 	};
 
 	$.getScript( '//maps.google.com/maps/api/js?sensor=true&libraries=places&callback=CMB_CMAPS_INIT&key=' + CMBGmaps.key );
-
 
 }(jQuery));
