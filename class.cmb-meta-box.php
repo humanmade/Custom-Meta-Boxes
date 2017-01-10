@@ -231,7 +231,7 @@ class CMB_Meta_Box {
 	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function add_for_id( $display, $field = [] ) {
+	function add_for_id( $display, $field = array() ) {
 
 		if ( empty( $field ) ) {
 			$field = $this->_meta_box;
@@ -264,7 +264,7 @@ class CMB_Meta_Box {
 	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function hide_for_id( $display, $field = [] ) {
+	function hide_for_id( $display, $field = array() ) {
 
 		if ( empty( $field ) ) {
 			$field = $this->_meta_box;
@@ -296,7 +296,7 @@ class CMB_Meta_Box {
 	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function add_for_page_template( $display, $field = [] ) {
+	function add_for_page_template( $display, $field = array() ) {
 
 		if ( empty( $field ) ) {
 			$field = $this->_meta_box;
@@ -331,7 +331,7 @@ class CMB_Meta_Box {
 	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function hide_for_page_template( $display, $field = [] ) {
+	function hide_for_page_template( $display, $field = array() ) {
 
 		if ( empty( $field ) ) {
 			$field = $this->_meta_box;
