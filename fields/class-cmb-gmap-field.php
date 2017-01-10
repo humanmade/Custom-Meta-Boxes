@@ -1,6 +1,6 @@
 <?php
 /**
- * Gmap field type.
+ * Google Map field type.
  *
  * @package WordPress
  * @subpackage Custom Meta Boxes
@@ -76,11 +76,18 @@ class CMB_Gmap_Field extends CMB_Field {
 	}
 
 	/**
+	 * Get multiple values for a field.
+	 *
+	 * @return array
+	 */
+	public function &get_values() {
+		return array( $this->values );
+	}
+
+	/**
 	 * Print out field HTML.
 	 */
 	public function html() {
-
-		echo $this->get_value();
 
 		// Ensure all args used are set.
 		$value = wp_parse_args(
