@@ -83,8 +83,18 @@ class CMB_Meta_Box {
 				$values = (array) get_post_meta( $post_id, $field['id'], $single );
 			}
 
+			/**
+			 * Filter which fields are consdered to be "group" types.
+			 *
+			 * This is useful if you want to extend the group field for your own use and still
+			 * use the array mapping below.
+			 *
+			 * @param array $group_fields Group field types
+			 */
+			$group_field_types = apply_filters( 'cmb_group_field_types', array( 'group' ) );
+
 			// Handle repeatable values for group fields.
-			if ( 'group' === $field['type'] && $single ) {
+			if ( in_array( $field['type'], $group_field_types ) && $single ) {
 				$values = array( $values );
 			}
 
