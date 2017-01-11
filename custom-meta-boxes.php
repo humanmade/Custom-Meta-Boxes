@@ -3,7 +3,7 @@
 Plugin Name: Custom Meta Boxes
 Plugin URI: https://github.com/humanmade/Custom-Meta-Boxes
 Description: Lets you easily create metaboxes with custom fields that will blow your mind. Originally a fork of https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress.
-Version: 1.0.2
+Version: 1.0.3
 License: GPL-2.0+
 Author: Human Made Limited
 Author URI: http://hmn.md
@@ -22,34 +22,40 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-if ( ! defined( 'CMB_DEV') )
+if ( ! defined( 'CMB_DEV' ) ) {
 	define( 'CMB_DEV', false );
+}
 
-if ( ! defined( 'CMB_PATH') )
+if ( ! defined( 'CMB_PATH' ) ) {
 	define( 'CMB_PATH', plugin_dir_path( __FILE__ ) );
+}
 
-if ( ! defined( 'CMB_URL' ) )
+if ( ! defined( 'CMB_URL' ) ) {
 	define( 'CMB_URL', plugins_url( '', __FILE__ ) );
+}
 
+/**
+ * Include base, required files.
+ */
 include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb-meta-box.php' );
 
-// Make it possible to add fields in locations other than post edit screen.
+/**
+ * Make it possible to add fields in locations other than post edit screen. Optional.
+ */
 include_once( CMB_PATH . '/fields-anywhere.php' );
 
-// include_once( CMB_PATH . '/example-functions.php' );
-
 /**
- * Get all the meta boxes on init
- *
- * @return null
+ * Get all the meta boxes on init.
  */
 function cmb_init() {
 
-	if ( ! is_admin() )
+	// Only run in the admin.
+	if ( ! is_admin() ) {
 		return;
+	}
 
-	// Load translations
+	// Load translations.
 	$textdomain = 'cmb';
 	$locale = apply_filters( 'plugin_locale', get_locale(), $textdomain );
 
@@ -59,23 +65,31 @@ function cmb_init() {
 
 	$meta_boxes = apply_filters( 'cmb_meta_boxes', array() );
 
-	if ( ! empty( $meta_boxes ) )
-		foreach ( $meta_boxes as $meta_box )
+	// Ensure that we have metaboxes to process.
+	if ( ! empty( $meta_boxes ) ) {
+		foreach ( $meta_boxes as $meta_box ) {
 			new CMB_Meta_Box( $meta_box );
+		}
+	}
 
 }
 add_action( 'init', 'cmb_init', 50 );
 
 /**
- * Return an array of built in available fields
+ * Return an array of built in available fields.
  *
  * Key is field name, Value is class used by field.
  * Available fields can be modified using the 'cmb_field_types' filter.
  *
- * @return array
+ * @return array List of all available fields.
  */
 function _cmb_available_fields() {
 
+	/**
+	 * Filter and potentially modify the available field types.
+	 *
+	 * @param $types All available field types.
+	 */
 	return apply_filters( 'cmb_field_types', array(
 		'text'				=> 'CMB_Text_Field',
 		'text_small' 		=> 'CMB_Text_Small_Field',
@@ -99,23 +113,24 @@ function _cmb_available_fields() {
 		'title'				=> 'CMB_Title',
 		'group'				=> 'CMB_Group_Field',
 		'gmap'				=> 'CMB_Gmap_Field',
-		'number'			=> 'CMB_Number_Field'
+		'number'			=> 'CMB_Number_Field',
 	) );
 
 }
 
 /**
- * Get a field class by type
+ * Get a field class by type.
  *
- * @param  string $type
- * @return string $class, or false if not found.
+ * @param  string $type Type of field (i.e. text, number, radio).
+ * @return string|bool $class, or false if not found.
  */
 function _cmb_field_class_for_type( $type ) {
 
 	$map = _cmb_available_fields();
 
-	if ( isset( $map[$type] ) )
-		return $map[$type];
+	if ( isset( $map[ $type ] ) ) {
+		return $map[ $type ];
+	}
 
 	return false;
 
@@ -128,33 +143,38 @@ function _cmb_field_class_for_type( $type ) {
  * Only do this for older versions as meta is now ordered by ID (since 3.8)
  * See http://core.trac.wordpress.org/ticket/25511
  *
- * @param  string $query
- * @return string $query
+ * @param  string $query SQL query.
+ * @return string $query (Potentially) modified query string
  */
-function cmb_fix_meta_query_order($query) {
+function cmb_fix_meta_query_order( $query ) {
 
-    $pattern = '/^SELECT (post_id|user_id), meta_key, meta_value FROM \w* WHERE post_id IN \([\d|,]*\)$/';
+	$pattern = '/^SELECT (post_id|user_id), meta_key, meta_value FROM \w* WHERE post_id IN \([\d|,]*\)$/';
 
-    if (
-            0 === strpos( $query, "SELECT post_id, meta_key, meta_value" ) &&
-            preg_match( $pattern, $query, $matches )
-    ) {
+	if (
+		0 === strpos( $query, 'SELECT post_id, meta_key, meta_value' ) &&
+		preg_match( $pattern, $query, $matches )
+	) {
+		if ( isset( $matches[1] ) && 'user_id' == $matches[1] ) {
+			$meta_id_column = 'umeta_id';
+		} else {
+			$meta_id_column = 'meta_id';
+		}
 
-            if ( isset( $matches[1] ) && 'user_id' == $matches[1] )
-                    $meta_id_column = 'umeta_id';
-            else
-                    $meta_id_column = 'meta_id';
+		$meta_query_orderby = ' ORDER BY ' . $meta_id_column;
 
-            $meta_query_orderby = ' ORDER BY ' . $meta_id_column;
+		if ( false === strpos( $query, $meta_query_orderby ) ) {
+			$query .= $meta_query_orderby;
+		}
+	}
 
-            if ( false === strpos( $query, $meta_query_orderby ) )
-                    $query .= $meta_query_orderby;
-
-    }
-
-    return $query;
+	return $query;
 
 }
 
-if ( version_compare( get_bloginfo( 'version' ), '3.8', '<' ) )
+/**
+ * Only run query modification for older versions as meta is now ordered by ID (since 3.8)
+ * See http://core.trac.wordpress.org/ticket/25511
+ */
+if ( version_compare( get_bloginfo( 'version' ), '3.8', '<' ) ) {
 	add_filter( 'query', 'cmb_fix_meta_query_order', 1 );
+}
