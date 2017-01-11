@@ -215,6 +215,16 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		),
 
 		/*
+		 * Hidden Field.
+		 */
+		array(
+			'id'      => 'field-hidden',
+			'name'    => 'Hidden field',
+			'type'    => 'hidden',
+			'default' => 'hidden default value',
+		),
+
+		/*
 		 * Select Field.
 		 */
 		array(
@@ -305,8 +315,6 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'name' => 'URL field',
 			'type' => 'url',
 		),
-
-		array( 'id' => 'field-25', 'name' => 'Hidden Field', 'type' => 'hidden', 'default' => 'my valuuuuuuue' ),
 
 	);
 
