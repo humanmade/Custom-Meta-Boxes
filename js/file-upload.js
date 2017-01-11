@@ -10,17 +10,18 @@ jQuery( document ).ready( function() {
 		var frameArgs = {
 			multiple: false,
 			title: CMBFile.strings.selectFile
-		}
+		};
 
-		library = container.attr( 'data-type' ).split(',');
-		if ( library.length > 0 )
-			frameArgs.library = { type: library }
+		library = container.attr( 'data-type' ).split( ',' );
+		if ( library.length > 0 ) {
+			frameArgs.library = {type: library};
+		}
 
 		var CMB_Frame = wp.media( frameArgs );
 
 		CMB_Frame.on( 'select', function() {
 
-			var selection = CMB_Frame.state().get('selection'),
+			var selection = CMB_Frame.state().get( 'selection' ),
 				model = selection.first(),
 				fileHolder = container.find( '.cmb-file-holder' );
 
@@ -43,9 +44,9 @@ jQuery( document ).ready( function() {
 					id:     model.attributes.id,
 					width:  container.width(),
 					height: container.height(),
-					crop:   fileHolder.attr('data-crop'),
+					crop:   fileHolder.attr( 'data-crop' ),
 					nonce:  link.attr( 'data-nonce' )
-				}
+				};
 
 				fileHolder.addClass( 'cmb-loading' );
 
@@ -62,7 +63,7 @@ jQuery( document ).ready( function() {
 			} else {
 
 				jQuery( '<img />', { src: model.attributes.icon } ).prependTo( fileHolder );
-				fileHolder.append( jQuery('<div class="cmb-file-name" />').html( '<strong>' + model.attributes.filename + '</strong>' ) );
+				fileHolder.append( jQuery( '<div class="cmb-file-name" />' ).html( '<strong>' + model.attributes.filename + '</strong>' ) );
 
 			}
 
@@ -96,20 +97,22 @@ jQuery( document ).ready( function() {
 
 		jQuery( '.cmb-file-wrap' ).each( function() {
 
-			var el        = jQuery(this),
+			var el        = jQuery( this ),
 				container = el.closest( '.postbox' ),
 				width     = container.width() - 12 - 10 - 10,
-				ratio     =  el.height() / el.width();
+				ratio     = el.height() / el.width();
 
-			if ( el.attr( 'data-original-width' ) )
+			if ( el.attr( 'data-original-width' ) ) {
 				el.width( el.attr( 'data-original-width' ) );
-			else
+			} else {
 				el.attr( 'data-original-width', el.width() );
+			}
 
-			if ( el.attr( 'data-original-height' ) )
+			if ( el.attr( 'data-original-height' ) ) {
 				el.height( el.attr( 'data-original-height' ) );
-			else
+			} else {
 				el.attr( 'data-original-height', el.height() );
+			}
 
 			if ( el.width() > width ) {
 				el.width( width );
@@ -119,11 +122,10 @@ jQuery( document ).ready( function() {
 				el.find( '.cmb-file-wrap-placeholder' ).height( ( width * ratio ) - 8 );
 			}
 
-
 		} );
-			}
+	};
 
 	recalculateFileFieldSize();
-	jQuery(window).resize( recalculateFileFieldSize );
+	jQuery( window ).resize( recalculateFileFieldSize );
 
 } );
