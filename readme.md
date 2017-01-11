@@ -56,6 +56,13 @@ See [CONTRIBUTING.md](https://github.com/humanmade/Custom-Meta-Boxes/blob/master
 
 ## Changelog ##
 
+**1.0.3**
+* Fix repeatable fields bugs (props @barryceelen )
+* Fix gmaps field bug where key doesn't pass in correctly (props: @shadyvb )
+* PHPUnit tests for repeatable fields
+* Fix all minor WordPress VIP PHPCS errors/warnings
+* Write and complete inline documentation/doc blocks
+
 **1.0.2**
 * Add google maps field
 * Add hide_on field argument
