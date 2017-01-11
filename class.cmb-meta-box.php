@@ -407,6 +407,7 @@ class CMB_Meta_Box {
 				// Field Repeatable Max.
 				if ( isset( $field->args['repeatable_max'] ) ) {
 					$attrs[] = sprintf( 'data-rep-max="%s"', intval( $field->args['repeatable_max'] ) );
+				}
 
 				// Ask for confirmation before removing field.
 				if ( isset( $field->args['confirm_delete_field'] ) ) {
