@@ -410,8 +410,8 @@ class CMB_Meta_Box {
 				}
 
 				// Ask for confirmation before removing field.
-				if ( isset( $field->args['confirm_delete_field'] ) ) {
-					$attrs[] = sprintf( 'data-confirm-delete="%s"', (bool) $field->args['confirm_delete_field'] );
+				if ( isset( $field->args['confirm_delete'] ) ) {
+					$attrs[] = sprintf( 'data-confirm-delete="%s"', $field->args['confirm_delete'] ? 'true' : 'false' );
 				}
 				?>
 

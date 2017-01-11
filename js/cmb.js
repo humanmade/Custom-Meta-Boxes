@@ -104,7 +104,7 @@ var CMB = {
 		fieldItem = jQuery( this ).closest('.field-item' );
 		field = fieldItem.closest( '.field' );
 
-		if ( 1 === field.data('confirm-delete') && ! confirm( CMBData.strings.confirmDeleteField ) ) {
+		if ( false !== field.data('confirm-delete') && ! confirm( CMBData.strings.confirmDeleteField ) ) {
 			return;
 		}
 
