@@ -1279,7 +1279,7 @@ class CMB_wysiwyg extends CMB_Field {
 			<script>
 				if ( 'undefined' === typeof( cmb_wysiwyg_editors ) )
 					var cmb_wysiwyg_editors = {};
-				cmb_wysiwyg_editors.<?php echo esc_js( $field_id ); ?> = '<?php echo esc_js( $editor ); ?>';
+				cmb_wysiwyg_editors.<?php echo esc_js( $field_id ); ?> = <?php echo json_encode( $editor ); ?>;
 			</script>
 
 			<?php
