@@ -100,18 +100,15 @@ class IsMetaBoxDisplayedTestCase extends WP_UnitTestCase {
 		) );
 
 		// Test is shown when no ID is set.
-		$displayed = $mb->hide_for_id( true );
-		$this->assertTrue( $displayed );
+		$this->assertTrue( $mb->hide_for_id( true ) );
 
 		// Test hidden for post ID
 		$_GET['post'] = 2;
-		$displayed = $mb->hide_for_id( true );
-		$this->assertFalse( $displayed );
+		$this->assertFalse( $mb->hide_for_id( true ) );
 
 		// Test not hidden when post ID doesn't match.
 		$_GET['post'] = 3;
-		$displayed = $mb->hide_for_id( true );
-		$this->assertTrue( $displayed );
+		$this->assertTrue( $mb->hide_for_id( true ) );
 
 		unset( $_GET['post'] );
 
