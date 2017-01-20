@@ -144,6 +144,15 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'datetime_unix',
 		),
 
+		/**
+		 * Email Field.
+		 */
+		array(
+			'id'   => 'field-email',
+			'name' => 'Email field',
+			'type' => 'email',
+		),
+
 		/*
 		 * Google Map Field.
 		 */

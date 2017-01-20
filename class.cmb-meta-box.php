@@ -425,8 +425,11 @@ class CMB_Meta_Box {
 					$classes[] = 'repeatable';
 				}
 
-				if ( ! empty( $field->args['sortable'] ) ) {
+				if ( ! empty( $field->args['sortable'] ) && ! empty( $field->args['repeatable'] ) ) {
 					$classes[] = 'cmb-sortable';
+				} elseif ( ! empty( $field->args['sortable'] ) && empty( $field->args['repeatable'] ) ) {
+					// Throw an error if calling the wrong combination of sortable and repeatable.
+					_doing_it_wrong( 'cmb_meta_boxes', __( 'Calling sortable on a non-repeatable field. A field cannot be sortable without being repeatable.', 'cmb' ), 4.7 );
 				}
 
 				// Assign extra class for has label or has no label.
