@@ -132,9 +132,10 @@ abstract class CMB_Field {
 		 * Modify the id attribute of a field.
 		 *
 		 * @param string $id ID Attribute
+		 * @param string $append ID to place.
 		 * @param array $args Arguments for this particular field.
 		 */
-		$id = apply_filters( 'cmb_field_id_attribute', $this->get_the_id_attr( $append ), $this->args );
+		$id = apply_filters( 'cmb_field_id_attribute', $this->get_the_id_attr( $append ), $append, $this->args );
 
 		printf( 'id="%s"', esc_attr( $id ) );
 
@@ -249,7 +250,7 @@ abstract class CMB_Field {
 
 		// Combine any passed-in classes and the ones defined in the arguments and sanitize them.
 		$all_classes = array_unique( explode( ' ', $classes . ' ' . $this->args['class'] ) );
-		$classes     = array_map( 'sanitize_html_class', $all_classes );
+		$classes     = array_map( 'sanitize_html_class', array_filter( $all_classes ) );
 
 		/**
 		 * Modify the classes assigned to a field.
