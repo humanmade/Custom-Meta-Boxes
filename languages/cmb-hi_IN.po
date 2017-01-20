@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Custom Meta Boxes\n"
+"POT-Creation-Date: 2017-01-12 23:28+0530\n"
+"PO-Revision-Date: 2017-01-12 23:53+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: hi_IN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: custom-meta-boxes.php\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: class.cmb-meta-box.php:144
+msgid "Are you sure you want to delete this field?"
+msgstr "आप इस फील्ड को नष्ट करना चाहते हैं आप सुनिश्चित हैं?"
+
+#: classes.fields.php:94
+msgid "Add New"
+msgstr "नया जोड़ें"
+
+#: classes.fields.php:95 classes.fields.php:622 classes.fields.php:709
+msgid "Remove"
+msgstr "हटाना"
+
+#: classes.fields.php:600
+msgid "Add File"
+msgstr "फाइल जोडें"
+
+#: classes.fields.php:697
+msgid "Add Image"
+msgstr "छवि जोड़ें"
+
+#: classes.fields.php:1433
+msgid "None"
+msgstr "कुछ नहीं "
+
+#: classes.fields.php:1466
+msgid "Type to search"
+msgstr "खोजने के लिए लिखें"
+
+#: classes.fields.php:1862
+msgid "Add New Group"
+msgstr "नया समूह जोड़ें"
+
+#: classes.fields.php:1863
+msgid "Remove Group"
+msgstr "समूह को निकालें"
+
+#: classes.fields.php:2099
+msgid "Drag to set the exact location"
+msgstr "खींचें सटीक स्थान निर्धारित करने के लिए"
+
+#: classes.fields.php:2100
+msgid "Google Maps API not loaded."
+msgstr "गूगल मैप्स एपीआई लोड नहीं।"
+
+#. Plugin Name of the plugin/theme
+msgid "Custom Meta Boxes"
+msgstr "कस्टम मेटा बक्से"
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/humanmade/Custom-Meta-Boxes"
+msgstr "https://github.com/humanmade/Custom-Meta-Boxes"
+
+#. Description of the plugin/theme
+msgid ""
+"Lets you easily create metaboxes with custom fields that will blow your "
+"mind. Originally a fork of https://github.com/jaredatch/Custom-Metaboxes-and-"
+"Fields-for-WordPress."
+msgstr ""
+"आप आसानी से कस्टम मेट बॉक्सेस और फ़ील्ड्स बना सकते हैं। मूलतः https://github.com/"
+"jaredatch/Custom-Metaboxes-and-Fields-for-WordPress"
+
+#. Author of the plugin/theme
+msgid "Human Made Limited"
+msgstr "ह्यूमन मेड लिमिटेड "
+
+#. Author URI of the plugin/theme
+msgid "http://hmn.md"
+msgstr "http://hmn.md"
