@@ -479,7 +479,7 @@ class CMB_Meta_Box {
 		}
 
 		// Verify this meta box is for the right post type
-		if ( ! in_array( get_post_type( $post_id ), (array) $this->_meta_box['pages'] ), true ) {
+		if ( ! in_array( get_post_type( $post_id ), (array) $this->_meta_box['pages'], true ) ) {
 			return $post_id;
 		}
 
