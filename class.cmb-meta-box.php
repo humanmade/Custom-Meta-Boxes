@@ -445,6 +445,11 @@ class CMB_Meta_Box {
 				if ( isset( $field->args['repeatable_max'] ) ) {
 					$attrs[] = sprintf( 'data-rep-max="%s"', intval( $field->args['repeatable_max'] ) );
 				}
+
+				// Ask for confirmation before removing field.
+				if ( isset( $field->args['confirm_delete'] ) ) {
+					$attrs[] = sprintf( 'data-confirm-delete="%s"', $field->args['confirm_delete'] ? 'true' : 'false' );
+				}
 				?>
 
 				<div class="cmb-cell-<?php echo intval( $field->args['cols'] ); ?> <?php echo esc_attr( $label_designation ); ?>">
