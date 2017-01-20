@@ -129,7 +129,16 @@ abstract class CMB_Field {
 	 */
 	public function id_attr( $append = null ) {
 
-		printf( 'id="%s"', esc_attr( $this->get_the_id_attr( $append ) ) );
+		/**
+		 * Modify the id attribute of a field.
+		 *
+		 * @param string $id ID Attribute
+		 * @param string $append ID to place.
+		 * @param array $args Arguments for this particular field.
+		 */
+		$id = apply_filters( 'cmb_field_id_attribute', $this->get_the_id_attr( $append ), $append, $this->args );
+
+		printf( 'id="%s"', esc_attr( $id ) );
 
 	}
 
@@ -175,7 +184,15 @@ abstract class CMB_Field {
 	 */
 	public function for_attr( $append = null ) {
 
-		printf( 'for="%s"', esc_attr( $this->get_the_id_attr( $append ) ) );
+		/**
+		 * Modify the for attribute of a field.
+		 *
+		 * @param string $for For attribute
+		 * @param array $args Arguments for this particular field.
+		 */
+		$for = apply_filters( 'cmb_field_for_attribute', $this->get_the_id_attr( $append ), $this->args );
+
+		printf( 'for="%s"', esc_attr( $for ) );
 
 	}
 
@@ -188,7 +205,15 @@ abstract class CMB_Field {
 	 */
 	public function name_attr( $append = null ) {
 
-		printf( 'name="%s"', esc_attr( $this->get_the_name_attr( $append ) ) );
+		/**
+		 * Modify the name attribute of a field.
+		 *
+		 * @param string $name Name attribute
+		 * @param array $args Arguments for this particular field.
+		 */
+		$name = apply_filters( 'cmb_field_name_attribute', $this->get_the_name_attr( $append ), $this->args );
+
+		printf( 'name="%s"', esc_attr( $name ) );
 
 	}
 
@@ -224,7 +249,19 @@ abstract class CMB_Field {
 	 */
 	public function class_attr( $classes = '' ) {
 
-		if ( $classes = implode( ' ', array_map( 'sanitize_html_class', array_filter( array_unique( explode( ' ', $classes . ' ' . $this->args['class'] ) ) ) ) ) ) { ?>
+		// Combine any passed-in classes and the ones defined in the arguments and sanitize them.
+		$all_classes = array_unique( explode( ' ', $classes . ' ' . $this->args['class'] ) );
+		$classes     = array_map( 'sanitize_html_class', array_filter( $all_classes ) );
+
+		/**
+		 * Modify the classes assigned to a field.
+		 *
+		 * @param array $classes Classes currently assigned to the field
+		 * @param array $args Arguments for this particular field.
+		 */
+		$classes = apply_filters( 'cmb_field_classes', $classes, $this->args );
+
+		if ( $classes = implode( ' ', $classes ) ) { ?>
 
 			class="<?php echo esc_attr( $classes ); ?>"
 
@@ -261,6 +298,14 @@ abstract class CMB_Field {
 		}
 
 		$attrs = array_filter( array_unique( $attrs ) );
+
+		/**
+		 * Modify any boolean attributes assigned to a field.
+		 *
+		 * @param array $attrs Boolean attributes.
+		 * @param array $args Arguments for this particular field.
+		 */
+		$attrs = apply_filters( 'cmb_field_boolean_attributes', $attrs, $this->args );
 
 		foreach ( $attrs as $attr ) {
 			echo esc_html( $attr ) . '="' . esc_attr( $attr ) . '"';
