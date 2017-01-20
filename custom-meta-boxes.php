@@ -44,6 +44,7 @@ include_once( CMB_PATH . '/class.cmb-meta-box.php' );
  * Make it possible to add fields in locations other than post edit screen. Optional.
  */
 include_once( CMB_PATH . '/fields-anywhere.php' );
+include_once( CMB_PATH . 'fields/class-cmb-gmap-field.php' );
 
 /**
  * Get all the meta boxes on init.
