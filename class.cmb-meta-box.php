@@ -411,7 +411,7 @@ class CMB_Meta_Box {
 
 			foreach ( $fields as $field ) :
 
-				if ( 0 == $current_colspan ) : ?>
+				if ( 0 == $current_colspan && ! $field instanceof CMB_Hidden_Field ) : ?>
 
 					<div class="cmb-row">
 
@@ -465,7 +465,7 @@ class CMB_Meta_Box {
 
 				</div>
 
-				<?php if ( 12 == $current_colspan || $field === end( $fields ) ) :
+				<?php if ( ( 12 == $current_colspan || $field === end( $fields ) ) && ! $field instanceof CMB_Hidden_Field ) :
 
 					$current_colspan = 0; ?>
 

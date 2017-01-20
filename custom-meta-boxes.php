@@ -42,6 +42,7 @@ error_log( CMB_PATH );
 include_once( CMB_PATH . 'classes.fields.php' );
 include_once( CMB_PATH . 'class.cmb-meta-box.php' );
 include_once( CMB_PATH . 'fields/class-cmb-email-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-hidden-field.php' );
 
 /**
  * Make it possible to add fields in locations other than post edit screen. Optional.
@@ -103,6 +104,7 @@ function _cmb_available_fields() {
 		'radio'           => 'CMB_Radio_Field',
 		'checkbox'        => 'CMB_Checkbox',
 		'file'            => 'CMB_File_Field',
+		'hidden'          => 'CMB_Hidden_Field',
 		'image'           => 'CMB_Image_Field',
 		'wysiwyg'         => 'CMB_wysiwyg',
 		'textarea'        => 'CMB_Textarea_Field',

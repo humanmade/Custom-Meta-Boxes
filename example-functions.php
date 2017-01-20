@@ -224,6 +224,16 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		),
 
 		/*
+		 * Hidden Field.
+		 */
+		array(
+			'id'      => 'field-hidden',
+			'name'    => 'Hidden field',
+			'type'    => 'hidden',
+			'default' => 'hidden default value',
+		),
+
+		/*
 		 * Select Field.
 		 */
 		array(
