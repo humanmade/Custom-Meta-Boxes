@@ -38,9 +38,9 @@ abstract class CMB_Field {
 	 */
 	public function __construct( $name, $title, array $values, $args = array() ) {
 
-		$this->id 		= $name;
-		$this->name		= $name . '[]';
-		$this->title 	= $title;
+		$this->id    = $name;
+		$this->name  = $name . '[]';
+		$this->title = $title;
 		$this->args  = wp_parse_args( $args, $this->get_default_args() );
 
 		// Deprecated argument: 'std'
@@ -69,34 +69,46 @@ abstract class CMB_Field {
 	}
 
 	/**
+	 * Establish baseline default arguments for a field.
+	 *
+	 * @return array Default arguments.
+	 */
+	public function default_args() {
+		return array(
+			'desc'                => '',
+			'repeatable'          => false,
+			'sortable'            => false,
+			'repeatable_max'      => null,
+			'show_label'          => false,
+			'readonly'            => false,
+			'disabled'            => false,
+			'default'             => '',
+			'cols'                => '12',
+			'style'               => '',
+			'class'               => '',
+			'data_delegate'       => null,
+			'save_callback'       => null,
+			'string-repeat-field' => __( 'Add New', 'cmb' ),
+			'string-delete-field' => __( 'Remove', 'cmb' ),
+			'confirm_delete'      => true,
+		);
+	}
+
+	/**
 	 * Get the default args for the abstract field.
 	 * These args are available to all fields.
 	 *
 	 * @return array $args
 	 */
 	public function get_default_args() {
-		return apply_filters(
-			'cmb_field_default_args',
-			array(
-				'desc'                => '',
-				'repeatable'          => false,
-				'sortable'            => false,
-				'repeatable_max'      => null,
-				'show_label'          => false,
-				'readonly'            => false,
-				'disabled'            => false,
-				'default'             => '',
-				'cols'                => '12',
-				'style'               => '',
-				'class'               => '',
-				'data_delegate'       => null,
-				'save_callback'       => null,
-				'string-repeat-field' => __( 'Add New', 'cmb' ),
-				'string-delete-field' => __( 'Remove', 'cmb' ),
-				'confirm_delete'      => true,
-			),
-			get_class( $this )
-		);
+
+		/**
+		 * Filter the default arguments passed by a field class.
+		 *
+		 * @param array $args default field arguments.
+		 * @param string $class Field class being called
+		 */
+		return apply_filters( 'cmb_field_default_args', $this->default_args(), get_class( $this ) );
 	}
 
 	/**
@@ -592,9 +604,9 @@ class CMB_File_Field extends CMB_Field {
 	 *
 	 * @return array Default arguments for field.
 	 */
-	public function get_default_args() {
+	public function default_args() {
 		return array_merge(
-			parent::get_default_args(),
+			parent::default_args(),
 			array(
 				'library-type' => array(
 					'video',
@@ -694,9 +706,9 @@ class CMB_Image_Field extends CMB_File_Field {
 	 *
 	 * @return array Default arguments for field.
 	 */
-	public function get_default_args() {
+	public function default_args() {
 		return array_merge(
-			parent::get_default_args(),
+			parent::default_args(),
 			array(
 				'size' => 'thumbnail',
 				'library-type' => array(
@@ -847,9 +859,9 @@ class CMB_Number_Field extends CMB_Field {
 	 *
 	 * @return array Default arguments for field.
 	 */
-	public function get_default_args() {
+	public function default_args() {
 		return array_merge(
-			parent::get_default_args(),
+			parent::default_args(),
 			array(
 				'step' => '',
 			)
@@ -1168,9 +1180,9 @@ class CMB_Radio_Field extends CMB_Field {
 	 *
 	 * @return array Default arguments for field.
 	 */
-	public function get_default_args() {
+	public function default_args() {
 		return array_merge(
-			parent::get_default_args(),
+			parent::default_args(),
 			array(
 				'options' => array(),
 			)
@@ -1272,9 +1284,9 @@ class CMB_wysiwyg extends CMB_Field {
 	 *
 	 * @return array Default arguments for field.
 	 */
-	public function get_default_args() {
+	public function default_args() {
 		return array_merge(
-			parent::get_default_args(),
+			parent::default_args(),
 			array(
 				'options' => array(),
 			)
@@ -1389,9 +1401,9 @@ class CMB_Select extends CMB_Field {
 	 *
 	 * @return array Default arguments for field.
 	 */
-	public function get_default_args() {
+	public function default_args() {
 		return array_merge(
-			parent::get_default_args(),
+			parent::default_args(),
 			array(
 				'options'         => array(),
 				'multiple'        => false,
@@ -1549,9 +1561,9 @@ class CMB_Taxonomy extends CMB_Select {
 	 *
 	 * @return array Default arguments for field.
 	 */
-	public function get_default_args() {
+	public function default_args() {
 		return array_merge(
-			parent::get_default_args(),
+			parent::default_args(),
 			array(
 				'taxonomy'   => '',
 				'hide_empty' => false,
@@ -1646,9 +1658,9 @@ class CMB_Post_Select extends CMB_Select {
 	 *
 	 * @return array Default arguments for field.
 	 */
-	public function get_default_args() {
+	public function default_args() {
 		return array_merge(
-			parent::get_default_args(),
+			parent::default_args(),
 			array(
 				'query'    => array(),
 				'use_ajax' => false,
@@ -1902,9 +1914,9 @@ class CMB_Group_Field extends CMB_Field {
 	 *
 	 * @return array Default arguments for field.
 	 */
-	public function get_default_args() {
+	public function default_args() {
 		return array_merge(
-			parent::get_default_args(),
+			parent::default_args(),
 			array(
 				'fields'              => array(),
 				'string-repeat-field' => __( 'Add New Group', 'cmb' ),
