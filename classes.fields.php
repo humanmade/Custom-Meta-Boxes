@@ -1888,8 +1888,10 @@ class CMB_Group_Field extends CMB_Field {
 			foreach ( $this->args['fields'] as $f ) {
 
 				$class = _cmb_field_class_for_type( $f['type'] );
-				$this->add_field( new $class( $f['id'], $f['name'], array(), $f ) );
 
+				if ( ! empty( $class ) && class_exists( $class ) ) {
+					$this->add_field( new $class( $f['id'], $f['name'], array(), $f ) );
+				}
 			}
 		}
 
@@ -1922,8 +1924,10 @@ class CMB_Group_Field extends CMB_Field {
 
 		foreach ( $this->args['fields'] as $f ) {
 			$class = _cmb_field_class_for_type( $f['type'] );
-			$field = new $class( '', '', array(), $f );
-			$field->enqueue_scripts();
+			if ( ! empty( $class ) && class_exists( $class ) ) {
+				$field = new $class( '', '', array(), $f );
+				$field->enqueue_scripts();
+			}
 		}
 
 	}
@@ -1939,8 +1943,10 @@ class CMB_Group_Field extends CMB_Field {
 
 		foreach ( $this->args['fields'] as $f ) {
 			$class = _cmb_field_class_for_type( $f['type'] );
-			$field = new $class( '', '', array(), $f );
-			$field->enqueue_styles();
+			if ( ! empty( $class ) && class_exists( $class ) ) {
+				$field = new $class( '', '', array(), $f );
+				$field->enqueue_styles();
+			}
 		}
 
 	}
