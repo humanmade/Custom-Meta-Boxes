@@ -93,7 +93,6 @@ class CMB_Meta_Box {
 				if ( $field->is_displayed() ) {
 					$this->fields[] = $field;
 				}
-				unset( $field );
 			}
 		}
 
@@ -350,7 +349,7 @@ class CMB_Meta_Box {
 			return $display;
 		}
 
-		return current_user_can( sanitize_text_field( $this->_meta_box['capability'] ) );
+		return current_user_can( $this->_meta_box['capability'] );
 
 	}
 
