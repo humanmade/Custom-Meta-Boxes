@@ -56,6 +56,12 @@ class CMB_Meta_Box {
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_styles' ) );
 
+		// Default filters for whether to show a metabox block or not.
+		add_filter( 'cmb_is_metabox_displayed', array( $this, 'add_for_id' ), 2, 2 );
+		add_filter( 'cmb_is_metabox_displayed', array( $this, 'hide_for_id' ), 3, 2 );
+		add_filter( 'cmb_is_metabox_displayed', array( $this, 'add_for_page_template' ), 4, 2 );
+		add_filter( 'cmb_is_metabox_displayed', array( $this, 'hide_for_page_template' ), 5, 2 );
+		add_filter( 'cmb_is_metabox_displayed', array( $this, 'check_capabilities' ), 5, 2 );
 	}
 
 	/**
@@ -83,8 +89,18 @@ class CMB_Meta_Box {
 				$values = (array) get_post_meta( $post_id, $field['id'], $single );
 			}
 
+			/**
+			 * Filter which fields are consdered to be "group" types.
+			 *
+			 * This is useful if you want to extend the group field for your own use and still
+			 * use the array mapping below.
+			 *
+			 * @param array $group_fields Group field types
+			 */
+			$group_field_types = apply_filters( 'cmb_group_field_types', array( 'group' ) );
+
 			// Handle repeatable values for group fields.
-			if ( 'group' === $field['type'] && $single ) {
+			if ( in_array( $field['type'], $group_field_types ) && $single ) {
 				$values = array( $values );
 			}
 
@@ -210,13 +226,14 @@ class CMB_Meta_Box {
 	 * a CMB field collection.
 	 */
 	function is_metabox_displayed() {
-		$display = true;
-		$display = $this->add_for_id( $display );
-		$display = $this->hide_for_id( $display );
-		$display = $this->add_for_page_template( $display );
-		$display = $this->hide_for_page_template( $display );
-		$display = $this->check_capabilities( $display );
-		return $display;
+
+		/**
+		 * Filter whether a metabox should be displayed or not.
+		 *
+		 * @param bool $is_displayed Current status of display
+		 * @param array $metabox Metabox information
+		 */
+		return apply_filters( 'cmb_is_metabox_displayed', true, $this->_meta_box );
 	}
 
 	/**
@@ -224,12 +241,17 @@ class CMB_Meta_Box {
 	 *
 	 * Only works for field collections that have the 'show_on' attribute of 'id'.
 	 *
-	 * @param bool $display Current display status.
+	 * @param bool  $display Current display status.
+	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function add_for_id( $display ) {
+	function add_for_id( $display, $field = array() ) {
 
-		if ( ! isset( $this->_meta_box['show_on']['id'] ) ) {
+		if ( empty( $field ) ) {
+			$field = $this->_meta_box;
+		}
+
+		if ( ! isset( $field['show_on']['id'] ) ) {
 			return $display;
 		}
 
@@ -241,9 +263,9 @@ class CMB_Meta_Box {
 		}
 
 		// If value isn't an array, turn it into one.
-		$this->_meta_box['show_on']['id'] = ! is_array( $this->_meta_box['show_on']['id'] ) ? array( $this->_meta_box['show_on']['id'] ) : $this->_meta_box['show_on']['id'];
+		$field['show_on']['id'] = ! is_array( $field['show_on']['id'] ) ? array( $field['show_on']['id'] ) : $field['show_on']['id'];
 
-		return in_array( $post_id, $this->_meta_box['show_on']['id'] );
+		return in_array( $post_id, $field['show_on']['id'] );
 
 	}
 
@@ -252,12 +274,17 @@ class CMB_Meta_Box {
 	 *
 	 * Only works for field collections that have the 'hide_on' attribute of 'id'.
 	 *
-	 * @param bool $display Current display status.
+	 * @param bool  $display Current display status.
+	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function hide_for_id( $display ) {
+	function hide_for_id( $display, $field = array() ) {
 
-		if ( ! isset( $this->_meta_box['hide_on']['id'] ) ) {
+		if ( empty( $field ) ) {
+			$field = $this->_meta_box;
+		}
+
+		if ( ! isset( $field['hide_on']['id'] ) ) {
 			return $display;
 		}
 
@@ -268,9 +295,9 @@ class CMB_Meta_Box {
 		}
 
 		// If value isn't an array, turn it into one.
-		$this->_meta_box['hide_on']['id'] = ! is_array( $this->_meta_box['hide_on']['id'] ) ? array( $this->_meta_box['hide_on']['id'] ) : $this->_meta_box['hide_on']['id'];
+		$field['hide_on']['id'] = ! is_array( $field['hide_on']['id'] ) ? array( $field['hide_on']['id'] ) : $field['hide_on']['id'];
 
-		return ! in_array( $post_id, $this->_meta_box['hide_on']['id'] );
+		return ! in_array( $post_id, $field['hide_on']['id'] );
 
 	}
 
@@ -279,12 +306,17 @@ class CMB_Meta_Box {
 	 *
 	 * Only works for field collections that have the 'show_on' attribute of 'page-template'.
 	 *
-	 * @param bool $display Current display status.
+	 * @param bool  $display Current display status.
+	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function add_for_page_template( $display ) {
+	function add_for_page_template( $display, $field = array() ) {
 
-		if ( ! isset( $this->_meta_box['show_on']['page-template'] ) ) {
+		if ( empty( $field ) ) {
+			$field = $this->_meta_box;
+		}
+
+		if ( ! isset( $field['show_on']['page-template'] ) ) {
 			return $display;
 		}
 
@@ -298,9 +330,9 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one.
-		$this->_meta_box['show_on']['page-template'] = ! is_array( $this->_meta_box['show_on']['page-template'] ) ? array( $this->_meta_box['show_on']['page-template'] ) : $this->_meta_box['show_on']['page-template'];
+		$field['show_on']['page-template'] = ! is_array( $field['show_on']['page-template'] ) ? array( $field['show_on']['page-template'] ) : $field['show_on']['page-template'];
 
-		return in_array( $current_template, $this->_meta_box['show_on']['page-template'] );
+		return in_array( $current_template, $field['show_on']['page-template'] );
 
 	}
 
@@ -309,12 +341,17 @@ class CMB_Meta_Box {
 	 *
 	 * Only works for field collections that have the 'hide_on' attribute of 'page-template'.
 	 *
-	 * @param bool $display Current display status.
+	 * @param bool  $display Current display status.
+	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function hide_for_page_template( $display ) {
+	function hide_for_page_template( $display, $field = array() ) {
 
-		if ( ! isset( $this->_meta_box['hide_on']['page-template'] ) ) {
+		if ( empty( $field ) ) {
+			$field = $this->_meta_box;
+		}
+
+		if ( ! isset( $field['hide_on']['page-template'] ) ) {
 			return $display;
 		}
 
@@ -329,9 +366,9 @@ class CMB_Meta_Box {
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 
 		// If value isn't an array, turn it into one.
-		$this->_meta_box['hide_on']['page-template'] = ! is_array( $this->_meta_box['hide_on']['page-template'] ) ? array( $this->_meta_box['hide_on']['page-template'] ) : $this->_meta_box['hide_on']['page-template'];
+		$field['hide_on']['page-template'] = ! is_array( $field['hide_on']['page-template'] ) ? array( $field['hide_on']['page-template'] ) : $field['hide_on']['page-template'];
 
-		return ! in_array( $current_template, $this->_meta_box['hide_on']['page-template'] );
+		return ! in_array( $current_template, $field['hide_on']['page-template'] );
 
 	}
 
@@ -340,10 +377,11 @@ class CMB_Meta_Box {
 	 *
 	 * Only works for field collections that have the 'capability' attribute set.
 	 *
-	 * @param bool $display Current display status.
+	 * @param bool  $display Current display status.
+	 * @param array $field Field arguments.
 	 * @return bool (Potentially) modified display status
 	 */
-	function check_capabilities( $display ) {
+	function check_capabilities( $display, $field = array()  ) {
 
 		if ( ! isset( $this->_meta_box['capability'] ) ) {
 			return $display;
@@ -396,7 +434,7 @@ class CMB_Meta_Box {
 
 			foreach ( $fields as $field ) :
 
-				if ( 0 == $current_colspan ) : ?>
+				if ( 0 == $current_colspan && ! $field instanceof CMB_Hidden_Field ) : ?>
 
 					<div class="cmb-row">
 
@@ -410,8 +448,11 @@ class CMB_Meta_Box {
 					$classes[] = 'repeatable';
 				}
 
-				if ( ! empty( $field->args['sortable'] ) ) {
+				if ( ! empty( $field->args['sortable'] ) && ! empty( $field->args['repeatable'] ) ) {
 					$classes[] = 'cmb-sortable';
+				} elseif ( ! empty( $field->args['sortable'] ) && empty( $field->args['repeatable'] ) ) {
+					// Throw an error if calling the wrong combination of sortable and repeatable.
+					_doing_it_wrong( 'cmb_meta_boxes', __( 'Calling sortable on a non-repeatable field. A field cannot be sortable without being repeatable.', 'cmb' ), 4.7 );
 				}
 
 				// Assign extra class for has label or has no label.
@@ -430,6 +471,11 @@ class CMB_Meta_Box {
 				if ( isset( $field->args['repeatable_max'] ) ) {
 					$attrs[] = sprintf( 'data-rep-max="%s"', intval( $field->args['repeatable_max'] ) );
 				}
+
+				// Ask for confirmation before removing field.
+				if ( isset( $field->args['confirm_delete'] ) ) {
+					$attrs[] = sprintf( 'data-confirm-delete="%s"', $field->args['confirm_delete'] ? 'true' : 'false' );
+				}
 				?>
 
 				<div class="cmb-cell-<?php echo intval( $field->args['cols'] ); ?> <?php echo esc_attr( $label_designation ); ?>">
@@ -442,7 +488,7 @@ class CMB_Meta_Box {
 
 				</div>
 
-				<?php if ( 12 == $current_colspan || $field === end( $fields ) ) :
+				<?php if ( ( 12 == $current_colspan || $field === end( $fields ) ) && ! $field instanceof CMB_Hidden_Field ) :
 
 					$current_colspan = 0; ?>
 

@@ -8,7 +8,8 @@
 	margin: 0 0 16px !important;
 }
 
-.cmb_metabox input[type=text], 
+.cmb_metabox input[type=text],
+.cmb_metabox input[type=email],
 .cmb_metabox textarea, 
 .cmb_metabox select { 
 	width: 100%;

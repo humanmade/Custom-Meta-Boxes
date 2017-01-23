@@ -56,7 +56,7 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 					'type'       => 'text',
 					'repeatable' => false,
 				),
-			)
+			),
 		);
 
 		$this->group_fields = array(
@@ -80,7 +80,7 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 						),
 					),
 				),
-			)
+			),
 		);
 
 		// Assign an admin user as we now check that you have proper permissions before passing a field.
@@ -124,10 +124,12 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 
 	function test_values_from_init_group_non_repeatable() {
 
-		$values = array( array(
-			'text'  => array( 'one', 'two', 'three' ),
-			'text2' => array( 'four', 'five', 'six' ),
-		) );
+		$values = array(
+			array(
+				'text'  => array( 'one', 'two', 'three' ),
+				'text2' => array( 'four', 'five', 'six' ),
+			)
+		);
 
 		$field = $this->intialize_fields( $this->group_fields, $values );
 
@@ -142,10 +144,12 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 		$this->group_fields['fields'][0]['fields'][0]['repeatable'] = true;
 		$this->group_fields['fields'][0]['fields'][1]['repeatable'] = true;
 
-		$values = array( array(
-			'text'  => array( 'one', 'two', 'three' ),
-			'text2' => array( 'four', 'five', 'six' ),
-		) );
+		$values = array(
+			array(
+				'text'  => array( 'one', 'two', 'three' ),
+				'text2' => array( 'four', 'five', 'six' ),
+			),
+		);
 
 		$field = $this->intialize_fields( $this->group_fields, $values );
 
@@ -156,7 +160,7 @@ class CmbMetaboxClassTests extends WP_UnitTestCase {
 				array(
 					'text' => array( 'one', 'two', 'three' ),
 					'text2' => array( 'four', 'five', 'six' ),
-				)
+				),
 			),
 			$field->values
 		);

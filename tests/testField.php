@@ -189,5 +189,4 @@ class FieldTestCase extends WP_UnitTestCase {
 
 		$this->assertFalse( $field->is_displayed() );
 	}
-
 }
