@@ -485,11 +485,12 @@ abstract class CMB_Field {
 	 */
 	public function display() {
 
-		// If there are no values and it's not repeateble, we want to do one with empty string.
+		// If there are no values, we need to start with an empty string since we're foreaching through.
 		if ( ! $this->get_values() && ! $this->args['repeatable'] ) {
 			$values = array( '' );
 		} else {
-			$values = $this->get_values();
+			$values = $this->get_values(); // Make PHP5.4 >= happy.
+			$values = empty( $values ) ? array( '' ) : $values;
 		}
 
 		// Print title if necessary.
@@ -1986,27 +1987,27 @@ class CMB_Group_Field extends CMB_Field {
 
 		if ( ! $this->args['repeatable'] && empty( $values ) ) {
 			$values = array( null );
+		} else {
+			$values = $this->get_values(); // Make PHP5.4 >= happy.
+			$values = ( empty( $values ) ) ? array( '' ) : $values;
 		}
 
-		if ( $values ) {
+		$i = 0;
+		foreach ( $values as $value ) {
 
-			$i = 0;
-			foreach ( $values as $value ) {
+			$this->field_index = $i;
+			$this->value = $value;
 
-				$this->field_index = $i;
-				$this->value = $value;
+			?>
 
-				?>
+			<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+				<?php $this->html(); ?>
+			</div>
 
-				<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-					<?php $this->html(); ?>
-				</div>
+			<?php
 
-				<?php
+			$i++;
 
-				$i++;
-
-			}
 		}
 
 		if ( $this->args['repeatable'] ) {
