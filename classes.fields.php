@@ -482,7 +482,7 @@ abstract class CMB_Field {
 			$values = array( '' );
 		} else {
 			$values = $this->get_values(); // Make PHP5.4 >= happy.
-			$values = ( empty( $values ) ) ? array( '' ) : $values;
+			$values = empty( $values ) ? array( '' ) : $values;
 		}
 
 		// Print title if necessary.
@@ -1984,25 +1984,22 @@ class CMB_Group_Field extends CMB_Field {
 			$values = ( empty( $values ) ) ? array( '' ) : $values;
 		}
 
-		if ( $values ) {
+		$i = 0;
+		foreach ( $values as $value ) {
 
-			$i = 0;
-			foreach ( $values as $value ) {
+			$this->field_index = $i;
+			$this->value = $value;
 
-				$this->field_index = $i;
-				$this->value = $value;
+			?>
 
-				?>
+			<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
+				<?php $this->html(); ?>
+			</div>
 
-				<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ) ?>" style="<?php echo esc_attr( $this->args['style'] ); ?>">
-					<?php $this->html(); ?>
-				</div>
+			<?php
 
-				<?php
+			$i++;
 
-				$i++;
-
-			}
 		}
 
 		if ( $this->args['repeatable'] ) {
