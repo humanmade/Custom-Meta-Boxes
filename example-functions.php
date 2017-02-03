@@ -162,6 +162,15 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		),
 
 		/**
+		 * Email Field.
+		 */
+		array(
+			'id'   => 'field-email',
+			'name' => 'Email field',
+			'type' => 'email',
+		),
+
+		/*
 		 * Google Map Field.
 		 */
 		array(
@@ -232,6 +241,16 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		),
 
 		/**
+		 * Hidden Field.
+		 */
+		array(
+			'id'      => 'field-hidden',
+			'name'    => 'Hidden field',
+			'type'    => 'hidden',
+			'default' => 'hidden default value',
+		),
+
+		/*
 		 * Select Field.
 		 */
 		array(
