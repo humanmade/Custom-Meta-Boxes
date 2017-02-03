@@ -536,6 +536,11 @@ class CMB_Meta_Box {
 			return $post_id;
 		}
 
+		// Verify this meta box is for the right post type
+		if ( ! in_array( get_post_type( $post_id ), (array) $this->_meta_box['pages'], true ) ) {
+			return $post_id;
+		}
+
 		foreach ( $this->_meta_box['fields'] as $field ) {
 
 			// Verify this meta box was shown on the page.
