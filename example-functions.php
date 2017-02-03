@@ -19,7 +19,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	 */
 	$fields = array(
 
-		/*
+		/**
 		 * Basic Text Field.
 		 */
 		array(
@@ -28,7 +28,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'text',
 		),
 
-		/*
+		/**
 		 * Text Field with all options.
 		 */
 		array(
@@ -81,7 +81,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'save_callback'   => null,
 		),
 
-		/*
+		/**
 		 * Small Text Field.
 		 */
 		array(
@@ -90,7 +90,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'text_small',
 		),
 
-		/*
+		/**
 		 * Single Checkbox Field.
 		 */
 		array(
@@ -99,7 +99,24 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'checkbox',
 		),
 
-		/*
+		/**
+		 * Checkbox Multi Field.
+		 */
+		array(
+			'id' => 'field-7b',
+			'name' => 'Checkbox-Multi field',
+			'type' => 'checkbox_multi',
+			'default' => array( 'option1' ),
+			'options' => array(
+				'option0' => 'Option with a really long label',
+				'option1' => 'Option 1',
+				'option2' => 'Option 2',
+				'option3' => 'Option 3',
+				'option4' => 'Option 4',
+			)
+		),
+
+		/**
 		 * Colorpicker Field.
 		 */
 		array(
@@ -108,7 +125,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'colorpicker',
 		),
 
-		/*
+		/**
 		 * Basic Date Field.
 		 */
 		array(
@@ -117,7 +134,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'date',
 		),
 
-		/*
+		/**
 		 * Basic Time Field.
 		 */
 		array(
@@ -126,7 +143,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'time',
 		),
 
-		/*
+		/**
 		 * Date UNIX Field.
 		 */
 		array(
@@ -135,7 +152,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'date_unix',
 		),
 
-		/*
+		/**
 		 * Date & Time UNIX Field.
 		 */
 		array(
@@ -186,7 +203,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'string-gmaps-api-not-loaded' => esc_html__( 'Google Maps API not loaded.', 'cmb' ),
 		),
 
-		/*
+		/**
 		 * Radio Input Field.
 		 */
 		array(
@@ -199,7 +216,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			),
 		),
 
-		/*
+		/**
 		 * File Upload Field.
 		 */
 		array(
@@ -211,7 +228,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			),
 		),
 
-		/*
+		/**
 		 * File Image Upload Field.
 		 */
 		array(
@@ -223,7 +240,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'show_size'  => true,        // Optional. Whether to show the image dimensions underneath image itself.
 		),
 
-		/*
+		/**
 		 * Hidden Field.
 		 */
 		array(
@@ -250,7 +267,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'select2_options' => array(), // Optional. Array of options to pass to Select2.
 		),
 
-		/*
+		/**
 		 * Select for Taxonomies Field.
 		 */
 		array(
@@ -263,7 +280,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 		),
 
-		/*
+		/**
 		 * Select for Posts Field.
 		 */
 		array(
@@ -277,7 +294,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			),
 		),
 
-		/*
+		/**
 		 * Plain Title Field.
 		 */
 		array(
@@ -286,7 +303,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'title',
 		),
 
-		/*
+		/**
 		 * Textarea Field.
 		 */
 		array(
@@ -295,7 +312,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'textarea',
 		),
 
-		/*
+		/**
 		 * Textarea Code Field.
 		 */
 		array(
@@ -304,7 +321,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'type' => 'textarea_code',
 		),
 
-		/*
+		/**
 		 * WYSIWYG (What You See is What You Get) TinyMCE Field.
 		 */
 		array(
@@ -316,7 +333,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			),
 		),
 
-		/*
+		/**
 		 * URL Field.
 		 */
 		array(

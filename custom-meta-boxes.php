@@ -41,6 +41,7 @@ error_log( CMB_PATH );
  */
 include_once( CMB_PATH . 'classes.fields.php' );
 include_once( CMB_PATH . 'class.cmb-meta-box.php' );
+include_once( CMB_PATH . 'fields/class-cmb-checkbox-multi.php' );
 include_once( CMB_PATH . 'fields/class-cmb-email-field.php' );
 include_once( CMB_PATH . 'fields/class-cmb-hidden-field.php' );
 
@@ -103,6 +104,7 @@ function _cmb_available_fields() {
 		'url'             => 'CMB_URL_Field',
 		'radio'           => 'CMB_Radio_Field',
 		'checkbox'        => 'CMB_Checkbox',
+		'checkbox_multi'  => 'CMB_Checkbox_Multi',
 		'file'            => 'CMB_File_Field',
 		'hidden'          => 'CMB_Hidden_Field',
 		'image'           => 'CMB_Image_Field',

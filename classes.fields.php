@@ -507,21 +507,20 @@ abstract class CMB_Field {
 		foreach ( $values as $key => $value ) {
 
 			$this->field_index = $i;
-			$this->value = $value; ?>
+			$this->value       = $value;
+			?>
 
 			<div class="field-item" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
-			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
-					<span class="cmb-delete-field-icon">&times;</span>
-				</button>
-			<?php endif; ?>
+			<?php if ( $this->args['repeatable'] ) {
+				$this->delete_button_markup();
+			} ?>
 
 			<?php $this->html(); ?>
 
 			</div>
 
-		<?php
+			<?php
 
 			$i++;
 
@@ -529,29 +528,66 @@ abstract class CMB_Field {
 
 		// Insert a hidden one if it's repeatable.
 		if ( $this->args['repeatable'] ) {
+			$this->repeatable_button_markup();
+		}
+	}
 
-			// X used to distinguish hidden fields.
-			$this->field_index = 'x';
-			$this->value = ''; ?>
+	/**
+	 * Markup to print an "add" button and for a repeatable field.
+	 */
+	protected function repeatable_button_markup() {
+		// X used to distinguish hidden fields.
+		$this->field_index = 'x';
+		$this->value       = '';
+		?>
 
-			<div class="field-item hidden" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
+		<div class="field-item hidden" data-class="<?php echo esc_attr( get_class( $this ) ); ?>" style="position: relative; <?php echo esc_attr( $this->args['style'] ); ?>">
 
-			<?php if ( $this->args['repeatable'] ) : ?>
-				<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
-					<span class="cmb-delete-field-icon">&times;</span>
-					<?php echo esc_html( $this->args['string-delete-field'] ); ?>
-				</button>
-			<?php endif; ?>
+			<?php $this->delete_button_markup(); ?>
 
 			<?php $this->html(); ?>
 
-			</div>
+		</div>
 
-			<button class="button repeat-field"><?php echo esc_html( $this->args['string-repeat-field'] ); ?></button>
+		<button class="button repeat-field"><?php echo esc_html( $this->args['string-repeat-field'] ); ?></button>
 
-			<?php
+		<?php
+	}
+
+	/**
+	 * Markup to print a "remove" button for a repeatable field.
+	 */
+	protected function delete_button_markup() {
+		?>
+		<button class="cmb-delete-field" title="<?php echo esc_attr( $this->args['string-delete-field'] ); ?>">
+			<span class="cmb-delete-field-icon">&times;</span>
+			<?php echo esc_html( $this->args['string-delete-field'] ); ?>
+		</button>
+		<?php
+	}
+
+	/**
+	 * Determine whether we're creating a new object or on an existing object.
+	 *
+	 * This is used so that the plugin has some awareness of whether we're dealing with an
+	 * existing or new object. This is important for things like knowing whether or not to
+	 * load default values when populating a field view.
+	 *
+	 * @return bool|null True if is new, false if existing, and null if not in the admin.
+	 */
+	protected function is_new_object() {
+		$screen = get_current_screen();
+		if ( null === $screen || ! $screen->in_admin ) {
+			return null;
 		}
 
+		$id = $GLOBALS['hook_suffix'];
+		$id = ( '.php' == substr( $id, -4 ) ) ? substr( $id, 0, -4 ) : $id;
+		if ( 'post-new' === $id || 'link-add' === $id || 'media-new' === $id || 'user-new' === $id ) {
+			return true;
+		}
+
+		return false;
 	}
 }
 
@@ -1246,7 +1282,6 @@ class CMB_Checkbox extends CMB_Field {
 		<?php
 	}
 }
-
 
 /**
  * Standard title used as a splitter.
