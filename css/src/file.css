@@ -5,7 +5,8 @@
 	margin: 0 16px 16px 0 !important; 
 	text-align: center; 
 	padding: 0 !important; 
-	z-index: 1; 
+	z-index: 1;
+	max-width: 100%;
 }
 
 .cmb-file-wrap { 
@@ -13,7 +14,7 @@
 	overflow: hidden; 
 	width: 150px; 
 	height: 150px; 
-	line-height: 150px; 
+	line-height: 150px;
 }
 
 .cmb-file-wrap-placeholder { 
@@ -25,7 +26,8 @@
 	height: 142px; 
 	width: 142px; 
 	border: 4px dashed #DDD; 
-	z-index: -1; 
+	z-index: -1;
+	box-sizing: border-box;
 }
 
 .cmb-file-wrap-placeholder .dimensions { 
