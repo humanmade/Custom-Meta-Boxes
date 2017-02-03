@@ -8,8 +8,8 @@ class CheckboxMultiFieldTestCase extends WP_UnitTestCase {
 		$args = array(
 			'post_author'  => 1,
 			'post_status'  => 'publish',
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
+			'post_content' => 'My random and unimportant test string',
+			'post_title'   => 'Random Post',
 			'post_type'    => 'post',
 		);
 

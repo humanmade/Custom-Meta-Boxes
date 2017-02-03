@@ -106,7 +106,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			'id' => 'field-7b',
 			'name' => 'Checkbox-Multi field',
 			'type' => 'checkbox_multi',
-			'default' => [ 'option1' ],
+			'default' => array( 'option1' ),
 			'options' => array(
 				'option0' => 'Option with a really long label',
 				'option1' => 'Option 1',
