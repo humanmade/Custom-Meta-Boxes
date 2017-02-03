@@ -4,6 +4,8 @@ class FieldTestCase extends WP_UnitTestCase {
 
 	private $post;
 
+	private $users = array();
+
 	function setUp() {
 
 		parent::setUp();
@@ -20,11 +22,16 @@ class FieldTestCase extends WP_UnitTestCase {
 
 		$this->post = get_post( $id );
 
+		// Setup some users to test our display logic.
+		$this->users['admin'] = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		$this->users['author'] = $this->factory->user->create( array( 'role' => 'author' ) );
+
 	}
 
 	function tearDown() {
 		wp_delete_post( $this->post->ID, true );
 		unset( $this->post );
+		wp_set_current_user( 0 );
 		parent::tearDown();
 	}
 
@@ -144,7 +151,6 @@ class FieldTestCase extends WP_UnitTestCase {
 
 		// Trigger output.
 		$field->html();
-
 	}
 
 	function testSavedFieldOutput() {
@@ -163,4 +169,57 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field->html();
 	}
 
+	/**
+	 * A single empty field should  display upon load.
+	 */
+	function testEmptyFieldDisplay() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
+
+		if ( ! $this->post ) {
+			$this->markTestSkipped( 'Post not found' );
+		}
+
+		// Test empty output
+		$this->expectOutputRegex( '/(div class\=\"field-title\"\>.*?type=\"text\".*?id=\"foo-cmb-field-0\".*?value=\"1\")/s' );
+
+		// Trigger output.
+		$field->display();
+	}
+
+	/**
+	 * A single empty field should still display on repeatable fields upon load.
+	 */
+	function testEmptyFieldDisplayRepeatable() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array(), array( 'repeatable' => true ) );
+
+		if ( ! $this->post ) {
+			$this->markTestSkipped( 'Post not found' );
+		}
+
+		// Test empty output
+		$this->expectOutputRegex( '/(div class\=\"field-title\"\>.*?type=\"text\".*?id=\"foo-cmb-field-0\".*?value=\"\")/s' );
+
+		// Trigger output.
+		$field->display();
+	}
+
+	function testIsDisplayed() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
+
+		wp_set_current_user( $this->users['admin'] );
+
+		// Test default value against default admin.
+		$this->assertTrue( $field->is_displayed() );
+
+		// Re-setup the field with some capability logic in there.
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ), array( 'capability' => 'edit_others_posts' ) );
+
+		// Should still return true for admin.
+		$this->assertTrue( $field->is_displayed() );
+
+		// Change to the author and test against our modified permission.
+		wp_set_current_user( $this->users['author'] );
+
+		$this->assertFalse( $field->is_displayed() );
+	}
 }

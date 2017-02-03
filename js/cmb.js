@@ -101,7 +101,10 @@ var CMB = {
 		e.preventDefault();
 		jQuery( this ).blur();
 
-		if ( ! confirm( CMBData.strings.confirmDeleteField ) ) {
+		fieldItem = jQuery( this ).closest('.field-item' );
+		field = fieldItem.closest( '.field' );
+
+		if ( false !== field.data('confirm-delete') && ! confirm( CMBData.strings.confirmDeleteField ) ) {
 			return;
 		}
 
