@@ -101,10 +101,10 @@ var CMB = {
 		e.preventDefault();
 		jQuery( this ).blur();
 
-		fieldItem = jQuery( this ).closest('.field-item' );
+		fieldItem = jQuery( this ).closest( '.field-item' );
 		field = fieldItem.closest( '.field' );
 
-		if ( false !== field.data('confirm-delete') && ! confirm( CMBData.strings.confirmDeleteField ) ) {
+		if ( false !== field.data( 'confirm-delete' ) && ! confirm( CMBData.strings.confirmDeleteField ) ) {
 			return;
 		}
 
@@ -330,6 +330,14 @@ var CMB = {
 
 	},
 
+	/**
+	 * Simple debouncing function.
+	 *
+	 * @param func func function to run after wait period.
+	 * @param wait int Wait interval.
+	 * @param immediate bool Whether to run immediately or not.
+	 * @returns {Function}
+	 */
 	debounce: function debounce( func, wait, immediate ) {
 		var timeout;
 		return function() {

@@ -139,5 +139,4 @@ jQuery( document ).ready( function() {
 	// Recheck the width every time that the window is re-sized, debounced.
 	window.addEventListener( 'resize', debounce );
 
-
 } );
