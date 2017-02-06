@@ -34,8 +34,6 @@ if ( ! defined( 'CMB_URL' ) ) {
 	define( 'CMB_URL', plugins_url( '', __FILE__ ) );
 }
 
-error_log( CMB_PATH );
-
 /**
  * Include base, required files.
  */
