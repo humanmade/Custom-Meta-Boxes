@@ -117,7 +117,8 @@
 	display: none !important; 
 }
 
-.cmb-file-wrap .cmb-file-upload { 
+.cmb-file-wrap .cmb-file-upload,
+.cmb-file-wrap .cmb-file-upload:active { /* Include :active because WP uses translateY(1px) */
 	position: relative;
 	top: 50%;
 	-webkit-transform: translateY(-50%);
