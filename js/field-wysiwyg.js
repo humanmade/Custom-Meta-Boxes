@@ -67,12 +67,13 @@ CMB.addCallbackForClonedField( 'CMB_wysiwyg', function( newT ) {
 			}
 		}
 
-		// Init Quicktags.
-		QTags.instances[0] = undefined;
-		try {
-			quicktags( tinyMCEPreInit.qtInit[ id ] );
-		} catch ( e ) {}
-
+		// Init Quicktags, only if we have have QuickTags specified.
+		if ( ! jQuery.isEmptyObject( newQTS ) ) {
+			QTags.instances[ 0 ] = undefined;
+			try {
+				quicktags( tinyMCEPreInit.qtInit[ id ] );
+			} catch ( e ) {}
+		}
 	} );
 
 } );
