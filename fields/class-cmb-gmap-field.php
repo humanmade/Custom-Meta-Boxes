@@ -50,7 +50,7 @@ class CMB_Gmap_Field extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery' ) );
+		wp_enqueue_script( 'cmb-google-maps-script', trailingslashit( CMB_URL ) . 'js/field-gmap.js', array( 'jquery' ), CMB_VERSION );
 
 		// Check for our key with either a field argument or constant.
 		$key = '';

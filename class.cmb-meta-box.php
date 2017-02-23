@@ -156,7 +156,7 @@ class CMB_Meta_Box {
 	 */
 	function enqueue_scripts() {
 
-		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
+		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ), CMB_VERSION );
 
 		wp_localize_script( 'cmb-scripts', 'CMBData', array(
 			'strings' => array(
@@ -180,9 +180,9 @@ class CMB_Meta_Box {
 		$suffix = CMB_DEV ? '' : '.min';
 
 		if ( version_compare( get_bloginfo( 'version' ), '3.8', '>=' ) ) {
-			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . "css/dist/cmb$suffix.css" );
+			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . "css/dist/cmb$suffix.css", array(), CMB_VERSION );
 		} else {
-			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'css/legacy.css' );
+			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'css/legacy.css', array(), CMB_VERSION );
 		}
 
 		foreach ( $this->fields as $field ) {
