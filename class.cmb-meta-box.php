@@ -180,9 +180,9 @@ class CMB_Meta_Box {
 		$suffix = CMB_DEV ? '' : '.min';
 
 		if ( version_compare( get_bloginfo( 'version' ), '3.8', '>=' ) ) {
-			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . "css/dist/cmb$suffix.css", CMB_VERSION );
+			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . "css/dist/cmb$suffix.css", array(), CMB_VERSION );
 		} else {
-			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'css/legacy.css', CMB_VERSION );
+			wp_enqueue_style( 'cmb-styles', trailingslashit( CMB_URL ) . 'css/legacy.css', array(), CMB_VERSION );
 		}
 
 		foreach ( $this->fields as $field ) {
