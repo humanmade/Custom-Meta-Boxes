@@ -2086,7 +2086,7 @@ class CMB_Group_Field extends CMB_Field {
 			foreach ( $value as $field_id => $field_value ) {
 				$field_value = ( ! empty( $field_value ) ) ? $field_value : array();
 				if ( ! empty( $fields[ $field_id ] ) ) {
-					$fields[ $field_id ]->set_values( (array) $field_value );
+					$fields[ $field_id ]->set_values( array( $field_value ) );
 				}
 			}
 		}
