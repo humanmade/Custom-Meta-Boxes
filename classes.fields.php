@@ -1495,8 +1495,8 @@ class CMB_Select extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_script( 'select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/select2.js', array( 'jquery' ) );
-		wp_enqueue_script( 'field-select', trailingslashit( CMB_URL ) . 'js/field.select.js', array( 'jquery', 'select2', 'cmb-scripts' ) );
+		wp_enqueue_script( 'cmb-select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/select2.full.min.js', array( 'jquery' ), '4.0.3' );
+		wp_enqueue_script( 'field-select', trailingslashit( CMB_URL ) . 'js/field.select.js', array( 'jquery', 'cmb-select2', 'cmb-scripts' ) );
 	}
 
 	/**
@@ -1508,7 +1508,7 @@ class CMB_Select extends CMB_Field {
 
 		parent::enqueue_styles();
 
-		wp_enqueue_style( 'select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/select2.css' );
+		wp_enqueue_style( 'cmb-select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/select2.min.css', array(), '4.0.3' );
 	}
 
 	/**
@@ -1764,36 +1764,6 @@ class CMB_Post_Select extends CMB_Select {
 	}
 
 	/**
-	 * Assemble and output of field HTML.
-	 */
-	public function output_field() {
-
-		// If AJAX, must use input type not standard select.
-		if ( $this->args['use_ajax'] ) :
-
-			?>
-
-			<input
-				<?php $this->id_attr(); ?>
-				<?php printf( 'value="%s" ', esc_attr( implode( ',' , (array) $this->value ) ) ); ?>
-				<?php printf( 'name="%s"', esc_attr( $this->get_the_name_attr() ) ); ?>
-				<?php printf( 'data-field-id="%s" ', esc_attr( $this->get_js_id() ) ); ?>
-				<?php $this->boolean_attr(); ?>
-				class="cmb_select"
-				style="width: 100%"
-			/>
-
-			<?php
-
-		else :
-
-			parent::output_field();
-
-		endif;
-
-	}
-
-	/**
 	 * Output inline scripts to support field.
 	 */
 	public function output_script() {
@@ -1815,7 +1785,6 @@ class CMB_Post_Select extends CMB_Select {
 				var options = window.cmb_select_fields[id];
 
 				<?php if ( $this->args['use_ajax'] && $this->args['multiple'] ) : ?>
-					// The multiple setting is required when using ajax (because an input field is used instead of select)
 					options.multiple = true;
 				<?php endif; ?>
 
@@ -1858,14 +1827,16 @@ class CMB_Post_Select extends CMB_Select {
 						url: <?php echo json_encode( esc_url( admin_url( 'admin-ajax.php' ) ) ); ?>,
 						type: 'POST',
 						dataType: 'json',
-						data: function( term, page ) {
-							ajaxData.query.s = term;
-							ajaxData.query.paged = page;
+						delay: 150,
+						data: function( params ) {
+							ajaxData.query.s = params.term;
+							ajaxData.query.paged = params.page;
 							return ajaxData;
 						},
-						results : function( results, page ) {
-							var postsPerPage = ajaxData.query.posts_per_page = ( 'posts_per_page' in ajaxData.query ) ? ajaxData.query.posts_per_page : ( 'showposts' in ajaxData.query ) ? ajaxData.query.showposts : 10;
-							var isMore = ( page * postsPerPage ) < results.total;
+						processResults : function( results, params ) {
+							var page = params.page = params.page || 1,
+								postsPerPage = ajaxData.query.posts_per_page = ( 'posts_per_page' in ajaxData.query ) ? ajaxData.query.posts_per_page : ( 'showposts' in ajaxData.query ) ? ajaxData.query.showposts : 10,
+								isMore = ( page * postsPerPage ) < results.total;
 							return { results: results.posts, more: isMore };
 						}
 					}
