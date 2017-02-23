@@ -41,17 +41,46 @@ if ( ! defined( 'CMB_URL' ) ) {
 /**
  * Include base, required files.
  */
-include_once( CMB_PATH . 'classes.fields.php' );
 include_once( CMB_PATH . 'class.cmb-meta-box.php' );
+
+/**
+ * Field types that are extended.
+ */
+include_once( CMB_PATH . 'fields/class-cmb-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-file-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-select.php' );
+include_once( CMB_PATH . 'fields/class-cmb-text-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-textarea-field.php' );
+
+/**
+ * Final field types.
+ */
+include_once( CMB_PATH . 'fields/class-cmb-checkbox.php' );
 include_once( CMB_PATH . 'fields/class-cmb-checkbox-multi.php' );
+include_once( CMB_PATH . 'fields/class-cmb-color-picker.php' );
+include_once( CMB_PATH . 'fields/class-cmb-date-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-date-timestamp-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-datetime-timestamp-field.php' );
 include_once( CMB_PATH . 'fields/class-cmb-email-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-gmap-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-group-field.php' );
 include_once( CMB_PATH . 'fields/class-cmb-hidden-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-image-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-number-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-post-select.php' );
+include_once( CMB_PATH . 'fields/class-cmb-radio-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-taxonomy.php' );
+include_once( CMB_PATH . 'fields/class-cmb-text-small-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-textarea-field-code.php' );
+include_once( CMB_PATH . 'fields/class-cmb-time-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-title.php' );
+include_once( CMB_PATH . 'fields/class-cmb-url-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-wysiwyg.php' );
 
 /**
  * Make it possible to add fields in locations other than post edit screen. Optional.
  */
 include_once( CMB_PATH . '/fields-anywhere.php' );
-include_once( CMB_PATH . 'fields/class-cmb-gmap-field.php' );
 
 /**
  * Get all the meta boxes on init.
