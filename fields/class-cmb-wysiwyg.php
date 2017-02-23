@@ -78,7 +78,7 @@ class CMB_wysiwyg extends CMB_Field {
 		} else {
 
 			$this->args['options']['textarea_name'] = $name;
-			echo wp_editor( $this->get_value(), $id, $this->args['options'] );
+			wp_editor( $this->get_value(), $id, $this->args['options'] );
 
 		}
 

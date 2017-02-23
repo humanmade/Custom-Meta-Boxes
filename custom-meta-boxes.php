@@ -41,7 +41,7 @@ if ( ! defined( 'CMB_URL' ) ) {
 /**
  * Include base, required files.
  */
-include_once( CMB_PATH . 'class.cmb-meta-box.php' );
+include_once( CMB_PATH . 'class-cmb-meta-box.php' );
 
 /**
  * Field types that are extended.

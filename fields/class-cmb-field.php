@@ -573,7 +573,7 @@ abstract class CMB_Field {
 	 */
 	protected function is_new_object() {
 		$screen = get_current_screen();
-		if ( null === $screen || ! $screen->in_admin ) {
+		if ( null === $screen || ! $screen->in_admin() ) {
 			return null;
 		}
 

@@ -2,15 +2,12 @@
 /**
  * Base functionality for HM CMB plugin.
  *
+ * @since 1.0.0
+ *
  * @package WordPress
  * @subpackage Custom Meta Boxes
  */
 
-/**
- * Create Meta Boxes.
- *
- * @since 1.0.0
- */
 class CMB_Meta_Box {
 
 	/**
