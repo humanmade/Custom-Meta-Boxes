@@ -63,8 +63,8 @@ CMB.addCallbackForClonedField( 'CMB_wysiwyg', function( newT ) {
 				var ed = tinymce.init( tinyMCEPreInit.mceInit[id] );
 			} else if ( tinyMCE.majorVersion === '3' ) {
 				var ed = new tinymce.Editor( id, tinyMCEPreInit.mceInit[id] );
+				ed.render();
 			}
-			ed.render();
 		}
 
 		// Init Quicktags.
