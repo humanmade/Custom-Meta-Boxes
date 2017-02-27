@@ -498,7 +498,7 @@ class CMB_Meta_Box {
 
 			<?php endforeach; ?>
 
-		</div>
+		<!-- </div> -->
 
 	<?php }
 
