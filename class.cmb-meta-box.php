@@ -512,6 +512,9 @@ class CMB_Meta_Box {
 
 		$this->save( $post_id );
 
+		// Allow code to hook into the save process
+		do_action( 'cmb_after_save', $post_id );
+
 	}
 
 	/**
