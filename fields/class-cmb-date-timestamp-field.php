@@ -40,8 +40,7 @@ class CMB_Date_Timestamp_Field extends CMB_Field {
 	}
 
 	/**
-	 * Convert val/**
-	ues into UNIX time values and sort.
+	 * Convert values into UNIX time values and sort.
 	 */
 	public function parse_save_values() {
 
