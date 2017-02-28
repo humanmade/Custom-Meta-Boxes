@@ -2,15 +2,12 @@
 /**
  * Base functionality for HM CMB plugin.
  *
+ * @since 1.0.0
+ *
  * @package WordPress
  * @subpackage Custom Meta Boxes
  */
 
-/**
- * Create Meta Boxes.
- *
- * @since 1.0.0
- */
 class CMB_Meta_Box {
 
 	/**
@@ -55,6 +52,7 @@ class CMB_Meta_Box {
 
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_styles' ) );
+		add_action( 'wp_ajax_cmb_post_select', array( $this, 'cmb_ajax_post_select' ) );
 
 		// Default filters for whether to show a metabox block or not.
 		add_filter( 'cmb_is_metabox_displayed', array( $this, 'add_for_id' ), 2, 2 );
@@ -606,6 +604,36 @@ class CMB_Meta_Box {
 		}
 
 		return (int) $post_id;
+
+	}
+
+	/**
+	 * AJAX callback for select fields.
+	 */
+	public function cmb_ajax_post_select() {
+
+		$post_id = ! empty( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : false;
+		$nonce   = ! empty( $_POST['nonce'] ) ? $_POST['nonce'] : false;
+		$args    = ! empty( $_POST['query'] ) ? $_POST['query'] : array();
+
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'cmb_select_field' ) || ! current_user_can( 'edit_post', $post_id ) ) {
+			echo json_encode( array( 'total' => 0, 'posts' => array() ) );
+			exit;
+		}
+
+		$args['fields'] = 'ids'; // Only need to retrieve post IDs.
+
+		$query = new WP_Query( $args );
+
+		$json = array( 'total' => $query->found_posts, 'posts' => array() );
+
+		foreach ( $query->posts as $post_id ) {
+			array_push( $json['posts'], array( 'id' => $post_id, 'text' => html_entity_decode( get_the_title( $post_id ) ) ) );
+		}
+
+		echo json_encode( $json );
+
+		exit;
 
 	}
 }

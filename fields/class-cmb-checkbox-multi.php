@@ -1,18 +1,15 @@
 <?php
 /**
- * Checkbox-Multi field type.
- *
- * @package WordPress
- * @subpackage Custom Meta Boxes
- */
-
-/**
  * Class CMB_Checkbox_Multi
  *
  * @since 1.1.0
  *
  * @extends CMB_Fields
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
  */
+
 class CMB_Checkbox_Multi extends CMB_Field {
 
 	/**

@@ -2,17 +2,14 @@
 /**
  * Hidden field type.
  *
+ * @since 1.1.0
+ *
+ * @extends CMB_Field
+ *
  * @package WordPress
  * @subpackage Custom Meta Boxes
  */
 
-/**
- * Hidden field type.
- *
- * @since 1.1.0
- *
- * @extends CMB_Field
- */
 class CMB_Hidden_Field extends CMB_Field {
 
 	/**

@@ -1,12 +1,5 @@
 <?php
 /**
- * Google Map field type.
- *
- * @package WordPress
- * @subpackage Custom Meta Boxes
- */
-
-/**
  * Google map field class for CMB
  *
  * It enables the google places API and doesn't store the place
@@ -17,7 +10,11 @@
  * @since 1.0.2
  *
  * @extends CMB_Field
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
  */
+
 class CMB_Gmap_Field extends CMB_Field {
 
 	/**
