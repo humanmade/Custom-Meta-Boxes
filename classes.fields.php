@@ -1962,7 +1962,7 @@ class CMB_Group_Field extends CMB_Field {
 	public function html() {
 
 		$fields = &$this->get_fields();
-		$value  = $this->get_value();
+		$value  = $this->get_values();
 
 		// Reset all field values.
 		foreach ( $fields as $field ) {
