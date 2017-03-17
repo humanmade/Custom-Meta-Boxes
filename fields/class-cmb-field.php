@@ -496,8 +496,15 @@ abstract class CMB_Field {
 		$this->description();
 
 		$i = 0;
+
+		// If the map field is not repeatable then we need to wrap it within an array to remove different in data structure between a repeater field and none
 		if ( isset( $this->args['type'] ) && 'gmap' == $this->args['type'] ) {
-			$values = array( $values );
+			if ( $this->args['repeatable'] === false &&  ! isset( $this->parent ) ) {
+				$values = array( $values );
+			}
+			if( $this->args['repeatable'] === false &&  isset( $this->parent ) ) {
+				$values = $values[0];
+			}
 		}
 
 		foreach ( $values as $key => $value ) {
