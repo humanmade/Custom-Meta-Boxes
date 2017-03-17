@@ -502,8 +502,12 @@ abstract class CMB_Field {
 			if ( $this->args['repeatable'] === false && ! isset( $this->parent ) ) {
 				$values = array( $values );
 			}
-			if ( $this->args['repeatable'] === false && isset( $this->parent ) ) {
+
+			// If its within a group then we need to unwrap it from the group,
+			// transitions code for data formats see https://github.com/humanmade/Custom-Meta-Boxes/issues/422
+			if ( $this->args['repeatable'] === false && isset( $this->parent ) && count( $values ) === 1 ) {
 				$values = $values[0];
+
 			}
 		}
 
