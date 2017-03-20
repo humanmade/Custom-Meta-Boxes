@@ -496,8 +496,24 @@ abstract class CMB_Field {
 		$this->description();
 
 		$i = 0;
-		if ( isset( $this->args['type'] ) && 'gmap' == $this->args['type'] ) {
-			$values = array( $values );
+
+		// If the map field is not repeatable then we need to wrap it within an
+		// array to remove difference in data structure between a repeater field and normal
+		if ( isset( $this->args['type'] ) && 'gmap' === $this->args['type'] ) {
+			if ( $this->args['repeatable'] === false && ! isset( $this->parent ) ) {
+				$values = array( $values );
+			}
+
+			// If its within a group then we need to unwrap it from the group,
+			if ( $this->args['repeatable'] === false && isset( $this->parent ) ) {
+				$values = $values[0];
+
+				// Transitions code for data formats see:
+				// https://github.com/humanmade/Custom-Meta-Boxes/issues/422
+				if ( count( $values ) !== 1 ) {
+					$values = array( $values );
+				}
+			}
 		}
 
 		foreach ( $values as $key => $value ) {
