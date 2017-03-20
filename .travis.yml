@@ -1,11 +1,11 @@
 language: php
 
 php:
-    - 5.3
     - 5.4
     - 5.5
     - 5.6
     - 7.0
+    - 7.1
     - hhvm
 
 env:
@@ -20,10 +20,6 @@ matrix:
   fast_finish: true
   exclude:
     # We really only need to verify that each PHP/WP combination works generally, not that multisite works between them
-    - php: 5.3
-      env: WP_VERSION=3.8 WP_MULTISITE=1
-    - php: 5.3
-      env: WP_VERSION=latest WP_MULTISITE=1
     - php: 5.4
       env: WP_VERSION=3.8 WP_MULTISITE=1
     - php: 5.4
@@ -37,10 +33,14 @@ matrix:
       env: WP_VERSION=3.8 WP_MULTISITE=0
     - php: hhvm
       env: WP_VERSION=3.8 WP_MULTISITE=1
-    # Only test latest version of WP with PHP 7.0 because 3.8 won't work at all
+    # Only test latest version of WP with PHP 7.0+ because 3.8 won't work at all
     - php: 7.0
       env: WP_VERSION=3.8 WP_MULTISITE=0
     - php: 7.0
+      env: WP_VERSION=3.8 WP_MULTISITE=1
+    - php: 7.1
+      env: WP_VERSION=3.8 WP_MULTISITE=0
+    - php: 7.1
       env: WP_VERSION=3.8 WP_MULTISITE=1
 
 before_script:
