@@ -19,7 +19,6 @@
     ]
   },
   "require": {
-    "composer/installers": "~1.0",
-    "phpunit/phpunit": "~5.7"
-   }
+    "composer/installers": "~1.0"
+  }
 }
