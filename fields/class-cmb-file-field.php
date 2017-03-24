@@ -52,7 +52,7 @@ class CMB_File_Field extends CMB_Field {
 		wp_localize_script( 'cmb-file-upload', 'CMBFile', array(
 			'strings'  => array(
 				'selectFile' => $this->args['string-select-file'],
-			)
+			),
 		) );
 
 	}
