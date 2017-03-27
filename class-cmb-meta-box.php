@@ -154,13 +154,16 @@ class CMB_Meta_Box {
 	 */
 	function enqueue_scripts() {
 
-		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ), CMB_VERSION );
+		if ( ! wp_script_is( 'cmb-scripts' ) ) {
 
-		wp_localize_script( 'cmb-scripts', 'CMBData', array(
-			'strings' => array(
-				'confirmDeleteField' => esc_html__( 'Are you sure you want to delete this field?', 'cmb' ),
-			),
-		) );
+			wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ), CMB_VERSION );
+
+			wp_localize_script( 'cmb-scripts', 'CMBData', array(
+				'strings' => array(
+					'confirmDeleteField' => esc_html__( 'Are you sure you want to delete this field?', 'cmb' ),
+				),
+			) );
+		}
 
 		foreach ( $this->fields as $field ) {
 			$field->enqueue_scripts();
