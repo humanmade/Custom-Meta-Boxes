@@ -104,7 +104,7 @@ class CMB_Meta_Box {
 
 			if ( class_exists( $class ) ) {
 				$field = new $class( $field['id'], $field['name'], (array) $values, $args );
-				if ( $field->is_displayed() ) {
+				if ( $field->is_displayed( $post_id ) ) {
 					$this->fields[] = $field;
 				}
 			}
