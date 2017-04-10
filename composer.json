@@ -18,6 +18,7 @@
       "custom-meta-boxes.php"
     ]
   },
+  "type": "wordpress-plugin",
   "require": {
     "composer/installers": "~1.0"
   }
