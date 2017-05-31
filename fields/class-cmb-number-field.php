@@ -22,6 +22,8 @@ class CMB_Number_Field extends CMB_Field {
 			parent::default_args(),
 			array(
 				'step' => '',
+				'min' => '',
+				'max' => '',
 			)
 		);
 	}
@@ -32,7 +34,7 @@ class CMB_Number_Field extends CMB_Field {
 	public function html() {
 		?>
 
-		<input step="<?php echo esc_attr( $this->args['step'] ); ?>" type="number" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_number code' ); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->get_value() ); ?>" />
+		<input step="<?php echo esc_attr( $this->args['step'] ); ?>" <?php echo '' !== $this->args['min'] ? printf( 'min="%d"', $this->args['min'] ) : ''; ?> <?php echo '' !== $this->args['max'] ? printf( 'max="%d"', $this->args['max'] ) : ''; ?> type="number" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_number code' ); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->get_value() ); ?>" />
 
 		<?php
 	}
