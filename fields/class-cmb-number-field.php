@@ -22,8 +22,8 @@ class CMB_Number_Field extends CMB_Field {
 			parent::default_args(),
 			array(
 				'step' => '',
-				'min' => '',
-				'max' => '',
+				'min'  => '',
+				'max'  => '',
 			)
 		);
 	}
