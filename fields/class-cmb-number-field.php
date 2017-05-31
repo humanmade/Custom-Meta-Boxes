@@ -32,9 +32,13 @@ class CMB_Number_Field extends CMB_Field {
 	 * Print out field HTML.
 	 */
 	public function html() {
+		$attrs = [];
+		$attrs[] = '' !== $this->args['step'] ? sprintf( 'step="%g"', $this->args['step'] ) : '';
+		$attrs[] = '' !== $this->args['min'] ? sprintf( 'min="%g"', $this->args['min'] ) : '';
+		$attrs[] = '' !== $this->args['max'] ? sprintf( 'max="%g"', $this->args['max'] ) : '';
 		?>
 
-		<input step="<?php echo esc_attr( $this->args['step'] ); ?>" <?php echo '' !== $this->args['min'] ? printf( 'min="%d"', $this->args['min'] ) : ''; ?> <?php echo '' !== $this->args['max'] ? printf( 'max="%d"', $this->args['max'] ) : ''; ?> type="number" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_number code' ); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->get_value() ); ?>" />
+		<input <?php echo implode( ' ', $attrs ); ?> type="number" <?php $this->id_attr(); ?> <?php $this->boolean_attr(); ?> <?php $this->class_attr( 'cmb_text_number code' ); ?> <?php $this->name_attr(); ?> value="<?php echo esc_attr( $this->get_value() ); ?>" />
 
 		<?php
 	}
