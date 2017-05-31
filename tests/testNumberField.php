@@ -45,14 +45,14 @@ class NumberFieldTestCase extends WP_UnitTestCase {
 	}
 
 	function testFieldOutput() {
-		$field        = new CMB_Number_Field( 'foo', 'Foo', array( 0.5 ), array( 'min' => 0, 'max' => 1 ) );
+		$field        = new CMB_Number_Field( 'foo', 'Foo', array( 0.5 ), array( 'min' => 0.5, 'max' => 1 ) );
 
 		if ( ! $this->post ) {
 			$this->markTestSkipped( 'Post not found' );
 		}
 
 		$this->expectOutputRegex( '/(type=\"number\".*?id=\"foo-cmb-field-0\".*?value=\"0.5\")/s' );
-		$this->expectOutputRegex( '/min="0"/s' );
+		$this->expectOutputRegex( '/min="0.5"/s' );
 		$this->expectOutputRegex( '/max="1"/s' );
 
 		// Trigger output.
