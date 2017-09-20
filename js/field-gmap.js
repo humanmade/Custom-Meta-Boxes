@@ -100,6 +100,6 @@
 		CMB.addCallbackForClonedField( ['CMB_Gmap_Field'], CMBGmapsInit );
 	};
 
-	$.getScript( '//maps.google.com/maps/api/js?sensor=true&libraries=places&callback=CMB_CMAPS_INIT&key=' + CMBGmaps.key );
+	$.getScript( '//maps.google.com/maps/api/js?sensor=true&libraries=places&language=' + CMBGmaps.language +  '&callback=CMB_CMAPS_INIT&key=' + CMBGmaps.key );
 
 }(jQuery));

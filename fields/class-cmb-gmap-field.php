@@ -34,6 +34,7 @@ class CMB_Gmap_Field extends CMB_Field {
 				'string-marker-title'         => esc_html__( 'Drag to set the exact location', 'cmb' ),
 				'string-gmaps-api-not-loaded' => esc_html__( 'Google Maps API not loaded.', 'cmb' ),
 				'google_api_key'              => '',
+				'language'                    => explode( '_', get_locale() )[0],
 			)
 		);
 	}
@@ -68,6 +69,7 @@ class CMB_Gmap_Field extends CMB_Field {
 				'markerTitle'            => $this->args['string-marker-title'],
 				'googleMapsApiNotLoaded' => $this->args['string-gmaps-api-not-loaded'],
 			),
+			'language' => $this->args['language'],
 		) );
 
 	}
