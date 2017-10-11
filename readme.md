@@ -46,6 +46,10 @@ This plugin is maintained by [Human Made Limited](http://hmn.md)
 
 It began as a fork of [Custom Meta Boxes](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress), but is no longer compatible.
 
+## Minimum Requirements:
+* PHP >= 5.4
+* WP >= 4.0
+
 ## Known Issues
 * Some fields do not work well as repeatable fields.
 * Some fields do not work well in repeatable groups.
