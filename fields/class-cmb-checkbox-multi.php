@@ -110,7 +110,7 @@ class CMB_Checkbox_Multi extends CMB_Field {
 	 *
 	 * @return array
 	 */
-	public function &get_values() {
+	public function get_values() {
 
 		// We always want to fetch the existing (possibly empty) values if it's an existing object.
 		if ( ! $this->is_new_object() ) {
