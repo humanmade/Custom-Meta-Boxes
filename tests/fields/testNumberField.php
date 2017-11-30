@@ -6,48 +6,40 @@
  * @subpackage Custom Meta Boxes
  */
 
-class NumberFieldTestCase extends WP_UnitTestCase {
+namespace HMCMB\Tests;
 
-	function setUp() {
+use CMB_Number_Field;
+
+/**
+ * Class NumberFieldTestCase
+ *
+ * @group fields
+ */
+class NumberFieldTestCase extends TestFieldCase {
+	public function setUp() {
 		parent::setUp();
 
-		$args = array(
-			'post_author'  => 1,
-			'post_status'  => 'publish',
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_type'    => 'post',
-		);
-
-		$id = wp_insert_post( $args );
-
-		$this->post = get_post( $id );
-	}
-
-	function tearDown() {
-		wp_delete_post( $this->post->ID, true );
-		unset( $this->post );
-		parent::tearDown();
+		$this->instance = new CMB_Number_Field( 'field', 'Field', [] );
 	}
 
 	function testSaveValue() {
 		$value = array( 0.5 );
 		$field = new CMB_Number_Field( 'foo', 'Foo', $value, array( 'min' => 0, 'max' => 1 ) );
 
-		if ( ! $this->post ) {
+		if ( ! self::$post ) {
 			$this->markTestSkipped( 'Post not found' );
 		}
 
-		$field->save( $this->post->ID, $value );
+		$field->save( self::$post->ID, $value );
 
 		// Verify single value is properly saved.
-		$this->assertEquals( get_post_meta( $this->post->ID, 'foo', false ), $value );
+		$this->assertEquals( get_post_meta( self::$post->ID, 'foo', false ), $value );
 	}
 
 	function testFieldOutput() {
-		$field        = new CMB_Number_Field( 'foo', 'Foo', array( 0.5 ), array( 'min' => 0.4, 'max' => 1 ) );
+		$field = new CMB_Number_Field( 'foo', 'Foo', array( 0.5 ), array( 'min' => 0.4, 'max' => 1 ) );
 
-		if ( ! $this->post ) {
+		if ( ! self::$post ) {
 			$this->markTestSkipped( 'Post not found' );
 		}
 
