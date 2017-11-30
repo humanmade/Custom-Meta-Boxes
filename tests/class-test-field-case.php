@@ -118,13 +118,6 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 				'id'         => 'my-ID',
 				'name'       => 'My Name',
 				'desc'       => 'A long description',
-				'repeatable' => true,
-				'sortable'   => true,
-			],
-			[
-				'id'         => 'my-ID',
-				'name'       => 'My Name',
-				'desc'       => 'A long description',
 				'repeatable' => false,
 				'sortable'   => true,
 			],
@@ -135,6 +128,19 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 				'repeatable' => true,
 				'sortable'   => false,
 			],
+			[
+				'id'         => 'my-ID',
+				'name'       => 'My Name',
+				'desc'       => 'A long description',
+				'repeatable' => true,
+				'sortable'   => true,
+				'cols'       => 6,
+				'readonly'   => true,
+				'disabled'   => true,
+				'class'      => 'my-fancy-fancy-class',
+			],
+
+			// @todo:: add default
 		];
 	}
 }
