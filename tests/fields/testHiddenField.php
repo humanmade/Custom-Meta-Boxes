@@ -1,47 +1,39 @@
 <?php
 
-class HiddenFieldTestCase extends WP_UnitTestCase {
+namespace HMCMB\Tests;
 
-	function setUp() {
+use CMB_Hidden_Field;
+
+/**
+ * Class HiddenFieldTestCase
+ *
+ * @group fields
+ */
+class HiddenFieldTestCase extends TestFieldCase {
+	public function setUp() {
 		parent::setUp();
 
-		$args = array(
-			'post_author'  => 1,
-			'post_status'  => 'publish',
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_type'    => 'post',
-		);
-
-		$id = wp_insert_post( $args );
-
-		$this->post = get_post( $id );
-	}
-
-	function tearDown() {
-		wp_delete_post( $this->post->ID, true );
-		unset( $this->post );
-		parent::tearDown();
+		$this->instance = new CMB_Hidden_Field( 'field', 'Field', [] );
 	}
 
 	function testSaveValue() {
 		$value = array( 'value' );
 		$field = new CMB_Hidden_Field( 'foo', 'Foo', $value );
 
-		if ( ! $this->post ) {
+		if ( ! self::$post ) {
 			$this->markTestSkipped( 'Post not found' );
 		}
 
-		$field->save( $this->post->ID, $value );
+		$field->save( self::$post->ID, $value );
 
 		// Verify single value is properly saved.
-		$this->assertEquals( get_post_meta( $this->post->ID, 'foo', false ), $value );
+		$this->assertEquals( get_post_meta( self::$post->ID, 'foo', false ), $value );
 	}
 
 	function testFieldOutput() {
-		$field        = new CMB_Hidden_Field( 'foo', 'Foo', array( 'value' ) );
+		$field = new CMB_Hidden_Field( 'foo', 'Foo', array( 'value' ) );
 
-		if ( ! $this->post ) {
+		if ( ! self::$post ) {
 			$this->markTestSkipped( 'Post not found' );
 		}
 
