@@ -3,7 +3,6 @@
 namespace HMCMB\Tests;
 
 use CMB_Date_Field;
-use WP_Scripts;
 
 /**
  * Class DateFieldsAssetsTestCase
@@ -15,15 +14,6 @@ class DateFieldsAssetsTestCase extends TestFieldCase {
 		parent::setUp();
 
 		$this->instance = new CMB_Date_Field( 'field', 'Field', [] );;
-
-		$this->old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
-		$GLOBALS['wp_scripts'] = new WP_Scripts();
-		$GLOBALS['wp_scripts']->default_version = get_bloginfo( 'version' );
-	}
-
-	function tearDown() {
-		$GLOBALS['wp_scripts'] = $this->old_wp_scripts;
-		parent::tearDown();
 	}
 
 	/**
@@ -31,6 +21,8 @@ class DateFieldsAssetsTestCase extends TestFieldCase {
 	 */
 	function testAssets() {
 		global $wp_version;
+
+		$this->reset_wp_scripts();
 
 		// Register CMB-Scripts as this is a dependency.
 		wp_register_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );

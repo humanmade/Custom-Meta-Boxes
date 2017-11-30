@@ -17,6 +17,8 @@ class TimeTestCase extends TestFieldCase {
 	}
 
 	function testAssets() {
+		$this->reset_wp_scripts();
+
 		// Register CMB-Scripts as this is a dependency.
 		wp_enqueue_script( 'cmb-scripts', trailingslashit( CMB_URL ) . 'js/cmb.js', array( 'jquery' ) );
 

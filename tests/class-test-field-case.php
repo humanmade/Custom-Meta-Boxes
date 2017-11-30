@@ -10,6 +10,7 @@ namespace HMCMB\Tests;
 
 use WP_UnitTest_Factory;
 use WP_UnitTestCase;
+use WP_Scripts;
 
 /**
  * Class TestFieldCase
@@ -28,11 +29,19 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	protected $instance;
 
 	/**
+	 * Store a reference to global scripts to reset after tests are complete.
+	 *
+	 * @var
+	 */
+	private static $old_wp_scripts;
+
+	/**
 	 * Setup objects for our tests.
 	 *
 	 * @param $factory
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+		// Setup a default post for usage within test.
 		self::$post = $factory->post->create_and_get( [
 			'post_author'  => 1,
 			'post_status'  => 'publish',
@@ -40,10 +49,14 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 			'post_title'   => rand_str(),
 			'post_type'    => 'post',
 		] );
+
+		// Capture WP Scripts object before usage.
+		self::$old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
 	}
 
 	public static function wpTearDownAfterClass() {
 		wp_delete_post( self::$post->ID );
+		$GLOBALS['wp_scripts'] = self::$old_wp_scripts;
 	}
 
 	/**
@@ -53,6 +66,14 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	 */
 	public function update_arguments( $new_arguments ) {
 		$this->instance->set_arguments( $new_arguments );
+	}
+
+	/**
+	 * Reset the wp_script globals
+	 */
+	public function reset_wp_scripts() {
+		$GLOBALS['wp_scripts'] = new WP_Scripts();
+		$GLOBALS['wp_scripts']->default_version = get_bloginfo( 'version' );
 	}
 
 	/**
