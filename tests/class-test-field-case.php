@@ -25,7 +25,7 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	/**
 	 * Class instance.
 	 */
-	//protected $instance;
+	protected $instance;
 
 	/**
 	 * Setup objects for our tests.
@@ -47,13 +47,73 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Verify that we can register and load a field without error.
+	 * Update the argument set on a field class.
+	 *
+	 * @param $new_arguments
 	 */
-	public function register_field( $field_id ) {}
+	public function update_arguments( $new_arguments ) {
+		$this->instance->set_arguments( $new_arguments );
+	}
 
-	public function instantiate_class( $class_name ) {}
+	/**
+	 * Verify that the field outputs with no errors for each argument set.
+	 *
+	 * @dataProvider argumentsProvider
+	 */
+	public function test_field_output( $arguments = [] ) {
+		$this->update_arguments( $arguments );
 
-	abstract public function test_field_class_instantiation();
-	abstract public function test_field_registration();
-	abstract public function test_field_output();
+		error_log( print_r( $arguments, true ) );
+
+		// Check the default HTML output.
+		// The point of these checks is to ensure that the field doesn't error out with each argument set.
+		$this->expectOutputRegex( '/data-class=\"' . get_class( $this->instance ) . '\"/' );
+		$this->instance->display();
+	}
+
+	/**
+	 * Provide a set of arguments to test against.
+	 *
+	 * Here we provide a default set of arguments to test each field against.
+	 *
+	 * @return array Default argument set.
+	 */
+	public function argumentsProvider() {
+		return [
+			[],
+			[
+				'id' => 'my-ID',
+			],
+			[
+				'id'   => 'my-ID',
+				'name' => 'My Name'
+			],
+			[
+				'id'   => 'my-ID',
+				'name' => 'My Name',
+				'desc' => 'A long description',
+			],
+			[
+				'id'         => 'my-ID',
+				'name'       => 'My Name',
+				'desc'       => 'A long description',
+				'repeatable' => true,
+				'sortable'   => true,
+			],
+			[
+				'id'         => 'my-ID',
+				'name'       => 'My Name',
+				'desc'       => 'A long description',
+				'repeatable' => false,
+				'sortable'   => true,
+			],
+			[
+				'id'         => 'my-ID',
+				'name'       => 'My Name',
+				'desc'       => 'A long description',
+				'repeatable' => true,
+				'sortable'   => false,
+			],
+		];
+	}
 }
