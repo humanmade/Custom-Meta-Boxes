@@ -1,5 +1,19 @@
 <?php
 
+// On Chassis, tests can silently fail, so introduce a shutdown function to print the last error.
+// Throwing an exception sends a non-zero exit code.
+register_shutdown_function( function() {
+	// Only load in Chassis.
+	if ( ! defined( 'WP_LOCAL_DEV' ) ) {
+		return;
+	}
+
+	$error = error_get_last();
+	if ( $error && isset( $error['message'] ) && ! defined( 'DOING_AJAX' ) ) {
+		throw new Exception( $error['message'] );
+	}
+} );
+
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
 if ( ! $_tests_dir ) {
@@ -14,6 +28,9 @@ function _manually_load_plugin() {
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 require $_tests_dir . '/includes/bootstrap.php';
+
+// Include our test class.
+require_once __DIR__ . '/class-test-field-case.php';
 
 /**
  * Call protected/private method of a class.
