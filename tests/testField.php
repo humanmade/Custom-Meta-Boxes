@@ -7,25 +7,20 @@ class FieldTestCase extends WP_UnitTestCase {
 	private $users = array();
 
 	function setUp() {
-
 		parent::setUp();
-
-		$args = array(
-			'post_author' => 1,
-			'post_status' => 'publish',
-			'post_content' => rand_str(),
-			'post_title' => rand_str(),
-			'post_type' => 'post',
-		);
-
-		$id = wp_insert_post( $args );
-
-		$this->post = get_post( $id );
 
 		// Setup some users to test our display logic.
 		$this->users['admin'] = $this->factory->user->create( array( 'role' => 'administrator' ) );
 		$this->users['author'] = $this->factory->user->create( array( 'role' => 'author' ) );
 
+		// Setup a post for testing is_displayed.
+		$this->post = $this->factory->post->create_and_get( array(
+			'post_author'  => 1,
+			'post_status'  => 'publish',
+			'post_content' => rand_str(),
+			'post_title'   => rand_str(),
+			'post_type'    => 'post',
+		) );
 	}
 
 	function tearDown() {
@@ -236,17 +231,17 @@ class FieldTestCase extends WP_UnitTestCase {
 		wp_set_current_user( $this->users['admin'] );
 
 		// Test default value against default admin.
-		$this->assertTrue( $field->is_displayed() );
+		$this->assertTrue( $field->is_displayed( $this->post->ID ) );
 
 		// Re-setup the field with some capability logic in there.
 		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ), array( 'capability' => 'edit_others_posts' ) );
 
 		// Should still return true for admin.
-		$this->assertTrue( $field->is_displayed() );
+		$this->assertTrue( $field->is_displayed( $this->post->ID ) );
 
 		// Change to the author and test against our modified permission.
 		wp_set_current_user( $this->users['author'] );
 
-		$this->assertFalse( $field->is_displayed() );
+		$this->assertFalse( $field->is_displayed( $this->post->ID ) );
 	}
 }
