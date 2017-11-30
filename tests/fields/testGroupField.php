@@ -1,6 +1,21 @@
 <?php
 
-class GroupFieldTestCase extends WP_UnitTestCase {
+namespace HMCMB\Tests;
+
+use CMB_Group_Field;
+use CMB_Text_Field;
+
+/**
+ * Class GroupFieldTestCase
+ *
+ * @group fields
+ */
+class GroupFieldTestCase extends TestFieldCase {
+	public function setUp() {
+		parent::setUp();
+
+		$this->instance = new CMB_Group_Field( 'field', 'Field', [] );
+	}
 
 	function testAddField() {
 
