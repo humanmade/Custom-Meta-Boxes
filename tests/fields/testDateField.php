@@ -1,9 +1,21 @@
 <?php
 
-class DateFieldsAssetsTestCase extends WP_UnitTestCase {
+namespace HMCMB\Tests;
 
+use CMB_Date_Field;
+use WP_Scripts;
+
+/**
+ * Class DateFieldsAssetsTestCase
+ *
+ * @group fields
+ */
+class DateFieldsAssetsTestCase extends TestFieldCase {
 	function setUp() {
 		parent::setUp();
+
+		$this->instance = new CMB_Date_Field( 'field', 'Field', [] );;
+
 		$this->old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
 		$GLOBALS['wp_scripts'] = new WP_Scripts();
 		$GLOBALS['wp_scripts']->default_version = get_bloginfo( 'version' );
@@ -17,7 +29,7 @@ class DateFieldsAssetsTestCase extends WP_UnitTestCase {
 	/**
 	 * Test that all required scripts & styles are correctly loaded.
 	 */
-	function testDateFieldAssets() {
+	function testAssets() {
 		global $wp_version;
 
 		$field = new CMB_Date_Field( 'foo', 'Title', array() );
