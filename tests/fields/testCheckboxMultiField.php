@@ -65,7 +65,9 @@ class CheckboxMultiFieldTestCase extends TestFieldCase {
 	 */
 	public function argumentsProvider() {
 		$args = [
-			'options' => [ 'Option 1', 'Option 2', 'Option 3' ],
+			[
+				'options' => [ 'Option 1', 'Option 2', 'Option 3' ],
+			]
 		];
 
 		return array_merge( $args, parent::argumentsProvider() );

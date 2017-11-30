@@ -15,4 +15,31 @@ class TaxonomyFieldTestCase extends TestFieldCase {
 
 		$this->instance = new CMB_Taxonomy( 'field', 'Field', [] );
 	}
+
+	/**
+	 * Update our default argument set with specific args.
+	 *
+	 * @return array
+	 */
+	public function argumentsProvider() {
+		$args = [
+			[
+				'taxonomy'   => 'post_tag',
+				'hide_empty' => false,
+				'multiple'   => true,
+			],
+			[
+				'taxonomy'   => 'post_tag',
+				'hide_empty' => true,
+				'multiple'   => true,
+			],
+			[
+				'taxonomy'   => 'post_tag',
+				'hide_empty' => false,
+				'multiple'   => false,
+			],
+		];
+
+		return array_merge( $args, parent::argumentsProvider() );
+	}
 }

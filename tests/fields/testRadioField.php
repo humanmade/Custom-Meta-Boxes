@@ -15,4 +15,19 @@ class RadioFieldTestCase extends TestFieldCase {
 
 		$this->instance = new CMB_Radio_Field( 'field', 'Field', [] );
 	}
+
+	/**
+	 * Update our default argument set with specific args.
+	 *
+	 * @return array
+	 */
+	public function argumentsProvider() {
+		$args = [
+			[
+				'options' => [ 'Option 1', 'Option 2', 'Option 3' ],
+			]
+		];
+
+		return array_merge( $args, parent::argumentsProvider() );
+	}
 }

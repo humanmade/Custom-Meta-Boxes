@@ -18,7 +18,6 @@ class GroupFieldTestCase extends TestFieldCase {
 	}
 
 	function testAddField() {
-
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
 		$field2 = new CMB_Text_Field( 'bar', 'Title', array( 2, 3 ), array( 'repeatable' => true ) );
@@ -28,11 +27,9 @@ class GroupFieldTestCase extends TestFieldCase {
 
 		$this->assertArrayHasKey( 'foo', $group->get_fields() );
 		$this->assertArrayHasKey( 'bar', $group->get_fields() );
-
 	}
 
 	function testGetValues() {
-
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array() );
 		$field2 = new CMB_Text_Field( 'bar', 'Title', array() );
@@ -48,11 +45,9 @@ class GroupFieldTestCase extends TestFieldCase {
 		);
 
 		$this->assertEquals( $group->get_values(), $values );
-
 	}
 
 	function testParseSaveValues() {
-
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
 		$field2 = new CMB_Text_Field( 'bar', 'Title', array( 2, 3 ), array( 'repeatable' => true ) );
@@ -77,11 +72,9 @@ class GroupFieldTestCase extends TestFieldCase {
 		$group->parse_save_values();
 
 		$this->assertEquals( $group->get_values(), $expected );
-
 	}
 
 	function testFieldNameAttrValue() {
-
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ) );
 
@@ -113,11 +106,9 @@ class GroupFieldTestCase extends TestFieldCase {
 		$id_attr = $field1->get_the_name_attr();
 		$this->assertEquals( $id_attr, 'group[cmb-group-12][foo][cmb-field-0]' );
 		$group->field_index = 0; // Unset
-
 	}
 
 	function testFieldIdAttrValue() {
-
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ) );
 
@@ -149,6 +140,31 @@ class GroupFieldTestCase extends TestFieldCase {
 		$id_attr = $field1->get_the_id_attr();
 		$this->assertEquals( $id_attr, 'group-cmb-group-12-foo-cmb-field-0' );
 		$group->field_index = 0; // Unset
+	}
 
+	/**
+	 * Update our default argument set with specific args.
+	 *
+	 * @return array
+	 */
+	public function argumentsProvider() {
+		$args = [
+			[
+				'fields' => [
+					[
+						'id' => 'gac-4-f-1',
+						'name' => 'Text input field',
+						'type' => 'text',
+					],
+					[
+						'id' => 'gac-4-f-2',
+						'name' => 'Text input field',
+						'type' => 'text',
+					],
+				],
+			]
+		];
+
+		return array_merge( $args, parent::argumentsProvider() );
 	}
 }

@@ -15,4 +15,19 @@ class WYSIWYGFieldTestCase extends TestFieldCase {
 
 		$this->instance = new CMB_wysiwyg( 'field', 'Field', [] );
 	}
+
+	/**
+	 * Update our default argument set with specific args.
+	 *
+	 * @return array
+	 */
+	public function argumentsProvider() {
+		$args = [
+			[
+				'options' => [ 'editor_height' => 500 ],
+			],
+		];
+
+		return array_merge( $args, parent::argumentsProvider() );
+	}
 }

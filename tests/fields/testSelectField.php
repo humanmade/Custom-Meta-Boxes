@@ -15,4 +15,27 @@ class SelectFieldTestCase extends TestFieldCase {
 
 		$this->instance = new CMB_Select( 'field', 'Field', [] );
 	}
+
+	/**
+	 * Update our default argument set with specific args.
+	 *
+	 * @return array
+	 */
+	public function argumentsProvider() {
+		$args = [
+			[
+				'options' => [ 'Option 1', 'Option 2', 'Option 3' ],
+				'select2_options' => [ 'an' => 'option' ],
+				'allow_none'      => true,
+				'multiple'        => true,
+			],
+			[
+				'options' => [ 'Option 1', 'Option 2', 'Option 3' ],
+				'allow_none'      => true,
+				'multiple'        => false,
+			]
+		];
+
+		return array_merge( $args, parent::argumentsProvider() );
+	}
 }

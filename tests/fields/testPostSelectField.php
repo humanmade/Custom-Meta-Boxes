@@ -15,4 +15,30 @@ class PostSelectFieldTestCase extends TestFieldCase {
 
 		$this->instance = new CMB_Post_Select( 'field', 'Field', [] );
 	}
+
+	/**
+	 * Update our default argument set with specific args.
+	 *
+	 * @return array
+	 */
+	public function argumentsProvider() {
+		$args = [
+			[
+				'use_ajax' => true,
+			],
+			[
+				'use_ajax' => true,
+				'multiple' => true,
+			],
+			[
+				'use_ajax' => true,
+				'multiple' => true,
+				'query'    => [
+					'posts_per_page' => 20,
+				],
+			]
+		];
+
+		return array_merge( $args, parent::argumentsProvider() );
+	}
 }
