@@ -91,6 +91,18 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Verify that the field saves values correctly to meta.
+	 *
+	 * @dataProvider valuesProvider
+	 */
+	function test_save_value( $value ) {
+		$this->instance->save( self::$post->ID, $value );
+
+		// Verify single value is properly saved.
+		$this->assertEquals( get_post_meta( self::$post->ID, get_class( $this->instance ), false ), $value );
+	}
+
+	/**
 	 * Provide a set of arguments to test against.
 	 *
 	 * Here we provide a default set of arguments to test each field against.
@@ -139,6 +151,19 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 			] ],
 
 			// @todo:: add default
+		];
+	}
+
+	/**
+	 * Provide a default set of values to test saving against.
+	 *
+	 * @return array Default values set.
+	 */
+	public function valuesProvider() {
+		return [
+			[ [ 'A string' ] ],
+			[ [ 162735 ] ],
+			[ [ true ] ],
 		];
 	}
 }
