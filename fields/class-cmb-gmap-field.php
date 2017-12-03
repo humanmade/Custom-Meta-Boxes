@@ -79,7 +79,7 @@ class CMB_Gmap_Field extends CMB_Field {
 	 *
 	 * @return array
 	 */
-	public function &get_values() {
+	public function get_values() {
 		return ( ! $this->args['repeatable'] ) ? array( $this->values ) : $this->values;
 	}
 

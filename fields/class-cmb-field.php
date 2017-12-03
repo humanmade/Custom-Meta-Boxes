@@ -346,7 +346,7 @@ abstract class CMB_Field {
 	 *
 	 * @return array
 	 */
-	public function &get_values() {
+	public function get_values() {
 		return $this->values;
 	}
 
@@ -425,6 +425,8 @@ abstract class CMB_Field {
 
 	/**
 	 * Check whether the current field should or should not be displayed.
+	 *
+	 * @param int $post_id Post ID to check against.
 	 */
 	public function is_displayed( $post_id ) {
 		return current_user_can( $this->args['capability'], $post_id );

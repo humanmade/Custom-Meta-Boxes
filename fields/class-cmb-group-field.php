@@ -163,7 +163,7 @@ class CMB_Group_Field extends CMB_Field {
 	 */
 	public function html() {
 
-		$fields = &$this->get_fields();
+		$fields = $this->get_fields();
 		$value  = $this->get_value();
 
 		// Reset all field values.
@@ -199,8 +199,8 @@ class CMB_Group_Field extends CMB_Field {
 	 */
 	public function parse_save_values() {
 
-		$fields = &$this->get_fields();
-		$values = &$this->get_values();
+		$fields = $this->get_fields();
+		$values = $this->get_values();
 
 		foreach ( $values as &$group_value ) {
 			foreach ( $group_value as $field_id => &$field_value ) {
@@ -224,6 +224,7 @@ class CMB_Group_Field extends CMB_Field {
 			}
 		}
 
+		$this->set_values( $values );
 	}
 
 	/**
@@ -241,7 +242,7 @@ class CMB_Group_Field extends CMB_Field {
 	 *
 	 * @return array
 	 */
-	public function &get_fields() {
+	public function get_fields() {
 		return $this->fields;
 	}
 
@@ -252,7 +253,7 @@ class CMB_Group_Field extends CMB_Field {
 	 */
 	public function set_values( array $values ) {
 
-		$fields       = &$this->get_fields();
+		$fields       = $this->get_fields();
 		$this->values = $values;
 
 		// Reset all field values.
