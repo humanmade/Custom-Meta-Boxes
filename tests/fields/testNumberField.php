@@ -19,7 +19,7 @@ class NumberFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Number_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Number_Field( 'CMB_Number_Field', 'Field', [] );
 	}
 
 	function testSaveValue() {

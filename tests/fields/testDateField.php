@@ -13,7 +13,7 @@ class DateFieldsAssetsTestCase extends TestFieldCase {
 	function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Date_Field( 'field', 'Field', [] );;
+		$this->instance = new CMB_Date_Field( 'CMB_Date_Field', 'Field', [] );;
 	}
 
 	/**

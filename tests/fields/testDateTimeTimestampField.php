@@ -13,7 +13,7 @@ class DateTimeTimestampFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Datetime_Timestamp_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Datetime_Timestamp_Field( 'CMB_Datetime_Timestamp_Field', 'Field', [] );
 	}
 
 	function testAssets() {

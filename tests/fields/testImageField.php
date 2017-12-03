@@ -13,7 +13,7 @@ class ImageFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Image_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Image_Field( 'CMB_Image_Field', 'Field', [] );
 	}
 
 	/**

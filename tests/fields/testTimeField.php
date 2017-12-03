@@ -13,7 +13,7 @@ class TimeTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Time_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Time_Field( 'CMB_Time_Field', 'Field', [] );
 	}
 
 	function testAssets() {

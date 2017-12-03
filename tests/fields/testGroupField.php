@@ -14,7 +14,7 @@ class GroupFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Group_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Group_Field( 'CMB_Group_Field', 'Field', [] );
 	}
 
 	function testAddField() {

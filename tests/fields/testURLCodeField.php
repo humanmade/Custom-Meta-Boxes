@@ -13,6 +13,6 @@ class URLFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_URL_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_URL_Field( 'CMB_URL_Field', 'Field', [] );
 	}
 }

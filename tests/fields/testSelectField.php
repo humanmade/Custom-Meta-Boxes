@@ -13,7 +13,7 @@ class SelectFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Select( 'field', 'Field', [] );
+		$this->instance = new CMB_Select( 'CMB_Select', 'Field', [] );
 	}
 
 	/**

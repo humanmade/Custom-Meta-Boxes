@@ -13,7 +13,7 @@ class GmapFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Gmap_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Gmap_Field( 'CMB_Gmap_Field', 'Field', [] );
 	}
 
 	/**

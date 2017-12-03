@@ -13,7 +13,7 @@ class RadioFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Radio_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Radio_Field( 'CMB_Radio_Field', 'Field', [] );
 	}
 
 	/**

@@ -13,7 +13,7 @@ class WYSIWYGFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_wysiwyg( 'field', 'Field', [] );
+		$this->instance = new CMB_wysiwyg( 'CMB_wysiwyg', 'Field', [] );
 	}
 
 	/**

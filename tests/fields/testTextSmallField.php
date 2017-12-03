@@ -13,6 +13,6 @@ class TextSmallFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Text_Small_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Text_Small_Field( 'CMB_Text_Small_Field', 'Field', [] );
 	}
 }

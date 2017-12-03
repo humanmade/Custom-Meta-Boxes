@@ -13,6 +13,6 @@ class ColorFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Color_Picker( 'field', 'Field', [] );
+		$this->instance = new CMB_Color_Picker( 'CMB_Color_Picker', 'Field', [] );
 	}
 }

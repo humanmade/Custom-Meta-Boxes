@@ -13,6 +13,6 @@ class TitleFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Title( 'field', 'Field', [] );
+		$this->instance = new CMB_Title( 'CMB_Title', 'Field', [] );
 	}
 }

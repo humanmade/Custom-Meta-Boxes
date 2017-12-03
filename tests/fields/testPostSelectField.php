@@ -13,7 +13,7 @@ class PostSelectFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Post_Select( 'field', 'Field', [] );
+		$this->instance = new CMB_Post_Select( 'CMB_Post_Select', 'Field', [] );
 	}
 
 	/**

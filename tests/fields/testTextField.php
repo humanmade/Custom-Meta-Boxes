@@ -13,6 +13,6 @@ class TextFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Text_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Text_Field( 'CMB_Text_Field', 'Field', [] );
 	}
 }

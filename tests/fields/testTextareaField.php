@@ -13,6 +13,6 @@ class TextareaFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Textarea_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Textarea_Field( 'CMB_Textarea_Field', 'Field', [] );
 	}
 }

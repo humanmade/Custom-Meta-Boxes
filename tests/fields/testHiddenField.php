@@ -13,7 +13,7 @@ class HiddenFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Hidden_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Hidden_Field( 'CMB_Hidden_Field', 'Field', [] );
 	}
 
 	function testSaveValue() {

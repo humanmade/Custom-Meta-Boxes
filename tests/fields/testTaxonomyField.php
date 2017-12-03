@@ -13,7 +13,7 @@ class TaxonomyFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Taxonomy( 'field', 'Field', [] );
+		$this->instance = new CMB_Taxonomy( 'CMB_Taxonomy', 'Field', [] );
 	}
 
 	/**

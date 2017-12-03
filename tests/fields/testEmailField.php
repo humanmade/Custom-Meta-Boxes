@@ -19,7 +19,7 @@ class EmailFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Email_Field( 'field', 'Field', [] );
+		$this->instance = new CMB_Email_Field( 'CMB_Email_Field', 'Field', [] );
 	}
 
 	function testSaveValue() {
