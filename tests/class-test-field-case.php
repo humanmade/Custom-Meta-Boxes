@@ -81,10 +81,8 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	 *
 	 * @dataProvider argumentsProvider
 	 */
-	public function test_field_output( $arguments = [] ) {
+	public function test_field_output( $arguments ) {
 		$this->update_arguments( $arguments );
-
-		error_log( print_r( $arguments, true ) );
 
 		// Check the default HTML output.
 		// The point of these checks is to ensure that the field doesn't error out with each argument set.
@@ -101,34 +99,34 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	 */
 	public function argumentsProvider() {
 		return [
-			[],
-			[
+			[ [] ],
+			[ [
 				'id' => 'my-ID',
-			],
-			[
+			] ],
+			[ [
 				'id'   => 'my-ID',
 				'name' => 'My Name'
-			],
-			[
+			] ],
+			[ [
 				'id'   => 'my-ID',
 				'name' => 'My Name',
 				'desc' => 'A long description',
-			],
-			[
+			] ],
+			[ [
 				'id'         => 'my-ID',
 				'name'       => 'My Name',
 				'desc'       => 'A long description',
 				'repeatable' => false,
 				'sortable'   => true,
-			],
-			[
+			] ],
+			[ [
 				'id'         => 'my-ID',
 				'name'       => 'My Name',
 				'desc'       => 'A long description',
 				'repeatable' => true,
 				'sortable'   => false,
-			],
-			[
+			] ],
+			[ [
 				'id'         => 'my-ID',
 				'name'       => 'My Name',
 				'desc'       => 'A long description',
@@ -138,7 +136,7 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 				'readonly'   => true,
 				'disabled'   => true,
 				'class'      => 'my-fancy-fancy-class',
-			],
+			] ],
 
 			// @todo:: add default
 		];
