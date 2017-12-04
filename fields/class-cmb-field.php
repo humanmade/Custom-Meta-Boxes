@@ -360,7 +360,7 @@ abstract class CMB_Field {
 	 *
 	 * @return array
 	 */
-	public function &get_values() {
+	public function get_values() {
 		return $this->values;
 	}
 
