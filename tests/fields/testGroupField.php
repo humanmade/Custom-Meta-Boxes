@@ -154,22 +154,9 @@ class GroupFieldTestCase extends TestFieldCase {
 	 * @param
 	 */
 	function test_save_value( $value, $expected_value = false ) {
-		$field = new CMB_Group_Field( 'CMB_Group_Field', 'Field', [
-			'fields' => [
-				[
-					'id' => 'gac-4-f-1',
-					'name' => 'Text input field',
-					'type' => 'text',
-				],
-				[
-					'id' => 'gac-4-f-2',
-					'name' => 'Text input field',
-					'type' => 'text',
-				],
-			],
-		] );
+		$this->instance->add_field( new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ) ) );
 
-		$field->save( self::$post->ID, $value );
+		$this->instance->save( self::$post->ID, $value );
 
 		// Usually, we only want to pass one value and not a parsed value. Accomodate this here.
 		if ( false === $expected_value ) {
@@ -179,7 +166,7 @@ class GroupFieldTestCase extends TestFieldCase {
 		// Verify single value is properly saved.
 		$this->assertEquals(
 			$expected_value,
-			get_post_meta( self::$post->ID, get_class( $field ), false )
+			get_post_meta( self::$post->ID, get_class( $this->instance ), false )
 		);
 	}
 
@@ -212,13 +199,24 @@ class GroupFieldTestCase extends TestFieldCase {
 	/**
 	 * Provide a default set of values to test saving against.
 	 *
+	 * P.S. the data structure for this field is NUTS.
+	 *
 	 * @return array Values set.
 	 */
 	public function valuesProvider() {
 		return [
-			[ [ [ 'foo' => 'A string' ] ] ],
-			[ [ [ 'foo' => 162735 ] ] ],
-			[ [ [ 'foo' =>  true ] ] ],
+			[
+				[ [ 'foo' => [ 'A string' ] ] ],
+				[ [ 'foo' => 'A string' ] ]
+			],
+			[
+				[ [ 'foo' => [ 162735 ] ] ],
+				[ [ 'foo' => 162735 ] ]
+			],
+			[
+				[ [ 'foo' =>  [ true ] ] ],
+				[ [ 'foo' => true ] ]
+			],
 		];
 	}
 }
