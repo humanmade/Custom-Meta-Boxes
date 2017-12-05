@@ -16,20 +16,6 @@ class CheckboxMultiFieldTestCase extends TestFieldCase {
 		$this->instance = new CMB_Checkbox_Multi( 'CMB_Checkbox_Multi', 'Field', [] );;
 	}
 
-	public function testSaveValue() {
-		$value = array( 'value' );
-		$field = new CMB_Checkbox_Multi( 'foo', 'Foo', $value );
-
-		if ( ! self::$post ) {
-			$this->markTestSkipped( 'Post not found' );
-		}
-
-		$field->save( self::$post->ID, $value );
-
-		// Verify single value is properly saved.
-		$this->assertEquals( get_post_meta( self::$post->ID, 'foo', false ), $value );
-	}
-
 	public function testEmptyFieldOutput() {
 		$field = new CMB_Checkbox_Multi( 'foo', 'Foo', array( 'value' => 'value' ), array( 'options' => array( 'value' => 'value' ) ) );
 

@@ -22,20 +22,6 @@ class NumberFieldTestCase extends TestFieldCase {
 		$this->instance = new CMB_Number_Field( 'CMB_Number_Field', 'Field', [] );
 	}
 
-	function testSaveValue() {
-		$value = array( 0.5 );
-		$field = new CMB_Number_Field( 'foo', 'Foo', $value, array( 'min' => 0, 'max' => 1 ) );
-
-		if ( ! self::$post ) {
-			$this->markTestSkipped( 'Post not found' );
-		}
-
-		$field->save( self::$post->ID, $value );
-
-		// Verify single value is properly saved.
-		$this->assertEquals( get_post_meta( self::$post->ID, 'foo', false ), $value );
-	}
-
 	function testFieldOutput() {
 		$field = new CMB_Number_Field( 'foo', 'Foo', array( 0.5 ), array( 'min' => 0.4, 'max' => 1 ) );
 
@@ -47,5 +33,18 @@ class NumberFieldTestCase extends TestFieldCase {
 
 		// Trigger output.
 		$field->html();
+	}
+
+	/**
+	 * Provide a default set of values to test saving against.
+	 *
+	 * @return array Default values set.
+	 */
+	public function valuesProvider() {
+		return [
+			[ [ '1' ] ],
+			[ [ 162735 ] ],
+			[ [ 0.5 ] ],
+		];
 	}
 }

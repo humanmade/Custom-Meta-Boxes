@@ -80,6 +80,8 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	 * Verify that the field outputs with no errors for each argument set.
 	 *
 	 * @dataProvider argumentsProvider
+	 *
+	 * @param
 	 */
 	public function test_field_output( $arguments ) {
 		$this->update_arguments( $arguments );
@@ -94,12 +96,23 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	 * Verify that the field saves values correctly to meta.
 	 *
 	 * @dataProvider valuesProvider
+	 *
+	 * @param
+	 * @param
 	 */
-	function test_save_value( $value ) {
+	function test_save_value( $value, $expected_value = false ) {
 		$this->instance->save( self::$post->ID, $value );
 
+		// Usually, we only want to pass one value and not a parsed value. Accomodate this here.
+		if ( false === $expected_value ) {
+			$expected_value = $value;
+		}
+
 		// Verify single value is properly saved.
-		$this->assertEquals( get_post_meta( self::$post->ID, get_class( $this->instance ), false ), $value );
+		$this->assertEquals(
+			$expected_value,
+			get_post_meta( self::$post->ID, get_class( $this->instance ), false )
+		);
 	}
 
 	/**

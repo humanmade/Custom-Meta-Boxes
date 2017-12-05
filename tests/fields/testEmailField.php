@@ -48,4 +48,17 @@ class EmailFieldTestCase extends TestFieldCase {
 		// Trigger output.
 		$field->html();
 	}
+
+	/**
+	 * Provide a default set of values to test saving against.
+	 *
+	 * @return array Default values set.
+	 */
+	public function valuesProvider() {
+		return [
+			[ [ 'A string' ] ],
+			[ [ 'hm@md.com' ] ],
+			[ [ 'mike@mike.co.uk' ] ],
+		];
+	}
 }

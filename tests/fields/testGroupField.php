@@ -143,6 +143,47 @@ class GroupFieldTestCase extends TestFieldCase {
 	}
 
 	/**
+	 * Verify that the field saves values correctly to meta.
+	 *
+	 * We need to override this method because inner fields must be setup
+	 * in order for saving to work correctly.
+	 *
+	 * @dataProvider valuesProvider
+	 *
+	 * @param
+	 * @param
+	 */
+	function test_save_value( $value, $expected_value = false ) {
+		$field = new CMB_Group_Field( 'CMB_Group_Field', 'Field', [
+			'fields' => [
+				[
+					'id' => 'gac-4-f-1',
+					'name' => 'Text input field',
+					'type' => 'text',
+				],
+				[
+					'id' => 'gac-4-f-2',
+					'name' => 'Text input field',
+					'type' => 'text',
+				],
+			],
+		] );
+
+		$field->save( self::$post->ID, $value );
+
+		// Usually, we only want to pass one value and not a parsed value. Accomodate this here.
+		if ( false === $expected_value ) {
+			$expected_value = $value;
+		}
+
+		// Verify single value is properly saved.
+		$this->assertEquals(
+			$expected_value,
+			get_post_meta( self::$post->ID, get_class( $field ), false )
+		);
+	}
+
+	/**
 	 * Update our default argument set with specific args.
 	 *
 	 * @return array
@@ -166,5 +207,18 @@ class GroupFieldTestCase extends TestFieldCase {
 		];
 
 		return array_merge( $args, parent::argumentsProvider() );
+	}
+
+	/**
+	 * Provide a default set of values to test saving against.
+	 *
+	 * @return array Values set.
+	 */
+	public function valuesProvider() {
+		return [
+			[ [ [ 'foo' => 'A string' ] ] ],
+			[ [ [ 'foo' => 162735 ] ] ],
+			[ [ [ 'foo' =>  true ] ] ],
+		];
 	}
 }

@@ -16,20 +16,6 @@ class HiddenFieldTestCase extends TestFieldCase {
 		$this->instance = new CMB_Hidden_Field( 'CMB_Hidden_Field', 'Field', [] );
 	}
 
-	function testSaveValue() {
-		$value = array( 'value' );
-		$field = new CMB_Hidden_Field( 'foo', 'Foo', $value );
-
-		if ( ! self::$post ) {
-			$this->markTestSkipped( 'Post not found' );
-		}
-
-		$field->save( self::$post->ID, $value );
-
-		// Verify single value is properly saved.
-		$this->assertEquals( get_post_meta( self::$post->ID, 'foo', false ), $value );
-	}
-
 	function testFieldOutput() {
 		$field = new CMB_Hidden_Field( 'foo', 'Foo', array( 'value' ) );
 

@@ -31,4 +31,16 @@ class DateTimestampFieldTestCase extends TestFieldCase {
 		$this->assertContains( CMB_URL . '/js/jquery.timePicker.min.js', $scripts_output );
 		$this->assertContains( CMB_URL . '/js/field.datetime.js', $scripts_output );
 	}
+
+	/**
+	 * Provide a default set of values to test saving against.
+	 *
+	 * @return array Default values set.
+	 */
+	public function valuesProvider() {
+		return [
+			[ [ '12/12/2012' ], [ '1355270400' ] ],
+			[ [ '12/12/2112' ], [ '4510944000' ] ],
+		];
+	}
 }
