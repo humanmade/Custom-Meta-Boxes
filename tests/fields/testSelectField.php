@@ -33,7 +33,7 @@ class SelectFieldTestCase extends TestFieldCase {
 				'options' => [ 'Option 1', 'Option 2', 'Option 3' ],
 				'allow_none'      => true,
 				'multiple'        => false,
-			]
+			],
 		];
 
 		return array_merge( $args, parent::argumentsProvider() );

@@ -40,18 +40,22 @@ class DateTimeTimestampFieldTestCase extends TestFieldCase {
 	public function valuesProvider() {
 		return [
 			[
-				[ [
-					'date' => '12/12/2012',
-					'time' => '12:00 am',
-				] ],
-				[ '1355270400' ]
+				[
+					[
+						'date' => '12/12/2012',
+						'time' => '12:00 am',
+					],
+				],
+				[ '1355270400' ],
 			],
 			[
-				[ [
-					'date' => '12/12/2112',
-					'time' => '12:00 am',
-				] ],
-				[ '4510944000' ]
+				[
+					[
+						'date' => '12/12/2112',
+						'time' => '12:00 am',
+					],
+				],
+				[ '4510944000' ],
 			],
 		];
 	}

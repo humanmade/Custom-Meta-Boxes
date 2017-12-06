@@ -25,7 +25,7 @@ class RadioFieldTestCase extends TestFieldCase {
 		$args = [
 			[
 				'options' => [ 'Option 1', 'Option 2', 'Option 3' ],
-			]
+			],
 		];
 
 		return array_merge( $args, parent::argumentsProvider() );

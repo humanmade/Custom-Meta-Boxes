@@ -207,15 +207,15 @@ class GroupFieldTestCase extends TestFieldCase {
 		return [
 			[
 				[ [ 'foo' => [ 'A string' ] ] ],
-				[ [ 'foo' => 'A string' ] ]
+				[ [ 'foo' => 'A string' ] ],
 			],
 			[
 				[ [ 'foo' => [ 162735 ] ] ],
-				[ [ 'foo' => 162735 ] ]
+				[ [ 'foo' => 162735 ] ],
 			],
 			[
 				[ [ 'foo' =>  [ true ] ] ],
-				[ [ 'foo' => true ] ]
+				[ [ 'foo' => true ] ],
 			],
 		];
 	}

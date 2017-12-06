@@ -36,7 +36,7 @@ class PostSelectFieldTestCase extends TestFieldCase {
 				'query'    => [
 					'posts_per_page' => 20,
 				],
-			]
+			],
 		];
 
 		return array_merge( $args, parent::argumentsProvider() );

@@ -27,7 +27,7 @@ class GmapFieldTestCase extends TestFieldCase {
 				'google_api_key' => 'abcdefghijk',
 				'default_lat'    => '1.234',
 				'default_long'   => '1.234',
-			]
+			],
 		];
 
 		return array_merge( $args, parent::argumentsProvider() );
