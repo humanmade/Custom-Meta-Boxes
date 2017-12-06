@@ -81,7 +81,7 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	 *
 	 * @dataProvider argumentsProvider
 	 *
-	 * @param
+	 * @param array $arguments Arguments to parse against.
 	 */
 	public function test_field_output( $arguments ) {
 		$this->update_arguments( $arguments );
@@ -97,8 +97,8 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	 *
 	 * @dataProvider valuesProvider
 	 *
-	 * @param
-	 * @param
+	 * @param mixed $value          Value to save
+	 * @param mixed $expected_value Optional. Expected value to save.
 	 */
 	function test_save_value( $value, $expected_value = false ) {
 		$this->instance->save( self::$post->ID, $value );
