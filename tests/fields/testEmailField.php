@@ -2,6 +2,8 @@
 /**
  * Tests for the email field type.
  *
+ * @since 1.1.0
+ *
  * @package WordPress
  * @subpackage Custom Meta Boxes
  */

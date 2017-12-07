@@ -1,4 +1,12 @@
 <?php
+/**
+ * Tests for the Google Maps field type.
+ *
+ * @since 1.1.0
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
+ */
 
 namespace HMCMB\Tests;
 

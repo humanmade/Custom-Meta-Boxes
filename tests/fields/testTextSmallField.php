@@ -1,4 +1,12 @@
 <?php
+/**
+ * Tests for the small-sized text field type.
+ *
+ * @since 1.1.0
+ *
+ * @package WordPress
+ * @subpackage Custom Meta Boxes
+ */
 
 namespace HMCMB\Tests;
 
