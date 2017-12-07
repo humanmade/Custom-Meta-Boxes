@@ -13,7 +13,7 @@ class CheckboxMultiFieldTestCase extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Checkbox_Multi( 'CMB_Checkbox_Multi', 'Field', [] );;
+		$this->instance = new CMB_Checkbox_Multi( 'CMB_Checkbox_Multi', 'Field', [] );
 	}
 
 	public function testEmptyFieldOutput() {

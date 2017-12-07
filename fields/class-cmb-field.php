@@ -605,7 +605,6 @@ abstract class CMB_Field {
 			_deprecated_argument( 'CMB_Field', '0.9', "field argument 'std' is deprecated, use 'default' instead" );
 		}
 
-
 		if ( ! empty( $this->args['options'] ) && is_array( reset( $this->args['options'] ) ) ) {
 			$re_format = array();
 			foreach ( $this->args['options'] as $option ) {

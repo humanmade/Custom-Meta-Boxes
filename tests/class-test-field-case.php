@@ -19,7 +19,7 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	/**
 	 * Consistent post for use with testing fields.
 	 *
-	 * @var
+	 * @var \WP_Post
 	 */
 	protected static $post;
 
@@ -31,12 +31,12 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	/**
 	 * Store a reference to global scripts to reset after tests are complete.
 	 *
-	 * @var
+	 * @var array
 	 */
 	private static $old_wp_scripts;
 
 	/**
-	 * Setup objects for our tests.
+	 * Setup fixtures for our tests.
 	 *
 	 * @param $factory
 	 */
@@ -54,6 +54,9 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 		self::$old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
 	}
 
+	/**
+	 * Clean up fixtures.
+	 */
 	public static function wpTearDownAfterClass() {
 		wp_delete_post( self::$post->ID );
 		$GLOBALS['wp_scripts'] = self::$old_wp_scripts;
