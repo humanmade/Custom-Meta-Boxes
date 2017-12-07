@@ -117,6 +117,6 @@ class CMB_Checkbox_Multi extends CMB_Field {
 			return $this->values;
 		}
 
-		return array_flip( $this->args['default'] );
+		return array_flip( (array) $this->args['default'] );
 	}
 }
