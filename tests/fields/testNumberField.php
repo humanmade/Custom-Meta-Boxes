@@ -24,6 +24,9 @@ class NumberFieldTestCase extends TestFieldCase {
 		$this->instance = new CMB_Number_Field( 'CMB_Number_Field', 'Field', [] );
 	}
 
+	/**
+	 * Test that the number field outputs correctly against more specific field output.
+	 */
 	function testFieldOutput() {
 		$field = new CMB_Number_Field( 'foo', 'Foo', array( 0.5 ), array( 'min' => 0.4, 'max' => 1 ) );
 

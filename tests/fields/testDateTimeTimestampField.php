@@ -24,6 +24,9 @@ class DateTimeTimestampFieldTestCase extends TestFieldCase {
 		$this->instance = new CMB_Datetime_Timestamp_Field( 'CMB_Datetime_Timestamp_Field', 'Field', [] );
 	}
 
+	/**
+	 * Test that all required scripts & styles are correctly loaded.
+	 */
 	function testAssets() {
 		$this->reset_wp_scripts();
 

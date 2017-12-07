@@ -24,6 +24,9 @@ class TimeTestCase extends TestFieldCase {
 		$this->instance = new CMB_Time_Field( 'CMB_Time_Field', 'Field', [] );
 	}
 
+	/**
+	 * Test that all required scripts & styles are correctly loaded.
+	 */
 	function testAssets() {
 		$this->reset_wp_scripts();
 

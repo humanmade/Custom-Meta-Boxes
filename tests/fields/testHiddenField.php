@@ -24,6 +24,9 @@ class HiddenFieldTestCase extends TestFieldCase {
 		$this->instance = new CMB_Hidden_Field( 'CMB_Hidden_Field', 'Field', [] );
 	}
 
+	/**
+	 * Test that the number field outputs correctly against more specific field output.
+	 */
 	function testFieldOutput() {
 		$field = new CMB_Hidden_Field( 'foo', 'Foo', array( 'value' ) );
 

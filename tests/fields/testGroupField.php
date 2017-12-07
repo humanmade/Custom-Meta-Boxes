@@ -25,6 +25,9 @@ class GroupFieldTestCase extends TestFieldCase {
 		$this->instance = new CMB_Group_Field( 'CMB_Group_Field', 'Field', [] );
 	}
 
+	/**
+	 * Test that a fields are correctly added to a group field.
+	 */
 	function testAddField() {
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
@@ -37,6 +40,9 @@ class GroupFieldTestCase extends TestFieldCase {
 		$this->assertArrayHasKey( 'bar', $group->get_fields() );
 	}
 
+	/**
+	 * Test that value retrieval within a group field works correctly.
+	 */
 	function testGetValues() {
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array() );
@@ -55,6 +61,9 @@ class GroupFieldTestCase extends TestFieldCase {
 		$this->assertEquals( $group->get_values(), $values );
 	}
 
+	/**
+	 * Test that vsaving values within a group field works correctly.
+	 */
 	function testParseSaveValues() {
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
@@ -82,6 +91,9 @@ class GroupFieldTestCase extends TestFieldCase {
 		$this->assertEquals( $group->get_values(), $expected );
 	}
 
+	/**
+	 * Test that the name attribute works correctly.
+	 */
 	function testFieldNameAttrValue() {
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ) );
@@ -116,6 +128,9 @@ class GroupFieldTestCase extends TestFieldCase {
 		$group->field_index = 0; // Unset
 	}
 
+	/**
+	 * Test that the ID attribute works correctly.
+	 */
 	function testFieldIdAttrValue() {
 		$group  = new CMB_Group_Field( 'group', 'Group Title', array() );
 		$field1 = new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ) );
@@ -158,8 +173,8 @@ class GroupFieldTestCase extends TestFieldCase {
 	 *
 	 * @dataProvider valuesProvider
 	 *
-	 * @param
-	 * @param
+	 * @param mixed $value          Value to save
+	 * @param mixed $expected_value Optional. Expected value to save.
 	 */
 	function test_save_value( $value, $expected_value = false ) {
 		$this->instance->add_field( new CMB_Text_Field( 'foo', 'Title', array( 1, 2 ) ) );

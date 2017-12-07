@@ -24,20 +24,9 @@ class EmailFieldTestCase extends TestFieldCase {
 		$this->instance = new CMB_Email_Field( 'CMB_Email_Field', 'Field', [] );
 	}
 
-	function testSaveValue() {
-		$value = array( 'hm@hmn.md' );
-		$field = new CMB_Email_Field( 'foo', 'Foo', $value );
-
-		if ( ! self::$post ) {
-			$this->markTestSkipped( 'Post not found' );
-		}
-
-		$field->save( self::$post->ID, $value );
-
-		// Verify single value is properly saved.
-		$this->assertEquals( get_post_meta( self::$post->ID, 'foo', false ), $value );
-	}
-
+	/**
+	 * Test that the number field outputs correctly against more specific field output.
+	 */
 	function testFieldOutput() {
 		$field        = new CMB_Email_Field( 'foo', 'Foo', array( 'hm@hmn.md' ) );
 

@@ -24,6 +24,9 @@ class CheckboxMultiFieldTestCase extends TestFieldCase {
 		$this->instance = new CMB_Checkbox_Multi( 'CMB_Checkbox_Multi', 'Field', [] );
 	}
 
+	/**
+	 * Test that the number field outputs correctly against an empty value set.
+	 */
 	public function testEmptyFieldOutput() {
 		$field = new CMB_Checkbox_Multi( 'foo', 'Foo', array( 'value' => 'value' ), array( 'options' => array( 'value' => 'value' ) ) );
 
@@ -37,6 +40,9 @@ class CheckboxMultiFieldTestCase extends TestFieldCase {
 		$field->html();
 	}
 
+	/**
+	 * Test that the number field outputs correctly against a saved value set.
+	 */
 	public function testSavedFieldOutput() {
 		$field = new CMB_Checkbox_Multi( 'foo', 'Foo', array( 'value' => 'value' ), array( 'options' => array( 'value' => 'value', 'value2' => 'value2' ) ) );
 
