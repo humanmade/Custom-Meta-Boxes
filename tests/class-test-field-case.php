@@ -50,6 +50,11 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 			'post_type'    => 'post',
 		] );
 
+		// Backwards compatibility with old WP versions.
+		if ( is_int( self::$post ) ) {
+			self::$post = get_post( self::$post );
+		}
+
 		// Capture WP Scripts object before usage.
 		self::$old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
 	}
