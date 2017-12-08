@@ -5,11 +5,11 @@ namespace HMCMB\Tests;
 use CMB_Image_Field;
 
 /**
- * Class ImageFieldTestCase
+ * Class TestImageField
  *
  * @group fields
  */
-class ImageFieldTestCase extends TestFieldCase {
+class TestImageField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

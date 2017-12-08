@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Datetime_Timestamp_Field;
 
 /**
- * Class DateTimeTimestampFieldTestCase
+ * Class TestDateTimeTimestampField
  *
  * @group fields
  */
-class DateTimeTimestampFieldTestCase extends TestFieldCase {
+class TestDateTimeTimestampField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

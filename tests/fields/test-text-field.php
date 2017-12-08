@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the title field type.
+ * Tests for the text field type.
  *
  * @since 1.1.0
  *
@@ -10,17 +10,17 @@
 
 namespace HMCMB\Tests;
 
-use CMB_Title;
+use CMB_Text_Field;
 
 /**
- * Class TitleFieldTestCase
+ * Class TestTextField
  *
  * @group fields
  */
-class TitleFieldTestCase extends TestFieldCase {
+class TestTextField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Title( 'CMB_Title', 'Field', [] );
+		$this->instance = new CMB_Text_Field( 'CMB_Text_Field', 'Field', [] );
 	}
 }

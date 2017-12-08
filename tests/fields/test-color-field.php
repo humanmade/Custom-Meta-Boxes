@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Color_Picker;
 
 /**
- * Class ColorFieldTestCase
+ * Class TestColorField
  *
  * @group fields
  */
-class ColorFieldTestCase extends TestFieldCase {
+class TestColorField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

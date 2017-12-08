@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the URL field type.
+ * Tests for the title field type.
  *
  * @since 1.1.0
  *
@@ -10,17 +10,17 @@
 
 namespace HMCMB\Tests;
 
-use CMB_URL_Field;
+use CMB_Title;
 
 /**
- * Class URLFieldTestCase
+ * Class TestTitleField
  *
  * @group fields
  */
-class URLFieldTestCase extends TestFieldCase {
+class TestTitleField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_URL_Field( 'CMB_URL_Field', 'Field', [] );
+		$this->instance = new CMB_Title( 'CMB_Title', 'Field', [] );
 	}
 }

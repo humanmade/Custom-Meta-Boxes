@@ -14,11 +14,11 @@ use CMB_Group_Field;
 use CMB_Text_Field;
 
 /**
- * Class GroupFieldTestCase
+ * Class TestGroupField
  *
  * @group fields
  */
-class GroupFieldTestCase extends TestFieldCase {
+class TestGroupField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Time_Field;
 
 /**
- * Class TimeTestCase
+ * Class TestTimeField
  *
  * @group fields
  */
-class TimeTestCase extends TestFieldCase {
+class TestTimeField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

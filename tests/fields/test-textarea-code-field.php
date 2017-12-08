@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Textarea_Field_Code;
 
 /**
- * Class TextareaCodeFieldTestCase
+ * Class TestTextareaCodeField
  *
  * @group fields
  */
-class TextareaCodeFieldTestCase extends TestFieldCase {
+class TestTextareaCodeField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Text_Small_Field;
 
 /**
- * Class TextSmallFieldTestCase
+ * Class TestTextSmallField
  *
  * @group fields
  */
-class TextSmallFieldTestCase extends TestFieldCase {
+class TestTextSmallField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

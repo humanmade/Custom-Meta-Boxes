@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Post_Select;
 
 /**
- * Class PostSelectFieldTestCase
+ * Class TestPostSelectField
  *
  * @group fields
  */
-class PostSelectFieldTestCase extends TestFieldCase {
+class TestPostSelectField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

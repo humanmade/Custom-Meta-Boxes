@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the number field type.
+ * Tests for the email field type.
  *
  * @since 1.1.0
  *
@@ -10,31 +10,31 @@
 
 namespace HMCMB\Tests;
 
-use CMB_Number_Field;
+use CMB_Email_Field;
 
 /**
- * Class NumberFieldTestCase
+ * Class TestEmailField
  *
  * @group fields
  */
-class NumberFieldTestCase extends TestFieldCase {
+class TestEmailField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Number_Field( 'CMB_Number_Field', 'Field', [] );
+		$this->instance = new CMB_Email_Field( 'CMB_Email_Field', 'Field', [] );
 	}
 
 	/**
 	 * Test that the number field outputs correctly against more specific field output.
 	 */
 	function testFieldOutput() {
-		$field = new CMB_Number_Field( 'foo', 'Foo', array( 0.5 ), array( 'min' => 0.4, 'max' => 1 ) );
+		$field        = new CMB_Email_Field( 'foo', 'Foo', array( 'hm@hmn.md' ) );
 
 		if ( ! self::$post ) {
 			$this->markTestSkipped( 'Post not found' );
 		}
 
-		$this->expectOutputRegex( '/min="0.4".*max="1".*(type=\"number\".*?id=\"foo-cmb-field-0\".*?value=\"0.5\")/s' );
+		$this->expectOutputRegex( '/(type=\"email\".*?id=\"foo-cmb-field-0\".*?value=\"hm@hmn.md\")/s' );
 
 		// Trigger output.
 		$field->html();
@@ -47,9 +47,9 @@ class NumberFieldTestCase extends TestFieldCase {
 	 */
 	public function valuesProvider() {
 		return [
-			[ [ '1' ] ],
-			[ [ 162735 ] ],
-			[ [ 0.5 ] ],
+			[ [ 'A string' ] ],
+			[ [ 'hm@md.com' ] ],
+			[ [ 'mike@mike.co.uk' ] ],
 		];
 	}
 }

@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Checkbox;
 
 /**
- * Class CheckboxFieldTestCase
+ * Class TestCheckboxField
  *
  * @group fields
  */
-class CheckboxFieldTestCase extends TestFieldCase {
+class TestCheckboxField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

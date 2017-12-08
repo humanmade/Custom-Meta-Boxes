@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the radio field type.
+ * Tests for the select field type.
  *
  * @since 1.1.0
  *
@@ -10,18 +10,18 @@
 
 namespace HMCMB\Tests;
 
-use CMB_Radio_Field;
+use CMB_Select;
 
 /**
- * Class RadioFieldTestCase
+ * Class TestSelectField
  *
  * @group fields
  */
-class RadioFieldTestCase extends TestFieldCase {
+class TestSelectField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Radio_Field( 'CMB_Radio_Field', 'Field', [] );
+		$this->instance = new CMB_Select( 'CMB_Select', 'Field', [] );
 	}
 
 	/**
@@ -33,6 +33,14 @@ class RadioFieldTestCase extends TestFieldCase {
 		$args = [
 			[
 				'options' => [ 'Option 1', 'Option 2', 'Option 3' ],
+				'select2_options' => [ 'an' => 'option' ],
+				'allow_none'      => true,
+				'multiple'        => true,
+			],
+			[
+				'options' => [ 'Option 1', 'Option 2', 'Option 3' ],
+				'allow_none'      => true,
+				'multiple'        => false,
 			],
 		];
 

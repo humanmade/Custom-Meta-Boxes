@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Hidden_Field;
 
 /**
- * Class HiddenFieldTestCase
+ * Class TestHiddenField
  *
  * @group fields
  */
-class HiddenFieldTestCase extends TestFieldCase {
+class TestHiddenField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

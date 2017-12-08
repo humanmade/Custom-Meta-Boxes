@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Date_Field;
 
 /**
- * Class DateFieldsAssetsTestCase
+ * Class TestDateFieldsAssets
  *
  * @group fields
  */
-class DateFieldsAssetsTestCase extends TestFieldCase {
+class TestDateFieldsAssets extends TestFieldCase {
 	function setUp() {
 		parent::setUp();
 

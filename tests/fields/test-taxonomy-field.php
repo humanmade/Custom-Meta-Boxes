@@ -13,11 +13,11 @@ namespace HMCMB\Tests;
 use CMB_Taxonomy;
 
 /**
- * Class TaxonomyFieldTestCase
+ * Class TestTaxonomyField
  *
  * @group fields
  */
-class TaxonomyFieldTestCase extends TestFieldCase {
+class TestTaxonomyField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the Google Maps field type.
+ * Tests for the WYSIWYG field type.
  *
  * @since 1.1.0
  *
@@ -10,18 +10,18 @@
 
 namespace HMCMB\Tests;
 
-use CMB_Gmap_Field;
+use CMB_wysiwyg;
 
 /**
- * Class GmapFieldTestCase
+ * Class TestWYSIWYGField
  *
  * @group fields
  */
-class GmapFieldTestCase extends TestFieldCase {
+class TestWYSIWYGField extends TestFieldCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = new CMB_Gmap_Field( 'CMB_Gmap_Field', 'Field', [] );
+		$this->instance = new CMB_wysiwyg( 'CMB_wysiwyg', 'Field', [] );
 	}
 
 	/**
@@ -32,9 +32,7 @@ class GmapFieldTestCase extends TestFieldCase {
 	public function argumentsProvider() {
 		$args = [
 			[
-				'google_api_key' => 'abcdefghijk',
-				'default_lat'    => '1.234',
-				'default_long'   => '1.234',
+				'options' => [ 'editor_height' => 500 ],
 			],
 		];
 
