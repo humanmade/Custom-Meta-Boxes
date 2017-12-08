@@ -213,7 +213,7 @@ class TestGroupField extends TestFieldCase {
 						'type' => 'text',
 					],
 				],
-			]
+			],
 		];
 
 		return array_merge( $args, parent::argumentsProvider() );
@@ -237,7 +237,7 @@ class TestGroupField extends TestFieldCase {
 				[ [ 'foo' => 162735 ] ],
 			],
 			[
-				[ [ 'foo' =>  [ true ] ] ],
+				[ [ 'foo' => [ true ] ] ],
 				[ [ 'foo' => true ] ],
 			],
 		];
