@@ -11,7 +11,6 @@ namespace HMCMB\Tests;
 use WP_UnitTest_Factory;
 use WP_UnitTestCase;
 use WP_Scripts;
-use WP_Post;
 
 /**
  * Class TestFieldCase
@@ -38,10 +37,10 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 
 	/**
 	 * Setup fixtures for our tests.
-	 *
-	 * @param $factory
 	 */
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
+
 		$post_args = [
 			'post_author'  => 1,
 			'post_status'  => 'publish',
@@ -51,12 +50,8 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 		];
 
 		// Setup a default post for usage within test.
+		$factory = new WP_UnitTest_Factory();
 		self::$post = $factory->post->create_and_get( $post_args );
-
-		// Backwards compatibility with old WP versions.
-		if ( ! self::$post instanceof WP_Post ) {
-			self::$post = get_post( wp_insert_post( $post_args ) );
-		}
 
 		// Capture WP Scripts object before usage.
 		self::$old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
@@ -65,7 +60,9 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	/**
 	 * Clean up fixtures.
 	 */
-	public static function wpTearDownAfterClass() {
+	public static function tearDownAfterClass() {
+		parent::tearDownAfterClass();
+
 		wp_delete_post( self::$post->ID );
 		$GLOBALS['wp_scripts'] = self::$old_wp_scripts;
 	}
