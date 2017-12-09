@@ -11,6 +11,7 @@ namespace HMCMB\Tests;
 use WP_UnitTest_Factory;
 use WP_UnitTestCase;
 use WP_Scripts;
+use WP_Post;
 
 /**
  * Class TestFieldCase
@@ -41,18 +42,20 @@ abstract class TestFieldCase extends WP_UnitTestCase {
 	 * @param $factory
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		// Setup a default post for usage within test.
-		self::$post = $factory->post->create_and_get( [
+		$post_args = [
 			'post_author'  => 1,
 			'post_status'  => 'publish',
 			'post_content' => rand_str(),
 			'post_title'   => rand_str(),
 			'post_type'    => 'post',
-		] );
+		];
+
+		// Setup a default post for usage within test.
+		self::$post = $factory->post->create_and_get( $post_args );
 
 		// Backwards compatibility with old WP versions.
-		if ( is_int( self::$post ) ) {
-			self::$post = get_post( self::$post );
+		if ( ! self::$post instanceof WP_Post ) {
+			self::$post = get_post( wp_insert_post( $post_args ) );
 		}
 
 		// Capture WP Scripts object before usage.
