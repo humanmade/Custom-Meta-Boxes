@@ -38,21 +38,7 @@ abstract class CMB_Field {
 		$this->id    = $name;
 		$this->name  = $name . '[]';
 		$this->title = $title;
-		$this->args  = wp_parse_args( $args, $this->get_default_args() );
-
-		// Deprecated argument: 'std'
-		if ( ! empty( $this->args['std'] ) && empty( $this->args['default'] ) ) {
-			$this->args['default'] = $this->args['std'];
-			_deprecated_argument( 'CMB_Field', '0.9', "field argument 'std' is deprecated, use 'default' instead" );
-		}
-
-		if ( ! empty( $this->args['options'] ) && is_array( reset( $this->args['options'] ) ) ) {
-			$re_format = array();
-			foreach ( $this->args['options'] as $option ) {
-				$re_format[ $option['value'] ] = $option['name'];
-			}
-			$this->args['options'] = $re_format;
-		}
+		$this->set_arguments( $args );
 
 		// If the field has a custom value populator callback.
 		if ( ! empty( $args['values_callback'] ) ) {
@@ -602,5 +588,29 @@ abstract class CMB_Field {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Setup arguments for the class.
+	 *
+	 * @param $arguments
+	 */
+	public function set_arguments( $arguments ) {
+		// Initially set arguments up.
+		$this->args = wp_parse_args( $arguments, $this->get_default_args() );
+
+		// Support the deprecated argument: 'std'
+		if ( ! empty( $this->args['std'] ) && empty( $this->args['default'] ) ) {
+			$this->args['default'] = $this->args['std'];
+			_deprecated_argument( 'CMB_Field', '0.9', "field argument 'std' is deprecated, use 'default' instead" );
+		}
+
+		if ( ! empty( $this->args['options'] ) && is_array( reset( $this->args['options'] ) ) ) {
+			$re_format = array();
+			foreach ( $this->args['options'] as $option ) {
+				$re_format[ $option['value'] ] = $option['name'];
+			}
+			$this->args['options'] = $re_format;
+		}
 	}
 }

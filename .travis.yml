@@ -11,8 +11,8 @@ php:
 env:
     - WP_VERSION=latest WP_MULTISITE=0
     - WP_VERSION=latest WP_MULTISITE=1
-    - WP_VERSION=4.0 WP_MULTISITE=0
-    - WP_VERSION=4.0 WP_MULTISITE=1
+    - WP_VERSION=4.1 WP_MULTISITE=0
+    - WP_VERSION=4.1 WP_MULTISITE=1
 
 matrix:
   allow_failures:
@@ -21,29 +21,29 @@ matrix:
   exclude:
     # We really only need to verify that each PHP/WP combination works generally, not that multisite works between them
     - php: 5.4
-      env: WP_VERSION=4.0 WP_MULTISITE=1
+      env: WP_VERSION=4.1 WP_MULTISITE=1
     - php: 5.4
       env: WP_VERSION=latest WP_MULTISITE=1
     - php: 5.5
-      env: WP_VERSION=4.0 WP_MULTISITE=1
+      env: WP_VERSION=4.1 WP_MULTISITE=1
     - php: 5.5
       env: WP_VERSION=latest WP_MULTISITE=1
     - php: 7.0
       env: WP_VERSION=latest WP_MULTISITE=1
     # Only test latest version of WP with HHVM
     - php: hhvm
-      env: WP_VERSION=4.0 WP_MULTISITE=0
+      env: WP_VERSION=4.1 WP_MULTISITE=0
     - php: hhvm
-      env: WP_VERSION=4.0 WP_MULTISITE=1
-    # Only test latest version of WP with PHP 7.0+ because 4.0 won't work at all
+      env: WP_VERSION=4.1 WP_MULTISITE=1
+    # Only test latest version of WP with PHP 7.0+ because 4.1 won't work at all
     - php: 7.0
-      env: WP_VERSION=4.0 WP_MULTISITE=0
+      env: WP_VERSION=4.1 WP_MULTISITE=0
     - php: 7.0
-      env: WP_VERSION=4.0 WP_MULTISITE=1
+      env: WP_VERSION=4.1 WP_MULTISITE=1
     - php: 7.1
-      env: WP_VERSION=4.0 WP_MULTISITE=0
+      env: WP_VERSION=4.1 WP_MULTISITE=0
     - php: 7.1
-      env: WP_VERSION=4.0 WP_MULTISITE=1
+      env: WP_VERSION=4.1 WP_MULTISITE=1
 
 before_script:
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION

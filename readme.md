@@ -48,7 +48,7 @@ It began as a fork of [Custom Meta Boxes](https://github.com/jaredatch/Custom-Me
 
 ## Minimum Requirements:
 * PHP >= 5.4
-* WP >= 4.0
+* WP >= 4.1
 
 ## Known Issues
 * Some fields do not work well as repeatable fields.
