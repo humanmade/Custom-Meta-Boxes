@@ -4,27 +4,29 @@ class FieldTestCase extends WP_UnitTestCase {
 
 	private $post;
 
-	function setUp() {
+	private $users = array();
 
+	function setUp() {
 		parent::setUp();
 
-		$args = array(
-			'post_author' => 1,
-			'post_status' => 'publish',
+		// Setup some users to test our display logic.
+		$this->users['admin'] = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		$this->users['author'] = $this->factory->user->create( array( 'role' => 'author' ) );
+
+		// Setup a post for testing is_displayed.
+		$this->post = $this->factory->post->create_and_get( array(
+			'post_author'  => 1,
+			'post_status'  => 'publish',
 			'post_content' => rand_str(),
-			'post_title' => rand_str(),
-			'post_type' => 'post',
-		);
-
-		$id = wp_insert_post( $args );
-
-		$this->post = get_post( $id );
-
+			'post_title'   => rand_str(),
+			'post_type'    => 'post',
+		) );
 	}
 
 	function tearDown() {
 		wp_delete_post( $this->post->ID, true );
 		unset( $this->post );
+		wp_set_current_user( 0 );
 		parent::tearDown();
 	}
 
@@ -144,7 +146,6 @@ class FieldTestCase extends WP_UnitTestCase {
 
 		// Trigger output.
 		$field->html();
-
 	}
 
 	function testSavedFieldOutput() {
@@ -163,4 +164,84 @@ class FieldTestCase extends WP_UnitTestCase {
 		$field->html();
 	}
 
+	function testDisplayedRepeatableButtonDiv() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ), array( 'repeatable' => true ) );
+
+		// Set expectation for an empty output.
+		$this->expectOutputRegex( '/\<div class=\"field-item hidden\" .*?\>/' );
+
+		hmcmb_invoke_method( $field, 'repeatable_button_markup' );
+	}
+
+	function testDisplayedRepeatableButtonButton() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ), array( 'repeatable' => true ) );
+
+		// Set expectation for an empty output.
+		$this->expectOutputRegex( '/\<button class=\"button repeat-field\"\>Add New<\/button\>/' );
+
+		hmcmb_invoke_method( $field, 'repeatable_button_markup' );
+	}
+
+	function testDisplayedDeleteButton() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ), array( 'repeatable' => true ) );
+
+		// Set expectation for an empty output.
+		$this->expectOutputRegex( '/\<button class=\"cmb-delete-field\" title=\"Remove\">/' );
+
+		hmcmb_invoke_method( $field, 'delete_button_markup' );
+	}
+
+	/**
+	 * A single empty field should  display upon load.
+	 */
+	function testEmptyFieldDisplay() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
+
+		if ( ! $this->post ) {
+			$this->markTestSkipped( 'Post not found' );
+		}
+
+		// Test empty output
+		$this->expectOutputRegex( '/(div class\=\"field-title\"\>.*?type=\"text\".*?id=\"foo-cmb-field-0\".*?value=\"1\")/s' );
+
+		// Trigger output.
+		$field->display();
+	}
+
+	/**
+	 * A single empty field should still display on repeatable fields upon load.
+	 */
+	function testEmptyFieldDisplayRepeatable() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array(), array( 'repeatable' => true ) );
+
+		if ( ! $this->post ) {
+			$this->markTestSkipped( 'Post not found' );
+		}
+
+		// Test empty output
+		$this->expectOutputRegex( '/(div class\=\"field-title\"\>.*?type=\"text\".*?id=\"foo-cmb-field-0\".*?value=\"\")/s' );
+
+		// Trigger output.
+		$field->display();
+	}
+
+	function testIsDisplayed() {
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ) );
+
+		wp_set_current_user( $this->users['admin'] );
+
+		// Test default value against default admin.
+		$this->assertTrue( $field->is_displayed( $this->post->ID ) );
+
+		// Re-setup the field with some capability logic in there.
+		$field = new CMB_Text_Field( 'foo', 'Title', array( 1 ), array( 'capability' => 'edit_others_posts' ) );
+
+		// Should still return true for admin.
+		$this->assertTrue( $field->is_displayed( $this->post->ID ) );
+
+		// Change to the author and test against our modified permission.
+		wp_set_current_user( $this->users['author'] );
+
+		$this->assertFalse( $field->is_displayed( $this->post->ID ) );
+	}
 }

@@ -2,7 +2,7 @@
 	<tr>
 		<td align="left" width="70">
 			<strong>HM Custom Meta Boxes for WordPress</strong><br />
-			A framework for easily adding custom fields  to the WordPress post edit page
+			A framework for easily adding custom fields to the WordPress post edit page
 		</td>
 		<td align="center" width="20%">
 		    <img src="https://hmn.md/content/themes/hmnmd/assets/images/hm-logo.svg" width="100" />
@@ -46,6 +46,10 @@ This plugin is maintained by [Human Made Limited](http://hmn.md)
 
 It began as a fork of [Custom Meta Boxes](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress), but is no longer compatible.
 
+## Minimum Requirements:
+* PHP >= 5.4
+* WP >= 4.1
+
 ## Known Issues
 * Some fields do not work well as repeatable fields.
 * Some fields do not work well in repeatable groups.
@@ -55,6 +59,25 @@ It began as a fork of [Custom Meta Boxes](https://github.com/jaredatch/Custom-Me
 See [CONTRIBUTING.md](https://github.com/humanmade/Custom-Meta-Boxes/blob/master/CONTRIBUTING.md)
 
 ## Changelog ##
+
+**1.1**
+
+_Enhancements_
+ - Added group field filter
+ - Cleaned up file upload styles
+ - Added Hindi translation (props @ajitbohra)
+ - Move all field classes to their own files
+ - Add min/max attributes to number input (props @shadvb)
+ - Use site language with Google Maps field (props @barryceelen)
+
+_Bug Fixes_
+ - Filter all arguments, not just select ones
+ - Only attempt to call getimagesize() if the icon is local (props @joehoyle)
+ - Add Dutch and German translations (props @barryceelen)
+ - Align the file button vertically (props @ocean90)
+ - Fix for multiple wysiwyg fields not displaying in groups (props @tareiking)
+ - Fix incorrect gmap grouped field structure (props @dan-westall)
+ - Fix enqueuing of cmb-scripts (props @barryceelen)
 
 **1.0.3**
 * Fix repeatable fields bugs (props @barryceelen )

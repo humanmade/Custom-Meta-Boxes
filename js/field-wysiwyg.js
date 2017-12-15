@@ -63,16 +63,17 @@ CMB.addCallbackForClonedField( 'CMB_wysiwyg', function( newT ) {
 				var ed = tinymce.init( tinyMCEPreInit.mceInit[id] );
 			} else if ( tinyMCE.majorVersion === '3' ) {
 				var ed = new tinymce.Editor( id, tinyMCEPreInit.mceInit[id] );
+				ed.render();
 			}
-			ed.render();
 		}
 
-		// Init Quicktags.
-		QTags.instances[0] = undefined;
-		try {
-			quicktags( tinyMCEPreInit.qtInit[ id ] );
-		} catch ( e ) {}
-
+		// Init Quicktags, only if we have have QuickTags specified.
+		if ( ! jQuery.isEmptyObject( newQTS ) ) {
+			QTags.instances[ 0 ] = undefined;
+			try {
+				quicktags( tinyMCEPreInit.qtInit[ id ] );
+			} catch ( e ) {}
+		}
 	} );
 
 } );

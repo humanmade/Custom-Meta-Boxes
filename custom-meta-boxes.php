@@ -22,6 +22,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+if ( ! defined( 'CMB_VERSION' ) ) {
+	define( 'CMB_VERSION', '1.0.3' );
+}
+
 if ( ! defined( 'CMB_DEV' ) ) {
 	define( 'CMB_DEV', false );
 }
@@ -37,8 +41,41 @@ if ( ! defined( 'CMB_URL' ) ) {
 /**
  * Include base, required files.
  */
-include_once( CMB_PATH . '/classes.fields.php' );
-include_once( CMB_PATH . '/class.cmb-meta-box.php' );
+include_once( CMB_PATH . 'class-cmb-meta-box.php' );
+
+/**
+ * Field types that are extended.
+ */
+include_once( CMB_PATH . 'fields/class-cmb-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-file-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-select.php' );
+include_once( CMB_PATH . 'fields/class-cmb-text-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-textarea-field.php' );
+
+/**
+ * Final field types.
+ */
+include_once( CMB_PATH . 'fields/class-cmb-checkbox.php' );
+include_once( CMB_PATH . 'fields/class-cmb-checkbox-multi.php' );
+include_once( CMB_PATH . 'fields/class-cmb-color-picker.php' );
+include_once( CMB_PATH . 'fields/class-cmb-date-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-date-timestamp-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-datetime-timestamp-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-email-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-gmap-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-group-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-hidden-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-image-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-number-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-post-select.php' );
+include_once( CMB_PATH . 'fields/class-cmb-radio-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-taxonomy.php' );
+include_once( CMB_PATH . 'fields/class-cmb-text-small-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-textarea-field-code.php' );
+include_once( CMB_PATH . 'fields/class-cmb-time-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-title.php' );
+include_once( CMB_PATH . 'fields/class-cmb-url-field.php' );
+include_once( CMB_PATH . 'fields/class-cmb-wysiwyg.php' );
 
 /**
  * Make it possible to add fields in locations other than post edit screen. Optional.
@@ -91,29 +128,32 @@ function _cmb_available_fields() {
 	 * @param $types All available field types.
 	 */
 	return apply_filters( 'cmb_field_types', array(
-		'text'				=> 'CMB_Text_Field',
-		'text_small' 		=> 'CMB_Text_Small_Field',
-		'text_url'			=> 'CMB_URL_Field',
-		'url'				=> 'CMB_URL_Field',
-		'radio'				=> 'CMB_Radio_Field',
-		'checkbox'			=> 'CMB_Checkbox',
-		'file'				=> 'CMB_File_Field',
-		'image' 			=> 'CMB_Image_Field',
-		'wysiwyg'			=> 'CMB_wysiwyg',
-		'textarea'			=> 'CMB_Textarea_Field',
-		'textarea_code'		=> 'CMB_Textarea_Field_Code',
-		'select'			=> 'CMB_Select',
-		'taxonomy_select'	=> 'CMB_Taxonomy',
-		'post_select'		=> 'CMB_Post_Select',
-		'date'				=> 'CMB_Date_Field',
-		'date_unix'			=> 'CMB_Date_Timestamp_Field',
-		'datetime_unix'		=> 'CMB_Datetime_Timestamp_Field',
-		'time'				=> 'CMB_Time_Field',
-		'colorpicker'		=> 'CMB_Color_Picker',
-		'title'				=> 'CMB_Title',
-		'group'				=> 'CMB_Group_Field',
-		'gmap'				=> 'CMB_Gmap_Field',
-		'number'			=> 'CMB_Number_Field',
+		'text'            => 'CMB_Text_Field',
+		'text_small'      => 'CMB_Text_Small_Field',
+		'text_url'        => 'CMB_URL_Field',
+		'email'           => 'CMB_Email_Field',
+		'url'             => 'CMB_URL_Field',
+		'radio'           => 'CMB_Radio_Field',
+		'checkbox'        => 'CMB_Checkbox',
+		'checkbox_multi'  => 'CMB_Checkbox_Multi',
+		'file'            => 'CMB_File_Field',
+		'hidden'          => 'CMB_Hidden_Field',
+		'image'           => 'CMB_Image_Field',
+		'wysiwyg'         => 'CMB_wysiwyg',
+		'textarea'        => 'CMB_Textarea_Field',
+		'textarea_code'   => 'CMB_Textarea_Field_Code',
+		'select'          => 'CMB_Select',
+		'taxonomy_select' => 'CMB_Taxonomy',
+		'post_select'     => 'CMB_Post_Select',
+		'date'            => 'CMB_Date_Field',
+		'date_unix'       => 'CMB_Date_Timestamp_Field',
+		'datetime_unix'   => 'CMB_Datetime_Timestamp_Field',
+		'time'            => 'CMB_Time_Field',
+		'colorpicker'     => 'CMB_Color_Picker',
+		'title'           => 'CMB_Title',
+		'group'           => 'CMB_Group_Field',
+		'gmap'            => 'CMB_Gmap_Field',
+		'number'          => 'CMB_Number_Field',
 	) );
 
 }
