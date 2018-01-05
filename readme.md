@@ -1,3 +1,5 @@
+## This project is no longer actively maintained, please refer to [CMB2](https://github.com/CMB2/CMB2) for meta-boxes.
+
 <table width="100%">
 	<tr>
 		<td align="left" width="70">
@@ -10,7 +12,7 @@
 	</tr>
 	<tr>
 		<td>
-			A <strong><a href="https://hmn.md/">Human Made</a></strong> project. Maintained by @mikeselander.
+			A <strong><a href="https://hmn.md/">Human Made</a></strong> project.
 		</td>
 		<td align="center"></td>
 	</tr>
