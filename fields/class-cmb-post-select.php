@@ -27,11 +27,7 @@ class CMB_Post_Select extends CMB_Select {
 
 		call_user_func_array( array( 'parent', '__construct' ), $args );
 
-		if ( ! $this->args['use_ajax'] ) {
-
-			$this->args['data_delegate'] = array( $this, 'get_delegate_data' );
-
-		}
+		$this->args['data_delegate'] = array( $this, 'get_delegate_data' );
 
 	}
 
@@ -60,9 +56,14 @@ class CMB_Post_Select extends CMB_Select {
 	 */
 	public function get_delegate_data() {
 
-		$data = array();
+		if ( $this->args['use_ajax'] ) {
+			$posts = (array) $this->get_value();
+		} else {
+			$posts = $this->get_posts();
+		}
 
-		foreach ( $this->get_posts() as $post_id ) {
+		$data = array();
+		foreach ( $posts as $post_id ) {
 			$data[ $post_id ] = get_the_title( $post_id );
 		}
 
@@ -98,32 +99,15 @@ class CMB_Post_Select extends CMB_Select {
 	}
 
 	/**
-	 * Assemble and output of field HTML.
+	 * Enqueue all scripts required by the field.
+	 *
+	 * @uses wp_enqueue_script()
 	 */
-	public function output_field() {
+	public function enqueue_scripts() {
 
-		// If AJAX, must use input type not standard select.
-		if ( $this->args['use_ajax'] ) :
+		$this->args['query']['fields'] = 'ids';
 
-			?>
-
-			<input
-				<?php $this->id_attr(); ?>
-				<?php printf( 'value="%s" ', esc_attr( implode( ',' , (array) $this->value ) ) ); ?>
-				<?php printf( 'name="%s"', esc_attr( $this->get_the_name_attr() ) ); ?>
-				<?php printf( 'data-field-id="%s" ', esc_attr( $this->get_js_id() ) ); ?>
-				<?php $this->boolean_attr(); ?>
-				class="cmb_select"
-				style="width: 100%"
-			/>
-
-			<?php
-
-		else :
-
-			parent::output_field();
-
-		endif;
+		parent::enqueue_scripts();
 
 	}
 
@@ -132,84 +116,14 @@ class CMB_Post_Select extends CMB_Select {
 	 */
 	public function output_script() {
 
+		$this->field_data['ajax_data'] = array(
+			'action'  => 'cmb_post_select',
+			'post_id' => intval( get_the_id() ),
+			'nonce'   => wp_create_nonce( 'cmb_select_field' ),
+			'query'   => $this->args['query'],
+		);
+		$this->field_data['ajax_url'] = esc_url( admin_url( 'admin-ajax.php' ) );
+
 		parent::output_script();
-
-		?>
-
-		<script type="text/javascript">
-
-			(function($) {
-
-				if ( 'undefined' === typeof( window.cmb_select_fields ) ) {
-					return false;
-				}
-
-				// Get options for this field so we can modify it.
-				var id = <?php echo json_encode( $this->get_js_id() ); ?>;
-				var options = window.cmb_select_fields[id];
-
-				<?php if ( $this->args['use_ajax'] && $this->args['multiple'] ) : ?>
-				// The multiple setting is required when using ajax (because an input field is used instead of select)
-				options.multiple = true;
-				<?php endif; ?>
-
-				<?php if ( $this->args['use_ajax'] && ! empty( $this->value ) ) : ?>
-
-				options.initSelection = function( element, callback ) {
-
-					var data = [];
-
-					<?php if ( $this->args['multiple'] ) : ?>
-
-					<?php foreach ( (array) $this->value as $post_id ) : ?>
-					data.push( <?php echo json_encode( array( 'id' => $post_id, 'text' => html_entity_decode( get_the_title( $post_id ) ) ) ); ?> );
-					<?php endforeach; ?>
-
-					<?php else : ?>
-
-					data = <?php echo json_encode( array( 'id' => $this->value, 'text' => html_entity_decode( get_the_title( $this->get_value() ) ) ) ); ?>;
-
-					<?php endif; ?>
-
-					callback( data );
-
-				};
-
-				<?php endif; ?>
-
-				<?php if ( $this->args['use_ajax'] ) : ?>
-
-				<?php $this->args['query']['fields'] = 'ids'; ?>
-
-				var ajaxData = {
-					action  : 'cmb_post_select',
-					post_id : '<?php echo intval( get_the_id() ); ?>', // Used for user capabilty check.
-					nonce   : <?php echo json_encode( wp_create_nonce( 'cmb_select_field' ) ); ?>,
-					query   : <?php echo json_encode( $this->args['query'] ); ?>
-				};
-
-				options.ajax = {
-					url: <?php echo json_encode( esc_url( admin_url( 'admin-ajax.php' ) ) ); ?>,
-					type: 'POST',
-					dataType: 'json',
-					data: function( term, page ) {
-						ajaxData.query.s = term;
-						ajaxData.query.paged = page;
-						return ajaxData;
-					},
-					results : function( results, page ) {
-						var postsPerPage = ajaxData.query.posts_per_page = ( 'posts_per_page' in ajaxData.query ) ? ajaxData.query.posts_per_page : ( 'showposts' in ajaxData.query ) ? ajaxData.query.showposts : 10;
-						var isMore = ( page * postsPerPage ) < results.total;
-						return { results: results.posts, more: isMore };
-					}
-				}
-
-				<?php endif; ?>
-
-			})( jQuery );
-
-		</script>
-
-		<?php
 	}
 }
