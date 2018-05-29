@@ -70,7 +70,7 @@ abstract class CMB_Field {
 			'class'               => '',
 			'data_delegate'       => null,
 			'save_callback'       => null,
-			'capability'          => 'edit_posts',
+			'capability'          => 'edit_post',
 			'string-repeat-field' => __( 'Add New', 'cmb' ),
 			'string-delete-field' => __( 'Remove', 'cmb' ),
 			'confirm_delete'      => true,
