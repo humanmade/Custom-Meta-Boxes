@@ -18,6 +18,8 @@
 
 class CMB_Select extends CMB_Field {
 
+	public $field_data;
+
 	/**
 	 * CMB_Select constructor.
 	 */
@@ -80,8 +82,8 @@ class CMB_Select extends CMB_Field {
 
 		parent::enqueue_scripts();
 
-		wp_enqueue_script( 'select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/select2.js', array( 'jquery' ) );
-		wp_enqueue_script( 'field-select', trailingslashit( CMB_URL ) . 'js/field.select.js', array( 'jquery', 'select2', 'cmb-scripts' ), CMB_VERSION );
+		wp_enqueue_script( 'select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/dist/js/select2.full.js', array( 'jquery' ), '4.0.3', true );
+		wp_enqueue_script( 'field-select', trailingslashit( CMB_URL ) . 'js/field.select.js', array( 'jquery', 'select2', 'cmb-scripts' ), '1.0.1', true );
 	}
 
 	/**
@@ -93,7 +95,7 @@ class CMB_Select extends CMB_Field {
 
 		parent::enqueue_styles();
 
-		wp_enqueue_style( 'select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/select2.css' );
+		wp_enqueue_style( 'select2', trailingslashit( CMB_URL ) . 'js/vendor/select2/dist/css/select2.css' );
 	}
 
 	/**
@@ -153,29 +155,14 @@ class CMB_Select extends CMB_Field {
 	 */
 	public function output_script() {
 
-		$options = wp_parse_args( $this->args['select2_options'], array(
-			'placeholder' => __( 'Type to search', 'cmb' ),
-			'allowClear'  => true,
-		) );
+		$this->field_data['options'] = wp_parse_args(
+			$this->args['select2_options'],
+			array(
+				'placeholder' => __( 'Type to search', 'cmb' ),
+				'allowClear'  => true,
+			)
+		);
 
-		?>
-
-		<script type="text/javascript">
-
-			(function($) {
-
-				var options = <?php echo  json_encode( $options ); ?>
-
-				if ( 'undefined' === typeof( window.cmb_select_fields ) )
-					window.cmb_select_fields = {};
-
-				var id = <?php echo json_encode( $this->get_js_id() ); ?>;
-				window.cmb_select_fields[id] = options;
-
-			})( jQuery );
-
-		</script>
-
-		<?php
+		wp_localize_script( 'field-select', $this->get_js_id(), $this->field_data );
 	}
 }
