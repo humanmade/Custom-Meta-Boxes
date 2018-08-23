@@ -29,6 +29,7 @@ class CMB_File_Field extends CMB_Field {
 					'text',
 					'application',
 				),
+				'string-select-file' => esc_html__( 'Select File', 'cmb' ),
 			)
 		);
 	}
@@ -47,6 +48,12 @@ class CMB_File_Field extends CMB_Field {
 
 		wp_enqueue_media( array( 'post' => $post_ID ) );
 		wp_enqueue_script( 'cmb-file-upload', trailingslashit( CMB_URL ) . 'js/file-upload.js', array( 'jquery', 'cmb-scripts' ), CMB_VERSION );
+
+		wp_localize_script( 'cmb-file-upload', 'CMBFile', array(
+			'strings'  => array(
+				'selectFile' => $this->args['string-select-file'],
+			),
+		) );
 
 	}
 

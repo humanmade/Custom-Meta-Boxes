@@ -26,6 +26,7 @@ class CMB_Image_Field extends CMB_File_Field {
 					'image',
 				),
 				'show_size' => false,
+				'string-select-file' => esc_html__( 'Select Image', 'cmb' ),
 			)
 		);
 	}
